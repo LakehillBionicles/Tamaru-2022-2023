@@ -1,4 +1,13 @@
-package org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses;
+package org.firstinspires.ftc.teamcode.Tamaru2.TeleOp2.Old;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
+import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.executionClass;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,9 +16,47 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 
-public abstract class calculationClass extends LinearOpMode {
-    public Tamaru2Hardware robot = new Tamaru2Hardware();
 
+
+
+@TeleOp
+//@Disabled
+
+    /*
+    DRIVE
+    EXTEND
+    HAND
+    TURRET
+    ARM
+    EXECUTION
+     */
+
+public class uglyTamaru2TeleOp extends LinearOpMode {
+
+    Tamaru2Hardware robot = new Tamaru2Hardware();
+
+    //changed all from private to public 2/5 3:48
+    public double fpdPOWPower = 0;
+    public double bpdBOWPower = 0;
+    public double fsdSOWPower = 0;
+    public double bsdPower = 0;
+    public double extendPower = 0;
+    public double handPosition = handClosed;
+    public double turretPosition = turretForward;
+    public int armTargetPosition = 0;
+    public double armPower = 0;
+    public boolean armToHeight = true;
+    public boolean fieldCentric = true;
+    public double drivePower;
+    public double strafePower;
+    public double rotatePower;
+    public double driveDenom = 1;
+    public String mode = "tele";
+
+
+    public ElapsedTime runtime = new ElapsedTime();
+
+    ////////////////////////////////CALCULATIONS VARIABLES//////////////////////////////////////////////////////
     static final double FEET_PER_METER = 3.28084;
 
     ////////////////////////////////TELEMETRY////////////////////////////////////////////////
@@ -18,19 +65,19 @@ public abstract class calculationClass extends LinearOpMode {
     public boolean senseColorTelemetry = true;
 
     ////////////////////////////////TURRET TARGETS////////////////////////////////////////////////
-    public static final double turretForward = .5;//TODO: check turretForward
-    public static final double turretPort = 1;//TODO: check turretPORT
-    public static final double turretStar = 0;//TODO: check turretStar
+    public static final double turretForward = .5;//not checked
+    public static final double turretPort = 0;//not checked
+    public static final double turretStar = 1;//not checked
 
     ////////////////////////////////HAND TARGETS////////////////////////////////////////////////
     public static final double handOpen = 1;
-    public static final double handClosed = .5;
+    public static final double handClosed = .7;
 
     ////////////////////////////////ARM TARGETS////////////////////////////////////////////////
-    public static final int downArmTarget = 0;//TODO: find downArmTarget
-    public static final int lowArmTarget = 0;//TODO: find lowArmTarget
-    public static final int midArmTarget = 0;//TODO: find midArmTarget
-    public static final int highArmTarget = 0;//TODO: find highArmTarget
+    public static final int downArmTarget = 0;//not checked
+    public static final int lowArmTarget = 0;//not checked
+    public static final int midArmTarget = 0;//not checked
+    public static final int highArmTarget = 0;//not checked
 
     //////////////////////////////// DRIVE TARGET VALUES ////////////////////////////////////////////////
     public double newTargetTheta = 0;
@@ -106,11 +153,9 @@ public abstract class calculationClass extends LinearOpMode {
     public int BOWPos = 0;*/
 
 
-    public ElapsedTime runtime = new ElapsedTime();
 
 
     /////////////////////////////////////FIELD CENTRIC VARIABLES//////////////////////////////////////////
-    public double rotatePower;
     public double drivePowerDenom;
 
     public double hypotenuseLeft;
@@ -136,7 +181,7 @@ public abstract class calculationClass extends LinearOpMode {
     //////////////////////////////////// WHEEL CALCULATIONS //////////////////////////////////////////////
     static final double COUNTS_PER_MOTOR_REV = 560;
     static final double DRIVE_GEAR_REDUCTION = (0.11111); // This is < 1.0 if geared UP
-    static final double WHEEL_DIAMETER_INCHES = 96/25.4;  // For figuring circumference
+    static final double WHEEL_DIAMETER_INCHES = 3.0;  // For figuring circumference
     static final double COUNTS_PER_INCH = 1.2 * 4 * ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415));
 
@@ -144,12 +189,159 @@ public abstract class calculationClass extends LinearOpMode {
     static final String sleeveColor = "";
 
 
-    //public void runOpMode() {startUp();}
+    public void runOpMode() {
 
-    ////////////////////////////ODO WHEELS////////////////////////////////////////////
-    public void odoWhereAmI() {
         robot.init(hardwareMap);
 
+        waitForStart();
+
+        resetEverything();
+
+        while (opModeIsActive()) {
+
+
+            ///////////////////////////////////////DRIVE////////////////////////////////////////////////////////
+            drivePower = gamepad1.left_stick_y;
+            strafePower = -gamepad1.left_stick_x;
+            rotatePower = -gamepad1.right_stick_x;
+
+            if(gamepad1.dpad_up){
+                fieldCentricUp = true;
+                fieldCentricDown = false;
+                fieldCentricLeft = false;
+                fieldCentricRight = false;
+            } else if(gamepad1.dpad_down){
+                fieldCentricUp = false;
+                fieldCentricDown = true;
+                fieldCentricLeft = false;
+                fieldCentricRight = false;
+            } else if(gamepad1.dpad_left){
+                fieldCentricUp = false;
+                fieldCentricDown = false;
+                fieldCentricLeft = true;
+                fieldCentricRight = false;
+            } else if(gamepad1.dpad_right){
+                fieldCentricUp = false;
+                fieldCentricDown = false;
+                fieldCentricLeft = false;
+                fieldCentricRight = true;
+            }
+
+            if(gamepad1.left_trigger>0){
+                driveDenom = .5;
+            } else {
+                driveDenom = 1;
+            }
+
+            if(gamepad1.a){
+                fieldCentric = false;
+            } else if(gamepad1.b){
+                fieldCentric = true;
+            }
+
+            if(fieldCentric) {
+                fpdPOWPower = fpdPOWFCPower;
+                bpdBOWPower = bpdBOWFCPower;
+                fsdSOWPower = fpdPOWFCPower;
+                bsdPower = fpdPOWFCPower;
+            } else {
+                fpdPOWPower = drivePower + strafePower + rotatePower;
+                bpdBOWPower = drivePower - strafePower + rotatePower;
+                fsdSOWPower = drivePower - strafePower - rotatePower;
+                bsdPower = drivePower + strafePower - rotatePower;
+            }
+
+            ///////////////////////////////////////EXTEND////////////////////////////////////////////////////////
+            if(gamepad2.right_stick_y < 0){
+                extendPower = 1;
+                //robot.servoExtend.setPower(1);
+            } else if(gamepad2.right_stick_y > 0){
+                extendPower = -1;
+            } else{
+                extendPower = 0;
+            }
+
+            ///////////////////////////////////////HAND////////////////////////////////////////////////////////
+            if (gamepad2.left_bumper || gamepad1.left_bumper) {
+                handPosition = handClosed;
+            } else if (gamepad2.right_bumper || gamepad1.right_bumper) {
+                handPosition = handOpen;
+            }
+
+            ///////////////////////////////////////TURRET////////////////////////////////////////////////////////
+            if(gamepad2.dpad_up){
+                turretPosition = turretForward;
+            } else if (gamepad2.dpad_right){
+                turretPosition = turretStar;
+            } else if (gamepad2.dpad_left){
+                turretPosition = turretPort;
+            }
+
+            ///////////////////////////////////////ARM////////////////////////////////////////////////////////
+            if(gamepad2.left_trigger>0){
+                armToHeight = false;
+            } else if(gamepad2.right_trigger>0){
+                armToHeight = true;
+            }
+
+            if(gamepad2.a && armToHeight){
+                armTargetPosition = downArmTarget;
+            } else if(gamepad2.x && armToHeight){
+                armTargetPosition = lowArmTarget;
+            } else if(gamepad2.y && armToHeight){
+                armTargetPosition = midArmTarget;
+            } else if(gamepad2.b && armToHeight){
+                armTargetPosition = highArmTarget;
+            }
+
+            if(!armToHeight){
+                if(gamepad2.left_stick_y<0){
+                    armPower = -gamepad2.left_stick_y;
+                } else if(gamepad2.left_stick_y>0){
+                    armPower = -gamepad2.left_stick_y/2;
+                }
+            }
+
+            ///////////////////////////////////////EXECUTION////////////////////////////////////////////////////////
+            //execution(fpdPOWPower, bpdBOWPower, fsdSOWPower, bsdPower, driveDenom, extendPower, handPosition, turretPosition, armTargetPosition, armPower, armToHeight, mode);
+            if(mode=="tele") {
+                fieldCentricCalculations();
+
+                robot.fpd.setPower(fpdPOWPower/driveDenom);
+                robot.bpd.setPower(bpdBOWPower/driveDenom);
+                robot.fsd.setPower(fsdSOWPower/driveDenom);
+                robot.bsd.setPower(bsdPower/driveDenom);
+            } else if(mode=="auto") {
+                robot.fpd.setPower(fpdPOWOdoPower);
+                robot.bpd.setPower(bpdBOWOdoPower);
+                robot.fsd.setPower(fsdSOWOdoPower);
+                robot.bsd.setPower(bsdOdoPower);
+            }
+
+            //robot.servoExtend.setPower(extendPower);
+
+            robot.servoHand.setPosition(handPosition);
+            robot.servoTurret.setPosition(turretPosition);
+
+            if (armToHeight == true){
+                robot.armPort.setTargetPosition(armTargetPosition);
+                robot.armPort.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.armPort.setPower(armPower);
+                robot.armStar.setPower(armPower);
+            } else if (armToHeight == false) {
+                robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robot.armPort.setPower(armPower);
+                robot.armStar.setPower(armPower);
+            }
+
+        }
+
+    }
+
+    /////////////////////////CALCULATIONS BASE/////////////////////////////////////////////
+////////////////////////////ODO WHEELS////////////////////////////////////////////
+    public void odoWhereAmI() {
         POWlocation = robot.fpd.getCurrentPosition();
         SOWlocation = robot.fsd.getCurrentPosition();
         BOWlocation = robot.bpd.getCurrentPosition();
@@ -176,8 +368,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public void odoPowerCalculations(double thetaTarget, double xTarget, double yTarget, double rotPower, double linXPower, double linYPower, double rotTol, double xTol, double yTol) {
-        robot.init(hardwareMap);
-
         odoWhereAmI();
 
         while (Math.abs(thetaError) > Math.toRadians(rotTol) || Math.abs(xError) > xTol || Math.abs(yError) > yTol) {
@@ -268,8 +458,6 @@ public abstract class calculationClass extends LinearOpMode {
 
     //////////////////////////FIELD CENTRIC CALCULATIONS/////////////////////////////
     public void fieldCentricReset() {
-        robot.init(hardwareMap);
-
         if (fieldCentricUp/*== true*/) {
             robot.fpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.bpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -314,8 +502,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public void fieldCentricCalculations() {
-        robot.init(hardwareMap);
-
         fieldCentricReset();
 
         POWlocation = robot.fpd.getCurrentPosition();
@@ -336,9 +522,9 @@ public abstract class calculationClass extends LinearOpMode {
         newX = (hypotenuseLeft * Math.sin(thetaFieldCentric));
         newY = -(hypotenuseLeft * Math.cos(thetaFieldCentric));
 
-        fpdPOWFCPower = (((newY + newX + rotatePower)) / drivePowerDenom);//signs not checked
+        fpdPOWFCPower = ((-1 * (newY + newX + rotatePower)) / drivePowerDenom);//signs not checked
         bpdBOWFCPower = (((newY - newX + rotatePower)) / drivePowerDenom);//signs not checked
-        fsdSOWFCPower = (((newY - newX - rotatePower)) / drivePowerDenom);//signs not checked
+        fsdSOWFCPower = ((-1 * (newY - newX - rotatePower)) / drivePowerDenom);//signs not checked
         bsdFCPower = (((newY + newX - rotatePower)) / drivePowerDenom);//signs not checked
     }
 
@@ -348,13 +534,11 @@ public abstract class calculationClass extends LinearOpMode {
     public void startUp() {
         robot.init(hardwareMap);
 
+
         ////////////reset encoders right here - added to make PID work
         robot.fpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.fsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.armPort.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
 
@@ -366,16 +550,20 @@ public abstract class calculationClass extends LinearOpMode {
         robot.fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.bsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        robot.armPort.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.armStar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.fpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        robot.fpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.fsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //initVuforia();
 
         //initTfod();
@@ -387,8 +575,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public void setMotorDir () {
-        robot.init(hardwareMap);
-
         robot.fpd.setDirection(DcMotorSimple.Direction.FORWARD);
         robot.bpd.setDirection(DcMotorSimple.Direction.FORWARD);
         robot.fsd.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -397,8 +583,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public void setMotorDirStrafe () {
-        robot.init(hardwareMap);
-
         robot.fpd.setDirection(DcMotorSimple.Direction.REVERSE);//not checked
         robot.bpd.setDirection(DcMotorSimple.Direction.FORWARD);//not checked
         robot.fsd.setDirection(DcMotorSimple.Direction.REVERSE);//not checked
@@ -406,8 +590,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public void resetEverything() {
-        robot.init(hardwareMap);
-
         robot.fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -433,8 +615,6 @@ public abstract class calculationClass extends LinearOpMode {
 
     ////////////////////////////////////SENSE COLORS/////////////////////////////////?????????????????????????????????????
     public void senseColorTelemetry(){ //drive until see not green
-        robot.init(hardwareMap);
-
         while (opModeIsActive()){
             if(senseColorTelemetry) {
                 telemetry.addData("redStar", robot.colorSensorStar.red());
@@ -452,8 +632,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public String senseColorsStar () {
-        robot.init(hardwareMap);
-
         String colorStar = "blank";
 
         while (opModeIsActive() && colorStar.equals("blank")) {
@@ -488,8 +666,6 @@ public abstract class calculationClass extends LinearOpMode {
     }
 
     public String senseColorsPort(){
-        robot.init(hardwareMap);
-
         String colorPort = "blank";
 
         while (opModeIsActive()&& colorPort.equals("blank")){
@@ -523,32 +699,39 @@ public abstract class calculationClass extends LinearOpMode {
         return colorPort;
     }
 
+    ///////////////////////////////////////EXECUTION CLASS////////////////////////////////////////////////////////
+    public void execution(double fpdPOWPower, double bpdBOWPower, double fsdSOWPower, double bsdPower, double driveDenom, double extendPower,
+                          double handPosition, double turretPosition, int armTargetPosition, double armPower, boolean armToHeight, String mode){
+        if(mode=="tele") {
+            fieldCentricCalculations();
 
-    //////////////////////////ARM CALCULATIONS///////////////////////////////////////
-    /* commented out because I am using RUN_TO_POSITION
-    public void armWhereAmI() {
-        armPortPosition = robot.armPort.getCurrentPosition();
-        armStarPosition = robot.armStar.getCurrentPosition();
-        armPosition = (armPortPosition + armStarPosition) / 2;
-
-        armError = armTarget - armPosition
-
-        if (armWhereAmITelemetry == true) {
-            telemetry.addData("armPortPosition", armPortPosition);
-            telemetry.addData("armStarPosition", armStarPosition);
-            telemetry.addData("armPosition", armPosition);
-            telemetry.update() l
+            robot.fpd.setPower(fpdPOWPower/driveDenom);
+            robot.bpd.setPower(bpdBOWPower/driveDenom);
+            robot.fsd.setPower(fsdSOWPower/driveDenom);
+            robot.bsd.setPower(bsdPower/driveDenom);
+        } else if(mode=="auto") {
+            robot.fpd.setPower(fpdPOWOdoPower);
+            robot.bpd.setPower(bpdBOWOdoPower);
+            robot.fsd.setPower(fsdSOWOdoPower);
+            robot.bsd.setPower(bsdOdoPower);
         }
-    }
 
-    public void armPowerCalculations() {
+        //robot.servoExtend.setPower(extendPower);
+
+        robot.servoHand.setPosition(handPosition);
+        robot.servoTurret.setPosition(turretPosition);
+
+        if (armToHeight == true){
+            robot.armPort.setTargetPosition(armTargetPosition);
+            robot.armPort.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.armPort.setPower(armPower);
+            robot.armStar.setPower(armPower);
+        } else if (armToHeight == false) {
+            robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.armPort.setPower(armPower);
+            robot.armStar.setPower(armPower);
+        }
 
     }
-     */
 }
-
-
-
-
-
-
