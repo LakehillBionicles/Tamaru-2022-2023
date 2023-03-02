@@ -175,4 +175,3 @@ public class RedSideRedCornerMidPole extends AutoBase2{
     }
 
 }
-//
