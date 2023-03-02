@@ -16,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
-//changing something
 
 @Config
 @TeleOp (name = "auto dashboard testing", group = "dashboard")
