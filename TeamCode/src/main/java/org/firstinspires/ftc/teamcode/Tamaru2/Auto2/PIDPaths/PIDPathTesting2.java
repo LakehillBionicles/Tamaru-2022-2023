@@ -10,7 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.AutoBase2;
-
+/**
+ * Class name: PIDPathTesting2
+ * Class Type: auto
+ * Class Function: test PIDController from FTClib
+ * Other Notes: works fine
+ */
 
 @Config
 @Autonomous

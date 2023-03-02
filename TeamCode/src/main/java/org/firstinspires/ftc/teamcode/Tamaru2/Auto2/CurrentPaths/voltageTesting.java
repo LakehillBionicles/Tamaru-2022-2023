@@ -11,7 +11,12 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
-
+/**
+ * Class name: voltageTesting
+ * Class Type: tele
+ * Class Function: test voltage functions
+ * Other Notes: does not work, made to try to fix consistency issues in RedCorner2 by using voltage sensors
+ */
 
 @Config
 @TeleOp

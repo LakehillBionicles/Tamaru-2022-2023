@@ -6,7 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
-
+/**
+ * Class name: calculationClass
+ * Class Type: base
+ * Class Function: has all the calculation methods
+ * Other Notes: trying to use calculation and execution classes, not used because
+ *              there were problems connecting with other classes
+ */
 public abstract class calculationClass extends LinearOpMode {
     public Tamaru2Hardware robot = new Tamaru2Hardware();
 
@@ -18,9 +24,9 @@ public abstract class calculationClass extends LinearOpMode {
     public boolean senseColorTelemetry = true;
 
     ////////////////////////////////TURRET TARGETS////////////////////////////////////////////////
-    public static final double turretForward = .5;//TODO: check turretForward
-    public static final double turretPort = 1;//TODO: check turretPORT
-    public static final double turretStar = 0;//TODO: check turretStar
+    public static final double turretForward = .5;
+    public static final double turretPort = 1;
+    public static final double turretStar = 0;
 
     ////////////////////////////////HAND TARGETS////////////////////////////////////////////////
     public static final double handOpen = 1;

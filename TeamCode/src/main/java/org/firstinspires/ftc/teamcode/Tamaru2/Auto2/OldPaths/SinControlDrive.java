@@ -6,7 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.AutoBase2;
-
+/**
+ * Class name: SinControlDrive
+ * Class Type: auto
+ * Class Function: test sinDrive function
+ * Other Notes: sinDrive function sort of works, but not very well
+ */
 
 @Autonomous
 @Disabled

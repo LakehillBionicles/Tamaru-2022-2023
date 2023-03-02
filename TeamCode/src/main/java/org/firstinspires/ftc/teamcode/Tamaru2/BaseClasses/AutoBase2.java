@@ -17,7 +17,12 @@ import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 //import org.openftc.easyopencv.OpenCvCamera;
 
 import java.util.ArrayList;
-
+/**
+ * Class name: AutoBase2
+ * Class Type: base
+ * Class Function: base class for auto paths
+ * Other Notes: isn't used in most auto paths because there were problems using methods from it
+ */
 public class AutoBase2 extends LinearOpMode {
     public Tamaru2Hardware robot = new Tamaru2Hardware();
 

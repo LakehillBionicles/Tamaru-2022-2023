@@ -6,7 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.AutoBase2;
-
+/**
+ * Class name: BlueCornerSinParking
+ * Class Type: auto
+ * Class Function: park in blue corner
+ * Other Notes: uses sinDrive function and color sensor to park in blue corner
+ */
 
 @Autonomous
 @Disabled

@@ -7,7 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
-
+/**
+ * Class name: PIDMethodTest
+ * Class Type: auto
+ * Class Function: test a PID loop we found on youtube
+ * Other Notes: we never actually used this one, found something else that works well
+ */
 @Autonomous
 @Disabled
 public class PIDMethodTest extends LinearOpMode {

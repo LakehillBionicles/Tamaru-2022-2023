@@ -6,11 +6,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.AutoBase2;
-
+/**
+ * Class name: AutoPathing
+ * Class Type: auto
+ * Class Function: uses sinDrive function to score on low pole
+ * Other Notes: doesn't work, sinDrive is a bad method
+ */
 
 @Autonomous
 @Disabled
-
 public class AutoPathing extends AutoBase2{
     Tamaru2Hardware robot = new Tamaru2Hardware();
 

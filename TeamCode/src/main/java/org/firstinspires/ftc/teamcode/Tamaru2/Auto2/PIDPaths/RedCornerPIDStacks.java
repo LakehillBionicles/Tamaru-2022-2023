@@ -10,7 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.AutoBase2;
-
+/**
+ * Class name: RedCornerPIDStacks
+ * Class Type: auto
+ * Class Function: drive to cone stacks
+ * Other Notes: works consistently using PIDController from FTClib
+ */
 
 @Config
 @Autonomous

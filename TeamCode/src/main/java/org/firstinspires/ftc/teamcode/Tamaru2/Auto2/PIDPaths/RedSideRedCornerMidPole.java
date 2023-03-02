@@ -10,7 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.AutoBase2;
-
+/**
+ * Class name: RedSideRedCornerMidPole
+ * Class Type: auto
+ * Class Function: score on middle pole in red corner
+ * Other Notes: works relatively consistently, voltage change leads to inconsistency
+ */
 
 @Config
 @Autonomous

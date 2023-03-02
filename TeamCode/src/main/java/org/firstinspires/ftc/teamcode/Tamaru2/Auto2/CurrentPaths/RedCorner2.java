@@ -10,6 +10,13 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
+/**
+ * Class name: RedCorner2
+ * Class Type: auto
+ * Class Function: 1+2 auto and parking in red corner
+ * Other Notes: worked pretty consistently in testing but not in competition, takes the whole 30 seconds,
+ *              inconsistent across voltages
+ */
 
 @Config
 @Autonomous

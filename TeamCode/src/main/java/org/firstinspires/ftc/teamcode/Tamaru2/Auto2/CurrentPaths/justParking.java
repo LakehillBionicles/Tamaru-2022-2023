@@ -10,6 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 
+/**
+ * Class name: justParking
+ * Class Type: auto
+ * Class Function: park from either corner
+ * Other Notes: works consistently
+ */
 
 @Config
 @Autonomous

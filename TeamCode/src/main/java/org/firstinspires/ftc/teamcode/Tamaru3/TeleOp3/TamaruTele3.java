@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tamaru3.TeleOp3;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,12 +12,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 
+/**
+ * Class name: TamaruTele3
+ * Class Type: tele
+ * Class Function: 2 driver tele
+ * Other Notes: gamepad1 is drive, gamepad 2 is arm
+ */
 
 @TeleOp
 //@Disabled
-
-//////////////////////gamepad1 is drive; gamepad 2 is arm/hand/pre-set distances//////////////////////
-
 public class TamaruTele3 extends LinearOpMode {
     Tamaru3Hardware robot = new Tamaru3Hardware();
     private PIDController armController;
@@ -99,7 +100,6 @@ public class TamaruTele3 extends LinearOpMode {
                 currentGamepad1.copy(gamepad1);
                 currentGamepad2.copy(gamepad2);
             } catch (RobotCoreException e) {}
-
 
             ///////////////////////////////////////////////////////////// GAMEPAD 1 //////////////////////////////////////////////////
             drivePower = -gamepad1.left_stick_y;

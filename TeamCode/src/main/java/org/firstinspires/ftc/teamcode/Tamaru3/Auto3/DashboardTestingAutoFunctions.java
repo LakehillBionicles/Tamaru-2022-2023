@@ -16,7 +16,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
-
+/**
+ * Class name: DashboardTestingAutoFunctions
+ * Class Type: tele
+ * Class Function: used to test auto function and PID loop tuning for drive and arm
+ * Other Notes:
+ */
 @Config
 @TeleOp (name = "auto dashboard testing", group = "dashboard")
 public class DashboardTestingAutoFunctions extends LinearOpMode {

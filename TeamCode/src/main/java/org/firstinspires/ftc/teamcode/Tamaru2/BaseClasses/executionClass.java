@@ -3,7 +3,12 @@ package org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.Objects;
-
+/**
+ * Class name: executionClass
+ * Class Type: base
+ * Class Function: sets power/position for all subsystems
+ * Other Notes: extends calculation class, isn't used becuase there were problems connecting with other classes
+ */
 public abstract class executionClass extends calculationClass {
     public Tamaru2Hardware robot = new Tamaru2Hardware();
 

@@ -11,6 +11,13 @@ import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 
+/**
+ * Class name: BlueCorner2
+ * Class Type: Auto
+ * Class Function: 1+2 auto and parking in the blue corner
+ * Other Notes: doesn't work very well, made quickly based on RedCorner2
+ */
+
 @Config
 @Autonomous
 public class BlueCorner2 extends LinearOpMode {
