@@ -81,11 +81,15 @@ public class TamaruTele3 extends LinearOpMode {
         robot.fsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        robot.armPort_POW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.armPort_POW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (opModeIsActive()) {
 
@@ -160,9 +164,9 @@ public class TamaruTele3 extends LinearOpMode {
             }
 
             /////////////////////////////////////////////////MATH//////////////////////////////////////////////////////////////
-            POWlocation = robot.armPort_POW.getCurrentPosition();
-            SOWlocation = robot.SOW.getCurrentPosition();
-            BOWlocation = robot.BOW.getCurrentPosition();
+            POWlocation = robot.armPortO.getCurrentPosition();
+            SOWlocation = robot.armStarO.getCurrentPosition();
+            BOWlocation = robot.armPortI.getCurrentPosition();
 
             thetaRobot = (-(((POWlocation - SOWlocation) / ODO_COUNTS_PER_INCH) / odoWheelGap));// we sure about this negative?
 
@@ -216,8 +220,10 @@ public class TamaruTele3 extends LinearOpMode {
             robot.bpd.setPower(bpdPower);
             robot.bsd.setPower(bsdPower);
 
-            robot.armPort_POW.setPower(armPower);
-            robot.armStar.setPower(armPower);
+            robot.armPortI.setPower(armPower);
+            robot.armPortO.setPower(armPower);
+            robot.armStarI.setPower(armPower);
+            robot.armStarO.setPower(armPower);
 
             robot.servoExtend.setPosition(extendPosition);
 
@@ -271,8 +277,7 @@ public class TamaruTele3 extends LinearOpMode {
                 robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
             }*/
 
-
-            telemetry.addData("robotArm", robot.armStar.getCurrentPosition());
+            telemetry.addData("robotArm", robot.armStarO.getCurrentPosition());
             telemetry.update();
         }
     }

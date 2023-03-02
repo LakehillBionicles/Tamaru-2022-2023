@@ -21,11 +21,10 @@ public class Tamaru3Hardware extends LinearOpMode{
     public DcMotorEx bpd = null;
     public DcMotorEx bsd = null;
 
-    public DcMotorEx BOW = null;
-    public DcMotorEx SOW = null;
-
-    public DcMotorEx armPort_POW = null;
-    public DcMotorEx armStar = null;
+    public DcMotorEx armPortI = null;
+    public DcMotorEx armPortO = null;
+    public DcMotorEx armStarI = null;
+    public DcMotorEx armStarO = null;
 
     public Servo servoHand = null;
     public Servo servoTurret = null;
@@ -81,11 +80,10 @@ public class Tamaru3Hardware extends LinearOpMode{
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
 
-        BOW = hwMap.get(DcMotorEx.class, "BOW");
-        SOW = hwMap.get(DcMotorEx.class, "SOW");
-
-        armPort_POW = hwMap.get(DcMotorEx.class, "armPort_POW");
-        armStar = hwMap.get(DcMotorEx.class, "armStar");
+        armPortI = hwMap.get(DcMotorEx.class, "armPortI");
+        armPortO = hwMap.get(DcMotorEx.class, "armPortO");
+        armStarI = hwMap.get(DcMotorEx.class, "armStarI");
+        armStarO = hwMap.get(DcMotorEx.class, "armStarO");
 
         servoHand = hwMap.get(Servo.class, "servoHand");
         servoTurret = hwMap.get(Servo.class, "servoTurret");
@@ -112,35 +110,39 @@ public class Tamaru3Hardware extends LinearOpMode{
         bpd.setDirection(DcMotorSimple.Direction.REVERSE);
         bsd.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        SOW.setDirection(DcMotorSimple.Direction.FORWARD);
-        BOW.setDirection(DcMotorSimple.Direction.FORWARD);
-        armPort_POW.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        armStar.setDirection(DcMotorSimple.Direction.FORWARD);
+        armPortI.setDirection(DcMotorSimple.Direction.REVERSE);//flipped 3/1 9:54
+        armPortO.setDirection(DcMotorSimple.Direction.FORWARD);
+        armStarI.setDirection(DcMotorSimple.Direction.REVERSE);//flipped 3/1 9:54
+        armStarO.setDirection(DcMotorSimple.Direction.FORWARD);
 
         fpd.setPower(0);
         fsd.setPower(0);
         bpd.setPower(0);
         bsd.setPower(0);
 
-        armPort_POW.setPower(0);
-        armStar.setPower(0);
+        armPortI.setPower(0);
+        armPortO.setPower(0);
+        armStarI.setPower(0);
+        armStarO.setPower(0);
 
         fpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        armPort_POW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         fpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        armPort_POW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armStar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        armPortI.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armPortO.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armStarI.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armStarO.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }

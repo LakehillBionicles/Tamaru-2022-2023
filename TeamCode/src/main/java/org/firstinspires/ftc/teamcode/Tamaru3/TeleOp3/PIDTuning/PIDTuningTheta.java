@@ -70,13 +70,15 @@ public class PIDTuningTheta extends OpMode{
         robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.armPort_POW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.SOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.armPort_POW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.SOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
@@ -91,7 +93,7 @@ public class PIDTuningTheta extends OpMode{
         int bsdPos = robot.bsd.getCurrentPosition();
         double robotY = ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH;
         double robotTheta = (((fsdPos-fpdPos)/WHEEL_COUNTS_PER_INCH/wheelGap));
-        double robotX = (robot.BOW.getCurrentPosition() / WHEEL_COUNTS_PER_INCH) - (2.5 * robotTheta);
+        double robotX = (robot.armPortI.getCurrentPosition() / WHEEL_COUNTS_PER_INCH) - (2.5 * robotTheta);
 
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 

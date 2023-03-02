@@ -54,13 +54,15 @@ public class PIDTuningY extends OpMode{
         robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.armPort_POW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.SOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.armPort_POW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.SOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class PIDTuningY extends OpMode{
         int starAvg = (robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/2;
         double robotY = ((portAvg+starAvg)/2)/WHEEL_COUNTS_PER_INCH;
         double robotTheta = ((portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/wheelGap);
-        double robotX = (robot.BOW.getCurrentPosition() / WHEEL_COUNTS_PER_INCH) - (2.5 * robotTheta);
+        double robotX = (robot.armPortI.getCurrentPosition() / WHEEL_COUNTS_PER_INCH) - (2.5 * robotTheta);
 
         double pidY = controller.calculate(robotY, target);
 

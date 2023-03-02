@@ -86,11 +86,15 @@ public class PIDTuningAll extends OpMode{
         robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.BOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -108,8 +112,8 @@ public class PIDTuningAll extends OpMode{
         int starAvg = (robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/2;
         double robotY = ((portAvg+starAvg)/2)/WHEEL_COUNTS_PER_INCH;
         robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double robotX = (robot.BOW.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * (portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/odoWheelGap);
-        double robotArm = robot.armStar.getCurrentPosition();
+        double robotX = -1*((robot.armPortI.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * (portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/odoWheelGap));
+        double robotArm = robot.armStarI.getCurrentPosition();
 
         double pidY = yController.calculate(robotY, targetY);
         double pidX = xController.calculate(robotX, targetX);
@@ -127,11 +131,15 @@ public class PIDTuningAll extends OpMode{
         robot.bsd.setVelocity(yVelocity + xMultiplier*xVelocity - thetaVelocity);
 
         if(robotArm!=(targetArm+20) || robotArm!=(targetArm-20)) {
-            robot.armPort_POW.setPower(1);
-            robot.armStar.setPower(1);
+            robot.armPortI.setPower(1);
+            robot.armPortO.setPower(1);
+            robot.armStarI.setPower(1);
+            robot.armStarO.setPower(1);
         } else {
-            robot.armPort_POW.setPower(0);
-            robot.armStar.setPower(0);
+            robot.armPortI.setPower(0);
+            robot.armPortO.setPower(0);
+            robot.armStarI.setPower(0);
+            robot.armStarO.setPower(0);
         }
 
         robot.servoHand.setPosition(handPos);

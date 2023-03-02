@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 
 @Config
-@TeleOp(name = "auto dashboard testing", group = "dashboard")
+@TeleOp (name = "auto dashboard testing", group = "dashboard")
 public class DashboardTestingAutoFunctions extends LinearOpMode {
     Tamaru3Hardware robot = new Tamaru3Hardware();
     private PIDController yController;
@@ -33,15 +33,16 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
     public static double xTarget = 0;
     public static double thetaTarget = 0;
     public static double armTarget = 0;
-    public static double turretTarget = 0;
+    public static double turretTarget = 0.6;
     public static double extensionTarget = 0;
     public static double handTarget = 0;
 
-
     public static double py = 0.075, iy = 0.0005, dy = 0.01;
-    public static double px = 0.01, ix = 0.001, dx = 0.01;
+    public static double px = 0.25, ix = 0.001, dx = 0.05;
     public static double pTheta = 0.01, iTheta = 0.0, dTheta = 0.001;
     public static double pArm = 0, iArm = 0, dArm = 0;
+
+    public static double xMultiplier = 1;
 
     double max = 2500;
     int loops = 1;
@@ -99,21 +100,20 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
         robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.BOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.SOW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armPort_POW.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.BOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.SOW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.armPort_POW.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while(opModeIsActive()) {
             Control(yTarget, xTarget, thetaTarget, armTarget,  turretTarget, extensionTarget, handTarget, 10000, false, false, false);
             //PIDDriveControl(62, -2, 0, 5, false, false, false);
-            stop();
+            //stop();
         }
     }
 
@@ -145,46 +145,34 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
         yController.setTolerance(.5);
         xController.setTolerance(.5);
         thetaController.setTolerance(.25);
-        armController.setTolerance(20);
+        armController.setTolerance(5);
 
         int fpdPos = robot.fpd.getCurrentPosition();
         int bpdPos = robot.bpd.getCurrentPosition();
         int fsdPos = robot.fsd.getCurrentPosition();
         int bsdPos = robot.bsd.getCurrentPosition();
-        int armStarPos = robot.armStar.getCurrentPosition();
-        int BOWPos = robot.BOW.getCurrentPosition();
+        int armStarPos = robot.armStarI.getCurrentPosition();
+        int BOWPos = robot.armPortI.getCurrentPosition();
 
-        double robotY = ((fpdPos+bpdPos+fsdPos+bsdPos)/4)/WHEEL_COUNTS_PER_INCH;
+        double robotY = ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH;
         robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double robotX = (BOWPos / ODO_COUNTS_PER_INCH) - (2.5 * ((fpdPos+bpdPos+fsdPos+bsdPos)/4)/WHEEL_COUNTS_PER_INCH/odoWheelGap);
-
-        /*
-        double yTolerance = 0.5;
-        double xTolerance = 0.5;
-        double thetaTolerance = 0.25;
-        double armTolerance = 20;
-
-        double yError = targetY - robotY;
-        double xError = targetX - robotX;
-        double thetaError = targetTheta - robotTheta.firstAngle;
-        double armError = targetArm - armStarPos;
-         */
+        double robotX = (BOWPos / ODO_COUNTS_PER_INCH) - (2.5 * ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH/odoWheelGap);
 
         resetRuntime();
-        //while(((Math.abs(yError)>yTolerance)||(Math.abs(xError)>xTolerance)||(Math.abs(thetaError)>thetaTolerance)||(Math.abs(armError)>armTolerance))&&(getRuntime()<timeout)){
-        while(((!yController.atSetPoint())||(!xController.atSetPoint())||(!thetaController.atSetPoint())||(!armController.atSetPoint()))&&(getRuntime()<timeout)) {
+        //while(((!yController.atSetPoint())||(!xController.atSetPoint())||(!thetaController.atSetPoint())||(!armController.atSetPoint()))&&(getRuntime()<timeout)) {
             fpdPos = robot.fpd.getCurrentPosition();
             bpdPos = robot.bpd.getCurrentPosition();
             fsdPos = robot.fsd.getCurrentPosition();
             bsdPos = robot.bsd.getCurrentPosition();
-            armStarPos = robot.armStar.getCurrentPosition();
-            BOWPos = robot.BOW.getCurrentPosition();
+            armStarPos = robot.armStarI.getCurrentPosition();
+            BOWPos = robot.armPortI.getCurrentPosition();
 
-            robotY = ((fpdPos+bpdPos+fsdPos+bsdPos)/4)/WHEEL_COUNTS_PER_INCH;
+            robotY = ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH;
             robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            robotX = (BOWPos / ODO_COUNTS_PER_INCH) - (2.5 * ((fpdPos+bpdPos+fsdPos+bsdPos)/4)/WHEEL_COUNTS_PER_INCH/odoWheelGap);
+            //robotX = -1*((BOWPos / ODO_COUNTS_PER_INCH) - (2.5 * ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH/odoWheelGap));
+            robotX = -1*((BOWPos / ODO_COUNTS_PER_INCH));
 
-            double pidY = -yController.calculate(robotY, yController.getSetPoint());
+            double pidY = yController.calculate(robotY, yController.getSetPoint());
             double pidX = -xController.calculate(robotX, xController.getSetPoint());
             double pidTheta = -thetaController.calculate(robotTheta.firstAngle, thetaController.getSetPoint());
             double pidArm = armController.calculate(armStarPos, armController.getSetPoint());
@@ -194,19 +182,21 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
             double vTheta = robot.maxVelocity * pidTheta;
             double powerArm = pidArm;
 
-            robot.fpd.setVelocity((vY - 4*vX + vTheta));
-            robot.bpd.setVelocity((vY + 4*vX + vTheta));
-            robot.fsd.setVelocity((vY + 4*vX - vTheta));
-            robot.bsd.setVelocity((vY - 4*vX - vTheta));
+            robot.fpd.setVelocity((vY + xMultiplier*vX + vTheta));
+            robot.bpd.setVelocity((vY - xMultiplier*vX + vTheta));
+            robot.fsd.setVelocity((vY - xMultiplier*vX - vTheta));
+            robot.bsd.setVelocity((vY + xMultiplier*vX - vTheta));
 
-            robot.armPort_POW.setPower(powerArm);
-            robot.armStar.setPower(powerArm);
+            robot.armPortI.setPower(powerArm);
+            robot.armPortO.setPower(powerArm);
+            robot.armStarI.setPower(powerArm);
+            robot.armStarO.setPower(powerArm);
 
             robot.servoHand.setPosition(targetHand);
             robot.servoTurret.setPosition(targetTurret);
             robot.servoExtend.setPosition(targetExtension);
 
-            if((portDist)&&(((robot.distSensorPort.getDistance(DistanceUnit.CM)<15)))){
+            /*if((portDist)&&(((robot.distSensorPort.getDistance(DistanceUnit.CM)<15)))){
                 break;
             }
             if((starDist)&&(robot.distSensorStar.getDistance(DistanceUnit.CM)<15)){
@@ -214,19 +204,23 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
             }
             if((handDist)&&(robot.distSensorPort.getDistance(DistanceUnit.CM)<4)){
                 break;
-            }
+            }*/
 
             loops++;
             telemetry.addData("loops", loops);
+            telemetry.addData("robotArm", armStarPos);
+            telemetry.addData("targetArm", targetArm);
             telemetry.update();
-        }
+        /*}
         robot.fpd.setVelocity(0);
         robot.bpd.setVelocity(0);
         robot.fsd.setVelocity(0);
         robot.bsd.setVelocity(0);
 
-        robot.armPort_POW.setPower(0);
-        robot.armStar.setPower(0);
+        robot.armPortI.setPower(0);
+        robot.armPortO.setPower(0);
+        robot.armStarI.setPower(0);
+        robot.armStarO.setPower(0);*/
     }
 
     /*public void PIDDriveControl(double targetY, double targetX, double targetTheta, double timeout, boolean portDist, boolean starDist, boolean handDist){
