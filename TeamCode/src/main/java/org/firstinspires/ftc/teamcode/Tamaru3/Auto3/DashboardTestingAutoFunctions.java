@@ -45,7 +45,7 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
     public static double py = 0.075, iy = 0.0005, dy = 0.01;
     public static double px = 0.25, ix = 0.001, dx = 0.05;
     public static double pTheta = 0.01, iTheta = 0.0, dTheta = 0.001;
-    public static double pArm = 0, iArm = 0, dArm = 0;
+    public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
 
     public static double xMultiplier = 1;
 
@@ -174,8 +174,7 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
 
             robotY = ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH;
             robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            //robotX = -1*((BOWPos / ODO_COUNTS_PER_INCH) - (2.5 * ((fpdPos+bpdPos+fsdPos+bsdPos)/4.0)/WHEEL_COUNTS_PER_INCH/odoWheelGap));
-            robotX = -1*((BOWPos / ODO_COUNTS_PER_INCH));
+            robotX = -1*((BOWPos / ODO_COUNTS_PER_INCH)-(2.5*Math.toRadians(robotTheta.firstAngle)));
 
             double pidY = yController.calculate(robotY, yController.getSetPoint());
             double pidX = -xController.calculate(robotX, xController.getSetPoint());
@@ -213,6 +212,8 @@ public class DashboardTestingAutoFunctions extends LinearOpMode {
 
             loops++;
             telemetry.addData("loops", loops);
+            telemetry.addData("runtime", getRuntime());
+            telemetry.addData("robotX", robotX);
             telemetry.addData("robotArm", armStarPos);
             telemetry.addData("targetArm", targetArm);
             telemetry.update();

@@ -37,7 +37,7 @@
     public class AprilTapAutonomousInitDetectionExample extends LinearOpMode
     {
         OpenCvCamera camera;
-        org.firstinspires.ftc.teamcode.auto.vision.AprilTagDetectionPipeline aprilTagDetectionPipeline;
+        org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AprilTags.AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
         static final double FEET_PER_METER = 3.28084;
 
@@ -65,7 +65,7 @@
         {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-            aprilTagDetectionPipeline = new org.firstinspires.ftc.teamcode.auto.vision.AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+            aprilTagDetectionPipeline = new org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AprilTags.AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
             camera.setPipeline(aprilTagDetectionPipeline);
             camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
