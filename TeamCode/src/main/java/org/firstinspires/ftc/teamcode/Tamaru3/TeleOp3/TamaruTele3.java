@@ -94,12 +94,10 @@ public class TamaruTele3 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            try {
-                previousGamepad1.copy(currentGamepad1);
-                previousGamepad2.copy(currentGamepad2);
-                currentGamepad1.copy(gamepad1);
-                currentGamepad2.copy(gamepad2);
-            } catch (RobotCoreException e) {}
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
 
             ///////////////////////////////////////////////////////////// GAMEPAD 1 //////////////////////////////////////////////////
             drivePower = -gamepad1.left_stick_y;
@@ -277,7 +275,10 @@ public class TamaruTele3 extends LinearOpMode {
                 robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
             }*/
 
-            telemetry.addData("robotArm", robot.armStarO.getCurrentPosition());
+            telemetry.addData("armPortO", robot.armPortO.getCurrentPosition());
+            telemetry.addData("armStarO", robot.armStarO.getCurrentPosition());
+            telemetry.addData("armPortI", robot.armPortI.getCurrentPosition());
+            telemetry.addData("armStarI", robot.armStarI.getCurrentPosition());
             telemetry.update();
         }
     }

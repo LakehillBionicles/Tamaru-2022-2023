@@ -8,7 +8,7 @@ repositories {
     }
 }
 
-//trying to fix roadrunner/imu import statements 3/3
+//trying to fix roadrunner/imu import statements 3/3 - this is what worked
 dependencies {
     implementation 'org.firstinspires.ftc:Inspection:8.1.1'//8.0.0
     implementation 'org.firstinspires.ftc:Blocks:8.1.1'//8.0.0
