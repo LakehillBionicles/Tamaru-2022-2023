@@ -107,13 +107,14 @@ public class Tamaru3Hardware extends LinearOpMode{
         //flipped drive directions 2/25 11:29
         fpd.setDirection(DcMotorSimple.Direction.REVERSE);
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        bpd.setDirection(DcMotorSimple.Direction.REVERSE);
+        bpd.setDirection(DcMotorSimple.Direction.FORWARD);
         bsd.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        armPortI.setDirection(DcMotorSimple.Direction.REVERSE);//flipped 3/1 9:54
-        armPortO.setDirection(DcMotorSimple.Direction.FORWARD);
-        armStarI.setDirection(DcMotorSimple.Direction.REVERSE);//flipped 3/1 9:54
-        armStarO.setDirection(DcMotorSimple.Direction.FORWARD);
+        //TODO: check direction with odo wheels for rr
+        armPortI.setDirection(DcMotorSimple.Direction.REVERSE);//BOW
+        armPortO.setDirection(DcMotorSimple.Direction.FORWARD);//POW
+        armStarI.setDirection(DcMotorSimple.Direction.REVERSE);
+        armStarO.setDirection(DcMotorSimple.Direction.FORWARD);//SOW
 
         fpd.setPower(0);
         fsd.setPower(0);

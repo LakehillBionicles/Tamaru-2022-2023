@@ -28,7 +28,6 @@ public class TamaruTele3 extends LinearOpMode {
     //the below variables are private to keep everything within this class
 
     //gamepad 1 (drive) variable
-
     private boolean polePort = false;
     private boolean poleStar = false;
     private boolean handOpen = false;

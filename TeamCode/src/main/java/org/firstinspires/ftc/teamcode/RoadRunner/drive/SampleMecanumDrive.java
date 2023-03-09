@@ -55,10 +55,15 @@ import static org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(15, 0, 3);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(2, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(2, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(11, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
+
+    public static double FPD_MULTIPLIER = 1;
+    public static double BPD_MULTIPLIER = 1;
+    public static double FSD_MULTIPLIER = 1;//.675
+    public static double BSD_MULTIPLIER = 1;//.675
 
     public static double X_MULTIPLIER = 1; // Multiplier in the X direction
     public static double Y_MULTIPLIER = 1; // Multiplier in the Y direction
@@ -129,7 +134,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         // TODO: reverse any motors using DcMotor.setDirection()
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
 
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
@@ -291,16 +296,16 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        leftFront.setPower(v*FPD_MULTIPLIER);
+        leftRear.setPower(v1*BPD_MULTIPLIER);
+        rightRear.setPower(v2*BSD_MULTIPLIER);
+        rightFront.setPower(v3*FSD_MULTIPLIER);
     }
 
     @Override
     public double getRawExternalHeading() {
         return 0;
-        //return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        ///return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     @Override
