@@ -105,16 +105,15 @@ public class Tamaru3Hardware extends LinearOpMode{
         lights = hwMap.get(RevBlinkinLedDriver.class, "lights");
 
         //flipped drive directions 2/25 11:29
-        fpd.setDirection(DcMotorSimple.Direction.REVERSE);
+        fpd.setDirection(DcMotorSimple.Direction.REVERSE);//BOW
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        bpd.setDirection(DcMotorSimple.Direction.FORWARD);
-        bsd.setDirection(DcMotorSimple.Direction.FORWARD);
+        bpd.setDirection(DcMotorSimple.Direction.FORWARD);//POW
+        bsd.setDirection(DcMotorSimple.Direction.FORWARD);//SOW
 
-        //TODO: check direction with odo wheels for rr
-        armPortI.setDirection(DcMotorSimple.Direction.REVERSE);//BOW
-        armPortO.setDirection(DcMotorSimple.Direction.FORWARD);//POW
+        armPortI.setDirection(DcMotorSimple.Direction.REVERSE);//formerly BOW
+        armPortO.setDirection(DcMotorSimple.Direction.FORWARD);//formerly POW
         armStarI.setDirection(DcMotorSimple.Direction.REVERSE);
-        armStarO.setDirection(DcMotorSimple.Direction.FORWARD);//SOW
+        armStarO.setDirection(DcMotorSimple.Direction.FORWARD);//formerly SOW
 
         fpd.setPower(0);
         fsd.setPower(0);

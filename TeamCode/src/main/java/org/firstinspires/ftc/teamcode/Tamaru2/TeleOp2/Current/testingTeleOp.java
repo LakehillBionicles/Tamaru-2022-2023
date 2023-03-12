@@ -109,7 +109,6 @@ public class testingTeleOp extends LinearOpMode {
                 handPos = robot.handOpen;
             }
 
-            //TODO: SIMPLER FUNCTIONS
             if (gamepad1.a){
                 PPTposition=PPTdown;
             }

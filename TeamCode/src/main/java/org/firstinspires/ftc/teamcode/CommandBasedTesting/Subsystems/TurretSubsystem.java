@@ -14,9 +14,9 @@ import com.qualcomm.robotcore.hardware.Servo;
  * */
 public class TurretSubsystem extends SubsystemBase {
     private final Servo turret;
-    public static double turretForward = 0.6;
+    public static double turretForward = 1;
     public static double turretPort = 1;
-    public static double turretStar = 0.05;
+    public static double turretStar = 0;
 
     public TurretSubsystem (Servo servo) {this.turret = servo;}
 

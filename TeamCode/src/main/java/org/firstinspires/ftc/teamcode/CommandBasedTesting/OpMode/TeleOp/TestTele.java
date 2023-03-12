@@ -2,9 +2,15 @@ package org.firstinspires.ftc.teamcode.CommandBasedTesting.OpMode.TeleOp;
 
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Button.*;
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.CommandBasedTesting.OpMode.TestBaseOpMode;
+import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToMidPolePort;
+import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToMidPoleStar;
+import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.armTo;
+import org.firstinspires.ftc.teamcode.CommandBasedTesting.Subsystems.LinearArmSubsystem;
 
 /** TestTele
  * attempting to use TestBaseOpMode for TeleOp
@@ -13,10 +19,15 @@ import org.firstinspires.ftc.teamcode.CommandBasedTesting.OpMode.TestBaseOpMode;
  */
 @TeleOp
 @Config
-public class TestTele extends TestBaseOpMode {
+public class TestTele extends TeleBaseOpMode {
+
 
     @Override
-    public void initialize() { super.initialize(); }
+    public void initialize() {
+        super.initialize();
+        CommandScheduler.getInstance().enable();
+        armControlButton(DPAD_UP).whenPressed(new armTo(tamaruArm, LinearArmSubsystem.Height.LOW_POLE));
+    }
 
     @Override
     public void run() {
@@ -26,13 +37,16 @@ public class TestTele extends TestBaseOpMode {
         baseControlButton(RIGHT_BUMPER).whenPressed(tamaruHand.release());
         armControlButton(LEFT_BUMPER).whenPressed(tamaruHand.grab());
         armControlButton(RIGHT_BUMPER).whenPressed(tamaruHand.release());
+        //armControlButton(DPAD_UP).whenPressed(() -> schedule(new armToMidPoleStar(tamaruArm, tamaruTurret, tamaruExtension)));
+        //armControlButton(DPAD_UP).whenPressed(new armTo(tamaruArm, LinearArmSubsystem.Height.LOW_POLE));
+        armControlButton(DPAD_UP).whenPressed(tamaruArm.setArmToHeight(LinearArmSubsystem.Height.LOW_POLE));
         /*turret*/
-        armControlButton(DPAD_UP).whenPressed(tamaruTurret.setTurretForward());
+        //armControlButton(DPAD_UP).whenPressed(tamaruTurret.setTurretForward());
         armControlButton(DPAD_LEFT).whenPressed(tamaruTurret.setTurretPort());
         armControlButton(DPAD_RIGHT).whenPressed(tamaruTurret.setTurretStar());
         /*drive*/
-        tamaruDrivetrain.drive(-baseControl.getLeftY(), baseControl.getLeftX(), baseControl.getRightX());
+        schedule(tamaruDrivetrain.drive(baseControl.getLeftY(), baseControl.getLeftX(), baseControl.getRightX()));
         /*arm*/
-        tamaruArm.setArmPower(-armControl.getLeftY());
+        //schedule(tamaruArm.setArmPower(armControl.getLeftY()));
     }
 }

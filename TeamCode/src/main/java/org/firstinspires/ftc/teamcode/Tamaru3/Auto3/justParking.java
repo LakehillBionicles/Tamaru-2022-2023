@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 @Config
-@Autonomous(name = "testingTrajectories", group = "autoTesting")
-public class testingTrajectories extends LinearOpMode {
+@Autonomous(name = "Just Parking", group = "TrajectoryAutos")
+public class justParking extends LinearOpMode {
     Tamaru3Hardware robot = new Tamaru3Hardware();
     private PIDController armPID;
     public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
@@ -29,12 +29,17 @@ public class testingTrajectories extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         armPID = new PIDController(pArm, iArm, dArm);
 
+        resetArm();
+
         Trajectory moveToSignalCone = drive.trajectoryBuilder(new Pose2d())
+                .addDisplacementMarker(() -> {
+                    armToPosition(fourConeArmTarget);
+                })
                 .forward(28)
                 .build();
 
         Trajectory parkRed = drive.trajectoryBuilder(moveToSignalCone.end())
-                .strafeLeft(24)
+                .strafeLeft(28)
                 .build();
 
         Trajectory parkBlue = drive.trajectoryBuilder(moveToSignalCone.end())
@@ -42,26 +47,14 @@ public class testingTrajectories extends LinearOpMode {
                 .build();
 
         Trajectory parkGreen = drive.trajectoryBuilder(moveToSignalCone.end())
-                .strafeRight(24)
+                .strafeRight(28)
                 .build();
-
-        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        PIDArmControl(twoConeArmTarget, 3);
         drive.followTrajectory(moveToSignalCone);
-
         if(senseColorsStar().equals("blue")){
             drive.followTrajectory(parkBlue);
         } else if(senseColorsStar().equals("green")){
@@ -76,15 +69,11 @@ public class testingTrajectories extends LinearOpMode {
         armPID.setSetPoint(targetArm);
         armPID.setTolerance(20);
 
-        double robotArmStar = robot.armStarI.getCurrentPosition();
-
         resetRuntime();
         while ((!armPID.atSetPoint()) && getRuntime() < timeout) {
-            robotArmStar = robot.armStarI.getCurrentPosition();
+            double robotArmStar = robot.armStarI.getCurrentPosition();
 
-            double pidArm = armPID.calculate(robotArmStar, armPID.getSetPoint());
-
-            double powerArm = pidArm;
+            double powerArm = armPID.calculate(robotArmStar, armPID.getSetPoint());
 
             robot.armPortI.setPower(powerArm);
             robot.armPortO.setPower(powerArm);
@@ -130,5 +119,34 @@ public class testingTrajectories extends LinearOpMode {
 
         }
         return colorStar;
+    }
+
+    public void resetArm(){
+        robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void armToPosition(int position){
+        robot.armPortI.setTargetPosition(position);
+        robot.armPortO.setTargetPosition(position);
+        robot.armStarI.setTargetPosition(position);
+        robot.armStarO.setTargetPosition(position);
+
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.armPortI.setPower(1);
+        robot.armPortO.setPower(1);
+        robot.armStarI.setPower(1);
+        robot.armStarO.setPower(1);
     }
 }

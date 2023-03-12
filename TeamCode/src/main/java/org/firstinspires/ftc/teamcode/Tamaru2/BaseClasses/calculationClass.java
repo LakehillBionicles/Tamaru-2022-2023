@@ -33,10 +33,10 @@ public abstract class calculationClass extends LinearOpMode {
     public static final double handClosed = .5;
 
     ////////////////////////////////ARM TARGETS////////////////////////////////////////////////
-    public static final int downArmTarget = 0;//TODO: find downArmTarget
-    public static final int lowArmTarget = 0;//TODO: find lowArmTarget
-    public static final int midArmTarget = 0;//TODO: find midArmTarget
-    public static final int highArmTarget = 0;//TODO: find highArmTarget
+    public static final int downArmTarget = 0;
+    public static final int lowArmTarget = 0;
+    public static final int midArmTarget = 0;
+    public static final int highArmTarget = 0;
 
     //////////////////////////////// DRIVE TARGET VALUES ////////////////////////////////////////////////
     public double newTargetTheta = 0;

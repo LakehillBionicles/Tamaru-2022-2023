@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CommandBasedTesting.OpMode;
+package org.firstinspires.ftc.teamcode.CommandBasedTesting.OpMode.Auto;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.CommandBasedTesting.Subsystems.TurretSubsy
  * initializes all subsystems, gamepads, and hardware
  * used in TestTele
  */
-public class TestBaseOpMode extends CommandOpMode {
+public class AutoBaseOpMode extends CommandOpMode {
     protected Servo servoHand, servoExtend, servoTurret;
     protected DcMotorEx fpd, bpd, fsd, bsd;
     protected DcMotorEx armPortI, armPortO, armStarI, armStarO;
@@ -29,14 +29,8 @@ public class TestBaseOpMode extends CommandOpMode {
     protected LinearArmSubsystem tamaruArm;
     protected DrivetrainSubsystem tamaruDrivetrain;
 
-    protected GamepadEx baseControl;
-    protected GamepadEx armControl;
-
     @Override
     public void initialize() {
-        baseControl = new GamepadEx(gamepad1);
-        armControl = new GamepadEx(gamepad2);
-
         initHardware();
 
         tamaruHand = new HandSubsystem(servoHand);
@@ -67,7 +61,4 @@ public class TestBaseOpMode extends CommandOpMode {
         armStarI = hardwareMap.get(DcMotorEx.class, "armStarI");
         armStarO = hardwareMap.get(DcMotorEx.class, "armStarO");
     }
-
-    protected GamepadButton baseControlButton(GamepadKeys.Button button){ return baseControl.getGamepadButton(button); }
-    protected GamepadButton armControlButton(GamepadKeys.Button button){ return armControl.getGamepadButton(button); }
 }

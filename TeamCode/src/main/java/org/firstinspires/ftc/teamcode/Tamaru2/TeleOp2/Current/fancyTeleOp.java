@@ -117,7 +117,6 @@ public class fancyTeleOp extends LinearOpMode {
                 handPos = robot.handOpen;
             }
 
-            //TODO: SIMPLER FUNCTIONS
             if (gamepad1.a){
                 PPTposition=PPTdown;
             }
@@ -252,7 +251,6 @@ public class fancyTeleOp extends LinearOpMode {
                 handOpen = false;
             }
 
-            //TODO: ARM DOWN TOO?
             if((polePort) && (!handOpen)){
                 turretPosition = robot.turretPort;
                 extendPosition = .65;//.75

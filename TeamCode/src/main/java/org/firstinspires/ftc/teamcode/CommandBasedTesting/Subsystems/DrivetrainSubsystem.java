@@ -67,4 +67,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public double getYDistance() {
         return encoderTicksToInches(avgEncoderTicks());
     }
+
+    public void resetDrive(){
+        fpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        fpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }

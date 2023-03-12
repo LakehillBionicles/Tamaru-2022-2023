@@ -147,6 +147,12 @@ public class TamaruTele3 extends LinearOpMode {
                 turretPosition = robot.turretStar;
             }
 
+            if(gamepad2.left_trigger>0){
+                robot.servoExtend.setPosition(1);
+            } else {
+                robot.servoExtend.setPosition(0);
+            }
+
             if (gamepad2.a) {
                 PPTposition = PPTdown;
             }

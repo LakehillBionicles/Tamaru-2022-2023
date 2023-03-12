@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -40,7 +41,8 @@ public class TestHand extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        armControl(LEFT_BUMPER).whenPressed(tamaruHand.grab());
+        //armControl(LEFT_BUMPER).whenPressed(tamaruHand.grab());
+        armControl(LEFT_BUMPER).whenPressed(new InstantCommand(() -> telemetry.update()));
         armControl(RIGHT_BUMPER).whenPressed(tamaruHand.release());
     }
 
