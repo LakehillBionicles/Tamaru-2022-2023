@@ -46,12 +46,11 @@ public class Tamaru3Hardware extends LinearOpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    public final double handOpen = .75;//static?
-    public final double handClosed = 0;//static?
+    public final double handOpen = .8, handClosed = 0;
 
-    public final double turretForward = .6;//static?
-    public final double turretPort = 1;//static?
-    public final double turretStar = 0.05;//static?
+    public final double turretForward = .285, turretPort = 0, turretStar = .6;
+
+    public final double extensionPort = .5, extensionStar = .5;
 
     static final double COUNTS_PER_MOTOR_REV_BE = 8192;
     static final double DRIVE_GEAR_REDUCTION_BE = 1.0;     // This is < 1.0 if geared UP
@@ -59,7 +58,7 @@ public class Tamaru3Hardware extends LinearOpMode{
     public static final double COUNTS_PER_INCH_BE = (COUNTS_PER_MOTOR_REV_BE * DRIVE_GEAR_REDUCTION_BE) /
             (WHEEL_DIAMETER_INCHES_BE * 3.1415);
 
-    public final double maxVelocity = 3250;//this is an inversion of the scaling that's happening in the tuning class
+    public final double maxVelocity = 3250;
 
 
     HardwareMap hwMap = null;

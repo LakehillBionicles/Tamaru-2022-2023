@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 @Config
 @Autonomous(name = "Parking", group = "TrajectoryAutos")
-public class Parking extends AutoBase{
+public class Parking extends AutoBase {
 
     @Override
     public void runOpMode(){

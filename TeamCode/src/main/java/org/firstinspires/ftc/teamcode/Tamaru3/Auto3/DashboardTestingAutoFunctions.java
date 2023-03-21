@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
  * Class Function: used to test auto function and PID loop tuning for drive and arm
  * Other Notes:
  */
+@Disabled
 @Config
 @TeleOp (name = "auto dashboard testing", group = "dashboard")
 public class DashboardTestingAutoFunctions extends LinearOpMode {

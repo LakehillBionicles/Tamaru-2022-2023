@@ -41,12 +41,12 @@ public class TestTele extends TeleBaseOpMode {
         //armControlButton(DPAD_UP).whenPressed(new armTo(tamaruArm, LinearArmSubsystem.Height.LOW_POLE));
         armControlButton(DPAD_UP).whenPressed(tamaruArm.setArmToHeight(LinearArmSubsystem.Height.LOW_POLE));
         /*turret*/
-        //armControlButton(DPAD_UP).whenPressed(tamaruTurret.setTurretForward());
+        armControlButton(DPAD_UP).whenPressed(tamaruTurret.setTurretForward());
         armControlButton(DPAD_LEFT).whenPressed(tamaruTurret.setTurretPort());
         armControlButton(DPAD_RIGHT).whenPressed(tamaruTurret.setTurretStar());
         /*drive*/
         schedule(tamaruDrivetrain.drive(baseControl.getLeftY(), baseControl.getLeftX(), baseControl.getRightX()));
         /*arm*/
-        //schedule(tamaruArm.setArmPower(armControl.getLeftY()));
+        tamaruArm.setDefaultCommand(tamaruArm.setArmPower(armControl.getLeftY()));
     }
 }

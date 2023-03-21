@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
+package org.firstinspires.ftc.teamcode.CoordinateBased;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -18,30 +18,28 @@ import org.firstinspires.ftc.teamcode.CoordinateBased.field;
 import java.util.HashMap;
 
 @Config
-public class AutoBase extends LinearOpMode {
+public class AutoBaseCoordinate extends LinearOpMode {
     public Tamaru3Hardware robot = new Tamaru3Hardware();
-    //public field field;
-    //public field.Coordinates currentCoordinates;
-    //public SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+    public field field;
+    public field.Coordinates currentCoordinates;
+    public SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
     private PIDController armPID;
     public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
 
-    public final int downArmTarget = 0, lowPoleArmTarget = 1100, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
-    public final int fiveConeArmTarget = 500, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
+    public final int downArmTarget = 0, lowPoleArmTarget = 1400, midPoleArmTarget = 2000, highPoleArmTarget = 2600;
+    public final int fiveConeArmTarget = 600, fourConeArmTarget = 500, threeConeArmTarget = 400, twoConeArmTarget = 300;
     private Coordinates targetCoordinates;
 
-    public String sleeveColor = "";
-
-    /*public AutoBase(Location location){
+    public AutoBaseCoordinate(Location location) {
         field = new field(location);
         currentCoordinates = new field.Coordinates(0, 0, Height.GROUND);
-    }*/
+    }
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         robot.init(hardwareMap);
-        //SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         armPID = new PIDController(pArm, iArm, dArm);
         resetArm();
         resetDrive();
@@ -81,19 +79,7 @@ public class AutoBase extends LinearOpMode {
         return colorStar;
     }
 
-    public String scanCone() {
-        if (senseColorsStar().equals("blue")) {
-            sleeveColor = "blue";
-        } else if (senseColorsStar().equals("green")) {
-            sleeveColor = "green";
-        } else {
-            sleeveColor = "red";
-        }
-
-        return sleeveColor;
-    }
-
-    public void resetArm(){
+    public void resetArm() {
         robot.armPortI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.armPortO.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.armStarI.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -105,7 +91,7 @@ public class AutoBase extends LinearOpMode {
         robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void resetDrive(){
+    public void resetDrive() {
         robot.fpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.fsd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -117,7 +103,7 @@ public class AutoBase extends LinearOpMode {
         robot.bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void armToPosition(int position){
+    public void armToPosition(int position) {
         robot.armPortI.setTargetPosition(position);
         robot.armPortO.setTargetPosition(position);
         robot.armStarI.setTargetPosition(position);
@@ -161,23 +147,20 @@ public class AutoBase extends LinearOpMode {
         robot.servoTurret.setPosition(turretPosition);
     }
 
-    public void extensionToPosition(double extensionPosition) {
-        robot.servoExtend.setPosition(extensionPosition);
-    }
-
-    /*public void Score(String id, field.Coordinates currentCoordinates){
+    public void Score(String id, field.Coordinates currentCoordinates) {
         this.currentCoordinates = currentCoordinates;
         targetCoordinates = field.scoreMap.get(id);
         double targetX = targetCoordinates.x;
         double targetY = targetCoordinates.y;
         field.armScore(id, currentCoordinates);
 
-        TrajectorySequence scoreTraj = drive.trajectoryBuilder(new Pose2d(currentCoordinates.x, currentCoordinates.y, 0))
+        /*TrajectorySequence scoreTraj = drive.trajectoryBuilder(new Pose2d(currentCoordinates.x, currentCoordinates.y, 0))
                 .addDisplacementMarker(() -> { field.armScore(id, currentCoordinates); })
-                .turn(Math.toRadians(90))
+                .turn()
                 .lineTo()
                 .strafeTo()
                 .build();
     }*/
 
+    }
 }

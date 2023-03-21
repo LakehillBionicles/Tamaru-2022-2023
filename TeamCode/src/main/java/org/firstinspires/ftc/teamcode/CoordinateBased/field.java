@@ -9,7 +9,7 @@ import java.util.Set;
 public class field {
 
     public double tile = 23.5;
-    public double halfTile = 23.5/2;
+    public double halfTile = 23.5 / 2;
 
     public Height targetHeight;
     public double targetX;
@@ -41,17 +41,21 @@ public class field {
         }
     }
 
+    public enum Heading {
+        NORTH, SOUTH, EAST, WEST
+    }
+
     public field(Location location) {
-        if(location==Location.BLUE_CORNER){
-            setScoreMap(1);
+        if (location == Location.BLUE_CORNER) {
+            //setScoreMap(1);
         } else {
-            setScoreMap(-1);
+            //setScoreMap(-1);
         }
     }
 
     public HashMap<String, Coordinates> scoreMap = new HashMap<>();
 
-    public static class Coordinates{
+    public static class Coordinates {
         public double x;
         public double y;
         public Height z;
@@ -61,7 +65,7 @@ public class field {
             return c.x == x && c.y == y && c.z == z;
         }
 
-        public Coordinates(double x, double y, Height z){
+        public Coordinates(double x, double y, Height z) {
             super();
             this.x = x;
             this.y = y;
@@ -70,10 +74,10 @@ public class field {
 
     }
 
-    public void armScore(String poleID, Coordinates currentCoordinates){
+    public void armScore(String poleID, Coordinates currentCoordinates) {
         Coordinates targetCoordinates = scoreMap.get(poleID);
         targetHeight = targetCoordinates.z;
-        if(targetCoordinates.y<currentCoordinates.y){
+        if (targetCoordinates.y < currentCoordinates.y) {
             //turret star
             //extend star
         } else {
@@ -82,24 +86,33 @@ public class field {
         }
     }
 
-    public void setScoreMap(int multiplier){
-        scoreMap.put("T1", new Coordinates(4*tile, multiplier*(halfTile+tile),  Height.HIGH_POLE));
-        scoreMap.put("T2", new Coordinates(3*tile, multiplier*(halfTile+(2*tile)), Height.HIGH_POLE));
-        scoreMap.put("T3", new Coordinates(2*tile, multiplier*(halfTile+tile), Height.HIGH_POLE));
-        scoreMap.put("T4", new Coordinates(3*tile, multiplier*halfTile, Height.HIGH_POLE));
-        scoreMap.put("M1", new Coordinates(4*tile, multiplier*(halfTile+(2*tile)), Height.MID_POLE));
-        scoreMap.put("M2", new Coordinates(2*tile, multiplier*(halfTile+(2*tile)), Height.MID_POLE));
-        scoreMap.put("M3", new Coordinates(2*tile, multiplier*(halfTile), Height.MID_POLE));
-        scoreMap.put("M4", new Coordinates(4*tile, multiplier*(halfTile), Height.MID_POLE));
-        scoreMap.put("L1", new Coordinates(2*tile, -multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L2", new Coordinates(4*tile, -multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L3", new Coordinates(1*tile, multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L4", new Coordinates(5*tile, multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L5", new Coordinates(tile, multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L6", new Coordinates(5*tile, multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L7", new Coordinates(2*tile, multiplier*(halfTile), Height.LOW_POLE));
-        scoreMap.put("L8", new Coordinates(4*tile, multiplier*(halfTile), Height.LOW_POLE));
-    }
+    public void setScoreMap(int multiplier, Heading heading) {
+        switch (heading) {
+            case NORTH:
+                scoreMap.clear();
+                scoreMap.put("T1", new Coordinates(4 * tile, multiplier * (halfTile + tile), Height.HIGH_POLE));
+                scoreMap.put("T2", new Coordinates(3 * tile, multiplier * (halfTile + (2 * tile)), Height.HIGH_POLE));
+                scoreMap.put("T3", new Coordinates(2 * tile, multiplier * (halfTile + tile), Height.HIGH_POLE));
+                scoreMap.put("T4", new Coordinates(3 * tile, multiplier * halfTile, Height.HIGH_POLE));
+                scoreMap.put("M1", new Coordinates(4 * tile, multiplier * (halfTile + (2 * tile)), Height.MID_POLE));
+                scoreMap.put("M2", new Coordinates(2 * tile, multiplier * (halfTile + (2 * tile)), Height.MID_POLE));
+                scoreMap.put("M3", new Coordinates(2 * tile, multiplier * (halfTile), Height.MID_POLE));
+                scoreMap.put("M4", new Coordinates(4 * tile, multiplier * (halfTile), Height.MID_POLE));
+                scoreMap.put("L1", new Coordinates(2 * tile, -multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L2", new Coordinates(4 * tile, -multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L3", new Coordinates(1 * tile, multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L4", new Coordinates(5 * tile, multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L5", new Coordinates(tile, multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L6", new Coordinates(5 * tile, multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L7", new Coordinates(2 * tile, multiplier * (halfTile), Height.LOW_POLE));
+                scoreMap.put("L8", new Coordinates(4 * tile, multiplier * (halfTile), Height.LOW_POLE));
+            case EAST:
+                scoreMap.clear();
+            case SOUTH:
+                scoreMap.clear();
+            case WEST:
+                scoreMap.clear();
+        }
 
     /*public void setJunctionsRedCorner(){
         fieldMap.put(ObjectType.GROUND_JUNCTION, new Coordinates(tile, halfTile, 0.0));
@@ -196,4 +209,5 @@ public class field {
         fieldMap.put(ObjectType.PARKING_SPOT, new Coordinates(2*tile, 0.0,  0.0));
     }*/
 
+    }
 }
