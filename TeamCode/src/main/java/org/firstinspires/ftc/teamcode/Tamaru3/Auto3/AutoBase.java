@@ -1,28 +1,19 @@
 package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.controller.PIDController;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
-
 import org.firstinspires.ftc.teamcode.CoordinateBased.field.*;
-import org.firstinspires.ftc.teamcode.CoordinateBased.field;
 
-import java.util.HashMap;
 
 @Config
 public class AutoBase extends LinearOpMode {
     public Tamaru3Hardware robot = new Tamaru3Hardware();
-    //public field field;
-    //public field.Coordinates currentCoordinates;
-    //public SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
     private PIDController armPID;
     public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
@@ -33,64 +24,81 @@ public class AutoBase extends LinearOpMode {
 
     public String sleeveColor = "";
 
-    /*public AutoBase(Location location){
-        field = new field(location);
-        currentCoordinates = new field.Coordinates(0, 0, Height.GROUND);
-    }*/
-
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        //SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         armPID = new PIDController(pArm, iArm, dArm);
         resetArm();
         resetDrive();
     }
 
-    public String senseColorsStar() {
-        String colorStar = "blank";
+    public String senseColorsFront() {
+        String colorFront = "blank";
 
-        while (opModeIsActive() && colorStar.equals("blank")) {
-            if (robot.colorSensorStar.red() > ((robot.colorSensorStar.blue()) - 5) && robot.colorSensorStar.red() > ((robot.colorSensorStar.green())) - 20) {
-                colorStar = "red";
+        while (opModeIsActive() && colorFront.equals("blank")) {
+            if (robot.colorSensorFront.red() > ((robot.colorSensorFront.blue()) - 5) && robot.colorSensorFront.red() > ((robot.colorSensorFront.green())) - 20) {
+                colorFront = "red";
                 telemetry.addData("i see red", " ");
                 telemetry.update();
-                colorStar = "red";
+                colorFront = "red";
                 //sleeveColor.equals(red);
 
-            } else if (robot.colorSensorStar.blue() > (robot.colorSensorStar.red()) && robot.colorSensorStar.blue() > (robot.colorSensorStar.green())) {
-                colorStar = "blue";
+            } else if (robot.colorSensorFront.blue() > (robot.colorSensorFront.red()) && robot.colorSensorFront.blue() > (robot.colorSensorFront.green())) {
+                colorFront = "blue";
                 telemetry.addData("i see blue", " ");
                 telemetry.update();
-                colorStar = "blue";
+                colorFront = "blue";
 
-            } else if (robot.colorSensorStar.green() > (robot.colorSensorStar.red()) && robot.colorSensorStar.green() > (robot.colorSensorStar.blue())) {
-                colorStar = "green";
+            } else if (robot.colorSensorFront.green() > (robot.colorSensorFront.red()) && robot.colorSensorFront.green() > (robot.colorSensorFront.blue())) {
+                colorFront = "green";
                 telemetry.addData("i see green", " ");
                 telemetry.update();
-                colorStar = "green";
+                colorFront = "green";
 
             } else {
                 telemetry.addData("i see nothing", " ");
                 telemetry.update();
-                colorStar = "no go";
+                colorFront = "no go";
 
             }
 
         }
-        return colorStar;
+        return colorFront;
     }
 
-    public String scanCone() {
-        if (senseColorsStar().equals("blue")) {
+    /*public String scanCone() {
+        if (senseColorsFront().equals("blue")) {
             sleeveColor = "blue";
-        } else if (senseColorsStar().equals("green")) {
+        } else if (senseColorsFront().equals("green")) {
             sleeveColor = "green";
         } else {
             sleeveColor = "red";
         }
-
         return sleeveColor;
+    }*/
+
+    //TODO: add some sort of timeout in case something goes wrong with the touch sensors
+    public void correctAngle(){
+        while(!robot.touchSensorPort.isPressed()||!robot.touchSensorStar.isPressed()) {
+            while (!robot.touchSensorPort.isPressed() && robot.touchSensorStar.isPressed()) {
+                robot.fpd.setPower(.25);
+                robot.bpd.setPower(.25);
+                robot.fsd.setPower(-.25);
+                robot.bsd.setPower(-.25);
+            }
+            while (!robot.touchSensorStar.isPressed() && robot.touchSensorPort.isPressed()) {
+                robot.fpd.setPower(-.25);
+                robot.bpd.setPower(-.25);
+                robot.fsd.setPower(.25);
+                robot.bsd.setPower(.25);
+            }
+            while (!robot.touchSensorPort.isPressed() && !robot.touchSensorStar.isPressed()) {
+                robot.fpd.setPower(.5);
+                robot.bpd.setPower(.5);
+                robot.fsd.setPower(.5);
+                robot.bsd.setPower(.5);
+            }
+        }
     }
 
     public void resetArm(){
@@ -164,20 +172,5 @@ public class AutoBase extends LinearOpMode {
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
     }
-
-    /*public void Score(String id, field.Coordinates currentCoordinates){
-        this.currentCoordinates = currentCoordinates;
-        targetCoordinates = field.scoreMap.get(id);
-        double targetX = targetCoordinates.x;
-        double targetY = targetCoordinates.y;
-        field.armScore(id, currentCoordinates);
-
-        TrajectorySequence scoreTraj = drive.trajectoryBuilder(new Pose2d(currentCoordinates.x, currentCoordinates.y, 0))
-                .addDisplacementMarker(() -> { field.armScore(id, currentCoordinates); })
-                .turn(Math.toRadians(90))
-                .lineTo()
-                .strafeTo()
-                .build();
-    }*/
 
 }

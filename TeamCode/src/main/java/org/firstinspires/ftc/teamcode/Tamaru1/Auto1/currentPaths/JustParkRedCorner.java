@@ -23,10 +23,10 @@ public class JustParkRedCorner extends AutoBase {
             coordinateDrive(0, 19, 0, .1, .1, .1, 2, .25, .25);
             //strafe sideways to see cone
 
-            if(senseColorsStar().equals( "red")){
+            if(senseColorsFront().equals( "red")){
                 color = "red";
                 telemetry.addData("color", "red");
-            }else if(senseColorsStar().equals("blue")){
+            }else if(senseColorsFront().equals("blue")){
                 telemetry.addData("color", "blue");
                 color = "blue";
             }

@@ -21,10 +21,10 @@ public class blueSideRedTerminalParking extends AutoBase {
 
 
             sideways(0.4, 14,14,3);//port is negative and starboard is positive
-            if(senseColorsStar().equals( "red")){
+            if(senseColorsFront().equals( "red")){
                 sideways(0.4, 7.5,7.5, 3);
                 encoderDrive(0.4,15, 15,3);
-            }else if(senseColorsStar().equals("blue")){
+            }else if(senseColorsFront().equals("blue")){
                 sideways(0.4, 7.5,7.5, 3);
                 encoderDrive(0.4, -15,-15,3);
             }else{

@@ -33,7 +33,7 @@ public class TemaruHardware extends LinearOpMode {
     public CRServo servoArm = null;
 
     public ColorSensor colorSensorPort = null;
-    public ColorSensor colorSensorStar = null;
+    public ColorSensor colorSensorFront = null;
 
     public ColorSensor colorSensorHand = null;
 
@@ -121,7 +121,7 @@ public class TemaruHardware extends LinearOpMode {
         servoArm = hwMap.get(CRServo.class, "servoArm");
 
         colorSensorPort = hwMap.get(ColorSensor.class, "colorSensorPort");
-        colorSensorStar = hwMap.get(ColorSensor.class, "colorSensorStar");
+        colorSensorFront = hwMap.get(ColorSensor.class, "colorSensorFront");
 
         colorSensorHand = hwMap.get(ColorSensor.class, "colorSensorHand");
 

@@ -33,10 +33,10 @@ public class TestTele extends TeleBaseOpMode {
     public void run() {
         super.run();
         /*hand*/
-        baseControlButton(LEFT_BUMPER).whenPressed(tamaruHand.grab());
-        baseControlButton(RIGHT_BUMPER).whenPressed(tamaruHand.release());
-        armControlButton(LEFT_BUMPER).whenPressed(tamaruHand.grab());
-        armControlButton(RIGHT_BUMPER).whenPressed(tamaruHand.release());
+        baseControlButton(LEFT_BUMPER).whenPressed(tamaruHand::grab);
+        baseControlButton(RIGHT_BUMPER).whenPressed(tamaruHand::release);
+        armControlButton(LEFT_BUMPER).whenPressed(tamaruHand::grab);
+        armControlButton(RIGHT_BUMPER).whenPressed(tamaruHand::release);
         //armControlButton(DPAD_UP).whenPressed(() -> schedule(new armToMidPoleStar(tamaruArm, tamaruTurret, tamaruExtension)));
         //armControlButton(DPAD_UP).whenPressed(new armTo(tamaruArm, LinearArmSubsystem.Height.LOW_POLE));
         armControlButton(DPAD_UP).whenPressed(tamaruArm.setArmToHeight(LinearArmSubsystem.Height.LOW_POLE));

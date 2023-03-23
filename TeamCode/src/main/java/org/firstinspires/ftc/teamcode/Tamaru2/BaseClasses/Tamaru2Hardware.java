@@ -33,7 +33,7 @@ public class Tamaru2Hardware extends LinearOpMode{
     public Servo servoPoleToucherStar = null;
 
     public ColorSensor colorSensorPort = null;
-    public ColorSensor colorSensorStar = null;
+    public ColorSensor colorSensorFront = null;
     public ColorSensor colorSensorHand = null;
 
     public TouchSensor touchSensorPort = null;
@@ -98,7 +98,7 @@ public class Tamaru2Hardware extends LinearOpMode{
         servoPoleToucherStar = hwMap.get(Servo.class, "servoPoleToucherStar");
 
         //colorSensorPort = hwMap.get(ColorSensor.class, "colorSensorPort");
-        colorSensorStar = hwMap.get(ColorSensor.class, "colorSensorStar");
+        colorSensorFront = hwMap.get(ColorSensor.class, "colorSensorFront");
         //colorSensorHand = hwMap.get(ColorSensor.class, "colorSensorHand");
 
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");

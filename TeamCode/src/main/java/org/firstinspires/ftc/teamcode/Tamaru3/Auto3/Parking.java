@@ -43,9 +43,9 @@ public class Parking extends AutoBase {
         if (isStopRequested()) return;
 
         drive.followTrajectory(moveToSignalCone);
-        if(senseColorsStar().equals("blue")){
+        if(senseColorsFront().equals("blue")){
             drive.followTrajectory(parkBlue);
-        } else if(senseColorsStar().equals("green")){
+        } else if(senseColorsFront().equals("green")){
             drive.followTrajectory(parkGreen);
         } else {
             drive.followTrajectory(parkRed);

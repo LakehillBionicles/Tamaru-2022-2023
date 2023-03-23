@@ -33,10 +33,14 @@ public class Tamaru3Hardware extends LinearOpMode{
     //public Servo servoPoleToucherPort = null;
     //public Servo servoPoleToucherStar = null;
 
+    public ColorSensor colorSensorFront = null;
+    public ColorSensor colorSensorPort = null;
     public ColorSensor colorSensorStar = null;
+    public ColorSensor colorSensorPortBottom = null;
+    public ColorSensor colorSensorStarBottom = null;
 
-    //public TouchSensor touchSensorPort = null;
-    //public TouchSensor touchSensorStar = null;
+    public TouchSensor touchSensorPort = null;
+    public TouchSensor touchSensorStar = null;
 
     public DistanceSensor distSensorHand = null;
     public DistanceSensor distSensorPort = null;
@@ -91,15 +95,18 @@ public class Tamaru3Hardware extends LinearOpMode{
         //servoPoleToucherPort = hwMap.get(Servo.class, "servoPoleToucherPort");
         //servoPoleToucherStar = hwMap.get(Servo.class, "servoPoleToucherStar");
 
-        colorSensorStar = hwMap.get(ColorSensor.class, "colorSensorStar");
+        colorSensorFront = hwMap.get(ColorSensor.class, "colorSensorFront");
+        colorSensorPort = hwMap.get(ColorSensor.class, "colorSensorPort");
+        //colorSensorStar = hwMap.get(ColorSensor.class, "colorSensorStar");
+        colorSensorPortBottom = hwMap.get(ColorSensor.class, "colorSensorPortBottom");
+        colorSensorStarBottom = hwMap.get(ColorSensor.class, "colorSensorStarBottom");
 
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
 
-        //touchSensorPort = hwMap.get(TouchSensor.class, "touchSensorPort");
-        //touchSensorStar = hwMap.get(TouchSensor.class, "touchSensorStar");
-
+        touchSensorPort = hwMap.get(TouchSensor.class, "touchSensorPort");
+        touchSensorStar = hwMap.get(TouchSensor.class, "touchSensorStar");
 
         lights = hwMap.get(RevBlinkinLedDriver.class, "lights");
 

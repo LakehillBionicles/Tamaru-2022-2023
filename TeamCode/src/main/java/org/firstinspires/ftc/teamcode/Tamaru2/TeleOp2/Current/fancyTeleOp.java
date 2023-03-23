@@ -269,9 +269,9 @@ public class fancyTeleOp extends LinearOpMode {
             }
 
 
-            telemetry.addData("red", robot.colorSensorStar.red());
-            telemetry.addData("blue", robot.colorSensorStar.blue());
-            telemetry.addData("green", robot.colorSensorStar.green());
+            telemetry.addData("red", robot.colorSensorFront.red());
+            telemetry.addData("blue", robot.colorSensorFront.blue());
+            telemetry.addData("green", robot.colorSensorFront.green());
             telemetry.update();
         }
     }

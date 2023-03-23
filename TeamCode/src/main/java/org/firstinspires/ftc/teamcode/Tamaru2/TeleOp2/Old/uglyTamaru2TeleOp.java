@@ -617,9 +617,9 @@ public class uglyTamaru2TeleOp extends LinearOpMode {
     public void senseColorTelemetry(){ //drive until see not green
         while (opModeIsActive()){
             if(senseColorTelemetry) {
-                telemetry.addData("redStar", robot.colorSensorStar.red());
-                telemetry.addData("greenStar", robot.colorSensorStar.green());
-                telemetry.addData("blueStar", robot.colorSensorStar.blue());
+                telemetry.addData("redStar", robot.colorSensorFront.red());
+                telemetry.addData("greenStar", robot.colorSensorFront.green());
+                telemetry.addData("blueStar", robot.colorSensorFront.blue());
 
                 telemetry.addData("redPort", robot.colorSensorPort.red());
                 telemetry.addData("greenPort", robot.colorSensorPort.green());
@@ -631,24 +631,24 @@ public class uglyTamaru2TeleOp extends LinearOpMode {
         }
     }
 
-    public String senseColorsStar () {
+    public String senseColorsFront () {
         String colorStar = "blank";
 
         while (opModeIsActive() && colorStar.equals("blank")) {
-            if (robot.colorSensorStar.red() > (robot.colorSensorStar.blue()) && robot.colorSensorStar.red() > (robot.colorSensorStar.green())) {
+            if (robot.colorSensorFront.red() > (robot.colorSensorFront.blue()) && robot.colorSensorFront.red() > (robot.colorSensorFront.green())) {
                 colorStar = "red";
                 telemetry.addData("i see red", " ");
                 telemetry.update();
                 colorStar = "red";
                 //sleeveColor.equals(red);
 
-            } else if (robot.colorSensorStar.blue() > (robot.colorSensorStar.red()) && robot.colorSensorStar.blue() > (robot.colorSensorStar.green())) {
+            } else if (robot.colorSensorFront.blue() > (robot.colorSensorFront.red()) && robot.colorSensorFront.blue() > (robot.colorSensorFront.green())) {
                 colorStar = "blue";
                 telemetry.addData("i see blue", " ");
                 telemetry.update();
                 colorStar = "blue";
 
-            } else if (robot.colorSensorStar.green() > (robot.colorSensorStar.red()) && robot.colorSensorStar.green() > (robot.colorSensorStar.blue())) {
+            } else if (robot.colorSensorFront.green() > (robot.colorSensorFront.red()) && robot.colorSensorFront.green() > (robot.colorSensorFront.blue())) {
                 colorStar = "green";
                 telemetry.addData("i see green", " ");
                 telemetry.update();

@@ -30,10 +30,10 @@ public class redCornerCone extends AutoBase {
             sideways(0.5, 16,16, 3); //move to cone
 
             //senseColorsPort(); //sense colors and store variable for later
-            if(senseColorsStar().equals( "red")){
+            if(senseColorsFront().equals( "red")){
                 color = "red";
                 telemetry.addData("color", "red");
-            }else if(senseColorsStar().equals("blue")){
+            }else if(senseColorsFront().equals("blue")){
                 telemetry.addData("color", "blue");
                 color = "blue";
             }

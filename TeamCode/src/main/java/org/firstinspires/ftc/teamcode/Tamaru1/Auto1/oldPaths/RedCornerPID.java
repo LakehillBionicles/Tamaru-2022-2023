@@ -31,10 +31,10 @@ public class RedCornerPID extends AutoBase {
             coordinateDrive(0, 18, 0, 0.1,0.1,0.1,2,0.1,0.1);
 
             //color sense and store variable
-            if(senseColorsStar().equals( "red")){
+            if(senseColorsFront().equals( "red")){
                 color = "red";
                 telemetry.addData("color", "red");
-            }else if(senseColorsStar().equals("blue")){
+            }else if(senseColorsFront().equals("blue")){
                 telemetry.addData("color", "blue");
                 color = "blue";
             }

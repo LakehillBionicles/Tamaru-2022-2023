@@ -147,23 +147,24 @@ public class TamaruTele3 extends LinearOpMode {
                 turretPosition = robot.turretStar;
             }
 
-            if(gamepad2.left_trigger>0){
+            /*if(gamepad2.left_trigger>0){
                 robot.servoExtend.setPosition(1);
             } else {
                 robot.servoExtend.setPosition(0);
-            }
+            }*/
 
-            if (gamepad2.a) {
-                PPTposition = PPTdown;
-            }
-            if (gamepad2.b) {
-                PPTposition = PPTup;
-            }
-            if (gamepad2.x) {
-                SPTposition = SPTup;
-            }
             if (gamepad2.y) {
-                SPTposition = SPTdown;
+                //PPTposition = PPTdown;
+                extendPosition = 0;
+            } else if (gamepad2.b) {
+                //PPTposition = PPTup;
+                extendPosition = 0.25;
+            } else if (gamepad2.a) {
+                //SPTposition = SPTup;
+                extendPosition = 0.5;
+            } else if (gamepad2.x) {
+                //SPTposition = SPTdown;
+                extendPosition = 1;
             }
 
             /////////////////////////////////////////////////MATH//////////////////////////////////////////////////////////////
@@ -188,11 +189,9 @@ public class TamaruTele3 extends LinearOpMode {
             ///////////////////////////////////////////////////////// MOTOR POWERS ////////////////////////////////////////////////////
 
             if (gamepad1.left_trigger > 0) {
-                drivePowerDenom = 4;
-            } else if (gamepad1.right_trigger > 0) {
-                drivePowerDenom = 1;
-            } else {
                 drivePowerDenom = 2;
+            } else {
+                drivePowerDenom = 1;
             }
 
             if (currentGamepad1.back && !previousGamepad1.back){
@@ -257,11 +256,11 @@ public class TamaruTele3 extends LinearOpMode {
                 handOpen = false;
             }
 
-            if(gamepad2.left_trigger>0){
+            /*if(gamepad2.left_trigger>0){
                 extendPosition = 1;
             } else {
                 extendPosition = 0;
-            }
+            }*/
 
             /*if ((polePort) && (!handOpen)) {
                 turretPosition = robot.turretPort;
