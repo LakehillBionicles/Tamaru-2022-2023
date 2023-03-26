@@ -43,7 +43,7 @@ public class TamaruTele3 extends LinearOpMode {
 
     //gamepad 2 (arm/elbow/hand) variable
     private double armPower;
-    private double handPos = 0.5;
+    private double handPos = robot.handClosed;
 
     private double fpdPower, bpdPower, fsdPower, bsdPower;
     private double POWlocation, SOWlocation, BOWlocation, thetaRobot, thetaLeftJoystick, thetaFieldCentric,
@@ -51,7 +51,7 @@ public class TamaruTele3 extends LinearOpMode {
 
     private double teleDenom;
 
-    private double extendPosition = 0;
+    private double extendPosition = 1;
     private double turretPosition = robot.turretForward;
 
     // gamepad 2 (pole toucher variables)
