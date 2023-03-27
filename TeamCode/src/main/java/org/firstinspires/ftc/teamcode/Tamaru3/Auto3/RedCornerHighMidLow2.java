@@ -50,9 +50,19 @@ public class RedCornerHighMidLow2 extends AutoBase{
                 .back(7)
                 .turn(Math.toRadians(94)) //turn to stack
                 .forward(12) //forward to stack 1
-                .waitSeconds(.5)
+                .strafeRight(10)
+                //.waitSeconds(.5)
                 .forward(12)
                 //.addDisplacementMarker(this::correctAngle)
+                .build();
+
+
+        TrajectorySequence Score1 = drive.trajectorySequenceBuilder(PickUp1.end())
+                .addDisplacementMarker(() -> armToPosition(midPoleArmTarget)) //arm to low pole
+                .addTemporalMarker((1), () -> { turretToPosition(robot.turretPort); extensionToPosition(robot.extensionPort);})
+                .back(18) //back to mid pole 1
+                .strafeLeft(7)//2
+                .back(23.5)
                 .build();
 
         waitForStart();
@@ -66,15 +76,15 @@ public class RedCornerHighMidLow2 extends AutoBase{
             drive.followTrajectorySequence(PickUp1);
             robot.servoHand.setPosition(robot.handClosed);
             correctAngle();
-            drive.followTrajectorySequence(wait);
+            //drive.followTrajectorySequence(wait);
             //touch sensor angle correction
             ////////////SCORE ON MID POLE//////////////////////////////////
-            /*drive.followTrajectorySequence(Score1);
+            drive.followTrajectorySequence(Score1);
             robot.servoHand.setPosition(robot.handOpen);
             drive.followTrajectorySequence(wait);
             ////////////PICK UP A CONE FROM THE STACK///////////////////////
             //color sensor find stack tape
-            drive.followTrajectorySequence(PickUp2);
+            /*drive.followTrajectorySequence(PickUp2);
             robot.servoHand.setPosition(robot.handClosed);
             correctAngle();
             drive.followTrajectorySequence(wait);

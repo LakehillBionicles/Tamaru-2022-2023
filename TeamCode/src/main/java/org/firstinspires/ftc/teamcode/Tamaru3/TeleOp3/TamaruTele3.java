@@ -122,12 +122,45 @@ public class TamaruTele3 extends LinearOpMode {
                 SPTposition = SPTdown;
             }
 
-            if (gamepad1.dpad_left && !(robot.distSensorPort.getDistance(DistanceUnit.CM) < 15)) {
+            /*
+            if(gamepad1.left_trigger>0){
+                port = true;
+            } else {
+                star = true;
+            }
+
+            if(port){ //add dist sensor condition
+                if(dpad_up){
+                    drive forward until distSensorPort < x;
+                } else if(dpad_down){
+                    drive forward until distSensorPort < x;
+                } else if(dpad_right){
+                    strafe right until distSensorPort < x;
+                } else if(dpad_left){
+                    strafe left until distSensorPort < x;
+                }
+            }
+
+            if(star){ //add dist sensor condition
+                if(dpad_up){
+                        drive forward until distSensorPort < x;
+                    } else if(dpad_down){
+                       drive forward until distSensorPort < x;
+                    } else if(dpad_right){
+                        strafe right until distSensorPort < x;
+                    } else if(dpad_left){
+                        strafe left until distSensorPort < x;
+                    }
+                }
+            }
+            */
+
+            /*if (gamepad1.dpad_left && !(robot.distSensorPort.getDistance(DistanceUnit.CM) < 15)) {
                 drivePower = 0.5;
             }
             if (gamepad1.dpad_right && !(robot.distSensorStar.getDistance(DistanceUnit.CM) < 15)) {
                 drivePower = 0.5;
-            }
+            }*/
 
             /////////////////////////////////////////////////////////// GAMEPAD 2 ////////////////////////////////////////////////////
 
@@ -155,16 +188,16 @@ public class TamaruTele3 extends LinearOpMode {
 
             if (gamepad2.y) {
                 //PPTposition = PPTdown;
-                extendPosition = 0;
+                extendPosition = 1;
             } else if (gamepad2.b) {
                 //PPTposition = PPTup;
-                extendPosition = 0.25;
+                extendPosition = 0.9;
             } else if (gamepad2.a) {
                 //SPTposition = SPTup;
-                extendPosition = 0.5;
+                extendPosition = 0.8;
             } else if (gamepad2.x) {
                 //SPTposition = SPTdown;
-                extendPosition = 1;
+                extendPosition = .75;
             }
 
             /////////////////////////////////////////////////MATH//////////////////////////////////////////////////////////////
@@ -198,17 +231,22 @@ public class TamaruTele3 extends LinearOpMode {
                 fieldCentric = !fieldCentric;
             }
 
-            if(!fieldCentric) {
-                fpdPower = (drivePower + strafePower + rotatePower) / drivePowerDenom;
-                bpdPower = (drivePower - strafePower + rotatePower) / drivePowerDenom;
-                fsdPower = (drivePower - strafePower - rotatePower) / drivePowerDenom;
-                bsdPower = (drivePower + strafePower - rotatePower) / drivePowerDenom;
+            /*if(!fieldCentric) {
+                fpdPower = (drivePower - strafePower - rotatePower) / drivePowerDenom;
+                bpdPower = (drivePower + strafePower - rotatePower) / drivePowerDenom;
+                fsdPower = (drivePower + strafePower + rotatePower) / drivePowerDenom;
+                bsdPower = (drivePower - strafePower + rotatePower) / drivePowerDenom;
             } else {
                 fpdPower = (newDrivePower + newStrafePower + rotatePower) / drivePowerDenom;
                 bpdPower = (newDrivePower - newStrafePower + rotatePower) / drivePowerDenom;
                 fsdPower = (newDrivePower - newStrafePower - rotatePower) / drivePowerDenom;
                 bsdPower = (newDrivePower + newStrafePower - rotatePower) / drivePowerDenom;
-            }
+            }*/
+
+            fpdPower = (drivePower - strafePower - rotatePower) / drivePowerDenom;
+            bpdPower = (drivePower + strafePower - rotatePower) / drivePowerDenom;
+            fsdPower = (drivePower + strafePower + rotatePower) / drivePowerDenom;
+            bsdPower = (drivePower - strafePower + rotatePower) / drivePowerDenom;
 
             /*fpdPower = (newDrivePower + newStrafePower + rotatePower) / drivePowerDenom;
             bpdPower = (newDrivePower - newStrafePower + rotatePower) / drivePowerDenom;

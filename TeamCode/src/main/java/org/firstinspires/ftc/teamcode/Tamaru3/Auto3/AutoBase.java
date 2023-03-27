@@ -19,7 +19,7 @@ public class AutoBase extends LinearOpMode {
     public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
 
     public final int downArmTarget = 0, lowPoleArmTarget = 1100, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
-    public final int fiveConeArmTarget = 500, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
+    public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
     private Coordinates targetCoordinates;
 
     public String sleeveColor = "";
