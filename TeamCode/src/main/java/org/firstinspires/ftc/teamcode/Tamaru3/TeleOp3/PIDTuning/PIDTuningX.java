@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 
 @Config
@@ -19,6 +22,8 @@ public class PIDTuningX extends OpMode{
     public static double p = 0, i = 0, d = 0;
 
     public static int target = 0;
+
+    public static double maxVelocity = 4000;
 
     public final double COUNTS_PER_ODO_REV = 8192;
     public final double ODO_GEAR_REDUCTION = (1.0); // This is < 1.0 if geared UP
@@ -70,15 +75,21 @@ public class PIDTuningX extends OpMode{
 
         //double robotTheta = (robot.armPort_POW.getCurrentPosition()-robot.SOW.getCurrentPosition())/ODO_COUNTS_PER_INCH / odoWheelGap;
         //double robotX = (robot.BOW.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * robotTheta);
-        int portAvg = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition()) / 2;
+        /*int portAvg = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition()) / 2;
         int starAvg = (robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/2;
         double robotY = ((portAvg+starAvg)/2)/WHEEL_COUNTS_PER_INCH;
         double robotTheta = ((portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/wheelGap);
-        double robotX = -1*((robot.armPortI.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * (portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/wheelGap));
+        double robotX = -1*((robot.armPortI.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * (portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/wheelGap));*/
+        int POW = (robot.bpd.getCurrentPosition()); //TODO: check that these are the right motors for the odowheels
+        int BOW = robot.fpd.getCurrentPosition();
+        int SOW = robot.bsd.getCurrentPosition();
+        double robotY = ((POW+SOW)/2)/WHEEL_COUNTS_PER_INCH;
+        double robotX = -1*((BOW / ODO_COUNTS_PER_INCH) - (2.5 * (POW-SOW)/ODO_COUNTS_PER_INCH/odoWheelGap));
+
 
         double pidX = controller.calculate(robotX, target);
 
-        double velocityX = -pidX * robot.maxVelocity;
+        double velocityX = -pidX * maxVelocity;
 
         robot.fpd.setVelocity(velocityX);
         robot.bpd.setVelocity(-velocityX);
@@ -88,10 +99,6 @@ public class PIDTuningX extends OpMode{
         telemetry.addData("robotX", robotX);
         telemetry.addData("target", target);
         telemetry.addData("velocityX", velocityX);
-        telemetry.addData("fpd", robot.fpd.getCurrentPosition());
-        telemetry.addData("bpd", robot.bpd.getCurrentPosition());
-        telemetry.addData("fsd", robot.fsd.getCurrentPosition());
-        telemetry.addData("bsd", robot.bsd.getCurrentPosition());
         telemetry.update();
     }
 }

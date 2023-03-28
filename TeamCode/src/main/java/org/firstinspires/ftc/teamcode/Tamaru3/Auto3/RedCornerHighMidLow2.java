@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
@@ -57,12 +58,59 @@ public class RedCornerHighMidLow2 extends AutoBase{
                 .build();
 
 
-        TrajectorySequence Score1 = drive.trajectorySequenceBuilder(PickUp1.end())
+        TrajectorySequence Score1A = drive.trajectorySequenceBuilder(startPose)
+                .addDisplacementMarker(() -> armToPosition(midPoleArmTarget)) //arm to low pole
+                //.addTemporalMarker((1), () -> { turretToPosition(robot.turretPort); extensionToPosition(robot.extensionPort);})
+                //.back(18) //back to mid pole 1
+                //.strafeLeft(7)//2
+                //.back(23.5)
+                .lineTo(new Vector2d(-37.5/2, -20))//-24
+                .waitSeconds(.5)
+                .build();
+
+        TrajectorySequence Score1B = drive.trajectorySequenceBuilder(Score1A.end())
                 .addDisplacementMarker(() -> armToPosition(midPoleArmTarget)) //arm to low pole
                 .addTemporalMarker((1), () -> { turretToPosition(robot.turretPort); extensionToPosition(robot.extensionPort);})
-                .back(18) //back to mid pole 1
-                .strafeLeft(7)//2
-                .back(23.5)
+                .lineTo(new Vector2d(-38.5, -20))
+                .build();
+
+        TrajectorySequence PickUp2 = drive.trajectorySequenceBuilder(Score1B.end())
+                .addDisplacementMarker(() -> { turretToPosition(robot.turretForward); extensionToPosition(1);})
+                .addTemporalMarker((.5), () -> armToPosition(fourConeArmTarget))
+                .lineTo(new Vector2d(-15.5, -24))
+                //.strafeRight(2)//1+4
+                //.forward(22)
+                //.strafeRight(3)
+                .forward(22)
+                .build();
+
+        TrajectorySequence Score2 = drive.trajectorySequenceBuilder(PickUp2.end())
+                .addDisplacementMarker(() -> armToPosition(lowPoleArmTarget)) //arm to low pole
+                .addTemporalMarker((1), () -> { turretToPosition(robot.turretPort); extensionToPosition(robot.extensionPort);})
+                /*.back(9) //back to low pole 1
+                .strafeLeft(3)
+                .back(9.5)*/
+                .lineTo(new Vector2d(-14, -22))
+                .build();
+
+        TrajectorySequence ParkGreen = drive.trajectorySequenceBuilder(Score2.end())
+                .addDisplacementMarker(() -> {turretToPosition(robot.turretForward); extensionToPosition(1); robot.servoHand.setPosition(robot.handClosed);})
+                //.addTemporalMarker((.5), () -> armToPosition(threeConeArmTarget))
+                .back(18)
+                .back(18)
+                .build();
+
+        TrajectorySequence ParkBlue = drive.trajectorySequenceBuilder(Score2.end())
+                .addDisplacementMarker(() -> {turretToPosition(robot.turretForward); extensionToPosition(1); robot.servoHand.setPosition(robot.handClosed);})
+                //.addTemporalMarker((.5), () -> armToPosition(threeConeArmTarget))
+                .back(14)
+                //.strafeLeft(3)
+                .build();
+
+        TrajectorySequence ParkRed = drive.trajectorySequenceBuilder(Score2.end())
+                .addDisplacementMarker(() -> {turretToPosition(robot.turretForward); extensionToPosition(1); })
+                //.addTemporalMarker((.5), () -> armToPosition(threeConeArmTarget))
+                .forward(12)
                 .build();
 
         waitForStart();
@@ -76,20 +124,22 @@ public class RedCornerHighMidLow2 extends AutoBase{
             drive.followTrajectorySequence(PickUp1);
             robot.servoHand.setPosition(robot.handClosed);
             correctAngle();
-            //drive.followTrajectorySequence(wait);
-            //touch sensor angle correction
-            ////////////SCORE ON MID POLE//////////////////////////////////
-            drive.followTrajectorySequence(Score1);
-            robot.servoHand.setPosition(robot.handOpen);
             drive.followTrajectorySequence(wait);
+            ////////////SCORE ON MID POLE//////////////////////////////////
+            resetDrive();
+            drive.followTrajectorySequence(Score1A);
+            drive.followTrajectorySequence(Score1B);
+            drive.followTrajectorySequence(wait);
+            robot.servoHand.setPosition(robot.handOpen);
             ////////////PICK UP A CONE FROM THE STACK///////////////////////
             //color sensor find stack tape
-            /*drive.followTrajectorySequence(PickUp2);
+            drive.followTrajectorySequence(PickUp2);
             robot.servoHand.setPosition(robot.handClosed);
             correctAngle();
             drive.followTrajectorySequence(wait);
             ////////////SCORE ON LOW POLE//////////////////////////////////
             drive.followTrajectorySequence(Score2);
+            drive.followTrajectorySequence(wait);
             robot.servoHand.setPosition(robot.handOpen);
             drive.followTrajectorySequence(wait);
             ////////////PARK//////////////////////////////////////////////
@@ -99,6 +149,6 @@ public class RedCornerHighMidLow2 extends AutoBase{
                 drive.followTrajectorySequence(ParkGreen);
             } else {
                 drive.followTrajectorySequence(ParkRed);
-            }*/
+            }
         }
     }

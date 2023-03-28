@@ -46,7 +46,8 @@ public class PIDTuningAll extends OpMode{
     public static double extensionPos = 0;
     public static double turretPos = .6;
 
-    public static double max = 2500;
+    //public static double max = 2500;
+    public static double max = 4000;
     public static double xMultiplier = 1;
 
     public final double COUNTS_PER_ODO_REV = 8192;
@@ -108,11 +109,18 @@ public class PIDTuningAll extends OpMode{
         //double robotTheta = (robot.armPort_POW.getCurrentPosition()-robot.SOW.getCurrentPosition())/ODO_COUNTS_PER_INCH / odoWheelGap;
         //double robotX = (robot.BOW.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * robotTheta);
 
-        int portAvg = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition()) / 2;
+        /*int portAvg = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition()) / 2;
         int starAvg = (robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/2;
         double robotY = ((portAvg+starAvg)/2)/WHEEL_COUNTS_PER_INCH;
         robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double robotX = -1*((robot.armPortI.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * (portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/odoWheelGap));
+        double robotX = -1*((robot.armPortI.getCurrentPosition() / ODO_COUNTS_PER_INCH) - (2.5 * (portAvg-starAvg)/WHEEL_COUNTS_PER_INCH/odoWheelGap));*/
+        int POW = (robot.bpd.getCurrentPosition()); //TODO: check that these are the right motors for the odowheels
+        int BOW = robot.fpd.getCurrentPosition();
+        int SOW = robot.bsd.getCurrentPosition();
+        double robotY = ((POW+SOW)/2)/WHEEL_COUNTS_PER_INCH;
+        robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double robotX = -1*((BOW / ODO_COUNTS_PER_INCH) - (2.5 * (POW-SOW)/WHEEL_COUNTS_PER_INCH/odoWheelGap));
+
         double robotArm = robot.armStarI.getCurrentPosition();
 
         double pidY = yController.calculate(robotY, targetY);
@@ -129,22 +137,6 @@ public class PIDTuningAll extends OpMode{
         robot.bpd.setVelocity(yVelocity - xMultiplier*xVelocity + thetaVelocity);
         robot.fsd.setVelocity(yVelocity - xMultiplier*xVelocity - thetaVelocity);
         robot.bsd.setVelocity(yVelocity + xMultiplier*xVelocity - thetaVelocity);
-
-        if(robotArm!=(targetArm+20) || robotArm!=(targetArm-20)) {
-            robot.armPortI.setPower(1);
-            robot.armPortO.setPower(1);
-            robot.armStarI.setPower(1);
-            robot.armStarO.setPower(1);
-        } else {
-            robot.armPortI.setPower(0);
-            robot.armPortO.setPower(0);
-            robot.armStarI.setPower(0);
-            robot.armStarO.setPower(0);
-        }
-
-        robot.servoHand.setPosition(handPos);
-        robot.servoTurret.setPosition(turretPos);
-        robot.servoExtend.setPosition(extensionPos);
 
         telemetry.addData("robotY", robotY);
         telemetry.addData("robotX", robotX);

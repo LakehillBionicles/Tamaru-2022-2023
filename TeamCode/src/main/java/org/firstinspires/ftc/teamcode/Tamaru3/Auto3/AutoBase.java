@@ -3,10 +3,17 @@ package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 import org.firstinspires.ftc.teamcode.CoordinateBased.field.*;
 
@@ -18,7 +25,32 @@ public class AutoBase extends LinearOpMode {
     private PIDController armPID;
     public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
 
-    public final int downArmTarget = 0, lowPoleArmTarget = 1100, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
+    private PIDController yController;
+    private PIDController xController;
+    private PIDController thetaController;
+    private PIDController armController;
+
+    public static double py = 0.0, iy = 0.0, dy = 0.0;
+    public static double px = 0.0, ix = 0.0, dx = 0.0;
+    public static double pTheta = 0.0, iTheta = 0.0, dTheta = 0.0;
+
+    public static double max = 2500;
+    public static double xMultiplier = 1;
+
+    public final double COUNTS_PER_ODO_REV = 8192;
+    public final double ODO_GEAR_REDUCTION = (1.0); // This is < 1.0 if geared UP
+    public final double ODO_WHEEL_DIAMETER_INCHES = 2.0;  // For figuring circumference
+    public final double ODO_COUNTS_PER_INCH = ((COUNTS_PER_ODO_REV * ODO_GEAR_REDUCTION) /
+            (ODO_WHEEL_DIAMETER_INCHES * 3.1415));
+
+    public final double WHEEL_COUNTS_PER_INCH = 22.48958;
+
+    public final double odoWheelGap = 12.5;
+
+    BNO055IMU imu;
+    Orientation robotTheta;
+
+    public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
     private Coordinates targetCoordinates;
 
@@ -27,7 +59,19 @@ public class AutoBase extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
+
         armPID = new PIDController(pArm, iArm, dArm);
+        yController = new PIDController(py, iy, dy);
+        xController = new PIDController(px, ix, dx);
+        thetaController = new PIDController(pTheta, iTheta, dTheta);
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
         resetArm();
         resetDrive();
     }
@@ -36,20 +80,20 @@ public class AutoBase extends LinearOpMode {
         String colorFront = "blank";
 
         while (opModeIsActive() && colorFront.equals("blank")) {
-            if (robot.colorSensorFront.red() > ((robot.colorSensorFront.blue()) - 5) && robot.colorSensorFront.red() > ((robot.colorSensorFront.green())) - 20) {
+            if (robot.colorSensorFront.red() > ((robot.colorSensorFront.blue()) - 5) && robot.colorSensorFront.red() > ((robot.colorSensorFront.green())) - 30) {
                 colorFront = "red";
                 telemetry.addData("i see red", " ");
                 telemetry.update();
                 colorFront = "red";
                 //sleeveColor.equals(red);
 
-            } else if (robot.colorSensorFront.blue() > (robot.colorSensorFront.red()) && robot.colorSensorFront.blue() > (robot.colorSensorFront.green())) {
+            } else if ((robot.colorSensorFront.blue()-5) > (robot.colorSensorFront.red()) && robot.colorSensorFront.blue() > (robot.colorSensorFront.green())) {
                 colorFront = "blue";
                 telemetry.addData("i see blue", " ");
                 telemetry.update();
                 colorFront = "blue";
 
-            } else if (robot.colorSensorFront.green() > (robot.colorSensorFront.red()) && robot.colorSensorFront.green() > (robot.colorSensorFront.blue())) {
+            } else if ((robot.colorSensorFront.green()-30) > (robot.colorSensorFront.red()) && robot.colorSensorFront.green() > (robot.colorSensorFront.blue())) {
                 colorFront = "green";
                 telemetry.addData("i see green", " ");
                 telemetry.update();
@@ -65,17 +109,6 @@ public class AutoBase extends LinearOpMode {
         }
         return colorFront;
     }
-
-    /*public String scanCone() {
-        if (senseColorsFront().equals("blue")) {
-            sleeveColor = "blue";
-        } else if (senseColorsFront().equals("green")) {
-            sleeveColor = "green";
-        } else {
-            sleeveColor = "red";
-        }
-        return sleeveColor;
-    }*/
 
     //TODO: add some sort of timeout in case something goes wrong with the touch sensors
     public void correctAngle(){
@@ -163,6 +196,41 @@ public class AutoBase extends LinearOpMode {
         robot.armPortO.setPower(0);
         robot.armStarI.setPower(0);
         robot.armStarO.setPower(0);
+    }
+
+    public void PIDDrive(double targetX, double targetY, double targetTheta){
+        yController.setPID(py, iy, dy);
+        xController.setPID(px, ix, dx);
+        thetaController.setPID(pTheta, iTheta, dTheta);
+
+        int POW = (robot.fpd.getCurrentPosition()); //TODO: check that these are the right motors for the odowheels
+        int BOW = robot.bpd.getCurrentPosition();
+        int SOW = robot.fsd.getCurrentPosition();
+        double robotY = ((POW+SOW)/2)/WHEEL_COUNTS_PER_INCH;
+        robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //TODO: add the imu back into the config
+        double robotX = -1*((BOW / ODO_COUNTS_PER_INCH) - (2.5 * (POW-SOW)/WHEEL_COUNTS_PER_INCH/odoWheelGap));
+
+        double pidY = yController.calculate(robotY, targetY);
+        double pidX = xController.calculate(robotX, targetX);
+        double pidTheta = thetaController.calculate(robotTheta.firstAngle, targetTheta);
+
+        double yVelocity = pidY * max;
+        double xVelocity = -pidX * max;
+        double thetaVelocity = -pidTheta * max;
+
+        robot.fpd.setVelocity(yVelocity + xMultiplier*xVelocity + thetaVelocity);
+        robot.bpd.setVelocity(yVelocity - xMultiplier*xVelocity + thetaVelocity);
+        robot.fsd.setVelocity(yVelocity - xMultiplier*xVelocity - thetaVelocity);
+        robot.bsd.setVelocity(yVelocity + xMultiplier*xVelocity - thetaVelocity);
+    }
+
+    public void distDrive(DistanceSensor distSensor){
+        while(distSensor.getDistance(DistanceUnit.CM)>10){
+            robot.fpd.setPower(.5);
+            robot.bpd.setPower(.5);
+            robot.fsd.setPower(.5);
+            robot.bsd.setPower(.5);
+        }
     }
 
     public void turretToPosition(double turretPosition) {

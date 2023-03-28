@@ -191,13 +191,20 @@ public class TamaruTele3 extends LinearOpMode {
                 extendPosition = 1;
             } else if (gamepad2.b) {
                 //PPTposition = PPTup;
-                extendPosition = 0.9;
+                extendPosition = 0.75;
             } else if (gamepad2.a) {
                 //SPTposition = SPTup;
-                extendPosition = 0.8;
+                extendPosition = 0.5;
             } else if (gamepad2.x) {
                 //SPTposition = SPTdown;
-                extendPosition = .75;
+                extendPosition = .25;
+            }
+
+            if(gamepad2.dpad_down){
+                turretPosition = robot.turretForward;
+                extendPosition = 1;
+                armToPosition(0);
+                setArmMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
             /////////////////////////////////////////////////MATH//////////////////////////////////////////////////////////////
@@ -317,11 +324,112 @@ public class TamaruTele3 extends LinearOpMode {
                 robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
             }*/
 
-            telemetry.addData("armPortO", robot.armPortO.getCurrentPosition());
-            telemetry.addData("armStarO", robot.armStarO.getCurrentPosition());
-            telemetry.addData("armPortI", robot.armPortI.getCurrentPosition());
-            telemetry.addData("armStarI", robot.armStarI.getCurrentPosition());
+            telemetry.addData("POW", robot.bpd.getCurrentPosition());
+            telemetry.addData("SOW", robot.bsd.getCurrentPosition());
+            telemetry.addData("BOW", robot.fpd.getCurrentPosition());
             telemetry.update();
         }
     }
+    public void armToPosition(int position){
+        robot.armPortI.setTargetPosition(position);
+        robot.armPortO.setTargetPosition(position);
+        robot.armStarI.setTargetPosition(position);
+        robot.armStarO.setTargetPosition(position);
+
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.armPortI.setPower(1);
+        robot.armPortO.setPower(1);
+        robot.armStarI.setPower(1);
+        robot.armStarO.setPower(1);
+    }
+
+    public void setArmMode(DcMotor.RunMode runMode){
+        robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }
+
+/* LINEUP CODE FROM AUSTIN
+   if (gamepad1.x) {
+        poleDriveAllignerPort(0.1, 0.5);
+    } else if (gamepad1.b) {
+        poleDriveAllignerStar(0.1,0.5);
+    } else {
+        counterForPoleDriveStar = 0;
+        counterForPoleDrivePort = 0;
+    }
+
+
+}double counterForPoleDriveStar = 0;
+    public void poleDriveAllignerStar ( double Starpower, double startStarPower){//make power really low
+        if (counterForPoleDriveStar < 1) {
+            robot.fpd.setPower(-startStarPower);
+            robot.fsd.setPower(-startStarPower);
+            robot.bpd.setPower(-startStarPower);
+            robot.bsd.setPower(-startStarPower);
+        }
+
+        if ((robot.distSensorStar <= 10) && ((robot.colorSensorStar.red >= 200) && (robot.colorSensorStar.green >= 200))) {
+            String autonoumousOn = "on";
+
+            if (counterForPoleDriveStar < 2) {
+                robot.fpd.setPower(Starpower / ((counterForPoleDriveStar + 1) * 2));
+                robot.fsd.setPower(Starpower / ((counterForPoleDriveStar + 1) * 2));
+                robot.bpd.setPower(Starpower / ((counterForPoleDriveStar + 1) * 2));
+                robot.bsd.setPower(Starpower / ((counterForPoleDriveStar + 1) * 2));
+                counterForPoleDriveStar++;
+            } else {
+                robot.fpd.setPower(0);
+                robot.fsd.setPower(0);
+                robot.bpd.setPower(0);
+                robot.bsd.setPower(0);
+            }
+            if ((robot.distSensorStar <= 5) && (counterForPoleDriveStar > 1)) {
+                elbowServo.setPosition(0);
+
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            } else {
+                robot.lights.setPartern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            }
+        }
+    }
+    double counterForPoleDrivePort = 0;
+    public void poleDriveAllignerPort ( double Portpower, double startPortPower)
+    {//make power really low
+        if (counterForPoleDrivePort < 1) {
+            robot.fpd.setPower(-startPortPower);
+            robot.fsd.setPower(-startPortPower);
+            robot.bpd.setPower(-startPortPower);
+            robot.bsd.setPower(-startPortPower);
+        }
+
+        if ((robot.distSensorPort <= 10) && ((robot.colorSensorPort.red >= 200) && (robot.colorSensorPort.green >= 200))) {
+            String autonoumousOn = "on";
+
+            if (counterForPoleDrivePort < 2) {
+                robot.fpd.setPower(Portpower / ((counterForPoleDrivePort + 1) * 2));
+                robot.fsd.setPower(Portpower / ((counterForPoleDrivePort + 1) * 2));
+                robot.bpd.setPower(Portpower / ((counterForPoleDrivePort + 1) * 2));
+                robot.bsd.setPower(Portpower / ((counterForPoleDrivePort + 1) * 2));
+                counterForPoleDrivePort++;
+            } else {
+                robot.fpd.setPower(0);
+                robot.fsd.setPower(0);
+                robot.bpd.setPower(0);
+                robot.bsd.setPower(0);
+            }
+            if ((robot.distSensorPort <= 5) && (counterForPoleDriveStar > 1)) {
+                elbowServo.setPosition(1);
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+            } else {
+                robot.lights.setPartern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            }
+        }
+    }
+ */
