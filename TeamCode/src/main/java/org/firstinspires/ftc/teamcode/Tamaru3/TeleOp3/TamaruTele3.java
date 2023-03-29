@@ -200,7 +200,7 @@ public class TamaruTele3 extends LinearOpMode {
                 extendPosition = .25;
             }
 
-            if(gamepad2.dpad_down){
+            if (gamepad2.dpad_down) {
                 turretPosition = robot.turretForward;
                 extendPosition = 1;
                 armToPosition(0);
@@ -222,9 +222,9 @@ public class TamaruTele3 extends LinearOpMode {
             //hypotenuseRight = Math.sqrt((gamepad1.right_stick_x * gamepad1.right_stick_x)+(gamepad1.right_stick_y * gamepad1.right_stick_y));
             //rotatePower = hypotenuseRight*(Math.sin(thetaDiscrepency / 2));
 
-            hypotenuseLeft = Math.sqrt((gamepad1.left_stick_x * gamepad1.left_stick_x)+(gamepad1.left_stick_y * gamepad1.left_stick_y));
+            hypotenuseLeft = Math.sqrt((gamepad1.left_stick_x * gamepad1.left_stick_x) + (gamepad1.left_stick_y * gamepad1.left_stick_y));
             newStrafePower = (hypotenuseLeft * Math.cos(thetaFieldCentric));
-            newDrivePower =  -(hypotenuseLeft * Math.sin(thetaFieldCentric));
+            newDrivePower = -(hypotenuseLeft * Math.sin(thetaFieldCentric));
 
             ///////////////////////////////////////////////////////// MOTOR POWERS ////////////////////////////////////////////////////
 
@@ -234,7 +234,7 @@ public class TamaruTele3 extends LinearOpMode {
                 drivePowerDenom = 1;
             }
 
-            if (currentGamepad1.back && !previousGamepad1.back){
+            if (currentGamepad1.back && !previousGamepad1.back) {
                 fieldCentric = !fieldCentric;
             }
 
@@ -324,13 +324,21 @@ public class TamaruTele3 extends LinearOpMode {
                 robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
             }*/
 
-            telemetry.addData("POW", robot.bpd.getCurrentPosition());
-            telemetry.addData("SOW", robot.bsd.getCurrentPosition());
-            telemetry.addData("BOW", robot.fpd.getCurrentPosition());
+            telemetry.addData("Color", senseColors());
+            telemetry.addData("front: red", robot.colorSensorFront.red());
+            telemetry.addData("front: green", robot.colorSensorFront.green());
+            telemetry.addData("front: blue", robot.colorSensorFront.blue());
+            telemetry.addData("port: red", robot.colorSensorPortBottom.red());
+            telemetry.addData("port: green", robot.colorSensorPortBottom.green());
+            telemetry.addData("port: blue", robot.colorSensorPortBottom.blue());
+            telemetry.addData("star: red", robot.colorSensorStarBottom.red());
+            telemetry.addData("star: green", robot.colorSensorStarBottom.green());
+            telemetry.addData("star: blue", robot.colorSensorStarBottom.blue());
             telemetry.update();
         }
     }
-    public void armToPosition(int position){
+
+    public void armToPosition(int position) {
         robot.armPortI.setTargetPosition(position);
         robot.armPortO.setTargetPosition(position);
         robot.armStarI.setTargetPosition(position);
@@ -347,13 +355,43 @@ public class TamaruTele3 extends LinearOpMode {
         robot.armStarO.setPower(1);
     }
 
-    public void setArmMode(DcMotor.RunMode runMode){
+    public void setArmMode(DcMotor.RunMode runMode) {
         robot.armPortI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.armPortO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.armStarI.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.armStarO.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    public String senseColors() {
+        String colorFront = "blank";
+        double redMax = 1.5 * Math.max(Math.max(robot.colorSensorFront.red(), robot.colorSensorPortBottom.red()), robot.colorSensorStarBottom.red());
+        int blueMax = Math.max(Math.max(robot.colorSensorFront.blue(), robot.colorSensorPortBottom.blue()), robot.colorSensorStarBottom.blue());
+        int greenMax = Math.max(Math.max(robot.colorSensorFront.green(), robot.colorSensorPortBottom.green()), robot.colorSensorStarBottom.green());
+
+        while (opModeIsActive() && colorFront.equals("blank")) {
+            if ((redMax > blueMax) && (redMax > greenMax)) {
+                telemetry.addData("i see red", " ");
+                telemetry.update();
+                colorFront = "red";
+            } else if ((blueMax > redMax) && (blueMax > greenMax)) {
+                telemetry.addData("i see blue", " ");
+                telemetry.update();
+                colorFront = "blue";
+            } else if ((greenMax > redMax) && (greenMax > blueMax)) {
+                telemetry.addData("i see green", " ");
+                telemetry.update();
+                colorFront = "green";
+            } else {
+                telemetry.addData("i see nothing", " ");
+                telemetry.update();
+                colorFront = "no go";
+            }
+
+        }
+        return colorFront;
+    }
 }
+
 
 /* LINEUP CODE FROM AUSTIN
    if (gamepad1.x) {

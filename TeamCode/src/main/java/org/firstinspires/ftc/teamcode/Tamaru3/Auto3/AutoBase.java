@@ -78,32 +78,27 @@ public class AutoBase extends LinearOpMode {
 
     public String senseColorsFront() {
         String colorFront = "blank";
+        double redMax = 1.5*Math.max(Math.max(robot.colorSensorFront.red(), robot.colorSensorPortBottom.red()), robot.colorSensorStarBottom.red());
+        int blueMax = Math.max(Math.max(robot.colorSensorFront.blue(), robot.colorSensorPortBottom.blue()), robot.colorSensorStarBottom.blue());
+        int greenMax = Math.max(Math.max(robot.colorSensorFront.green(), robot.colorSensorPortBottom.green()), robot.colorSensorStarBottom.green());
 
         while (opModeIsActive() && colorFront.equals("blank")) {
-            if (robot.colorSensorFront.red() > ((robot.colorSensorFront.blue()) - 5) && robot.colorSensorFront.red() > ((robot.colorSensorFront.green())) - 30) {
-                colorFront = "red";
+            if ((redMax > blueMax) && (redMax > greenMax)) {
                 telemetry.addData("i see red", " ");
                 telemetry.update();
                 colorFront = "red";
-                //sleeveColor.equals(red);
-
-            } else if ((robot.colorSensorFront.blue()-5) > (robot.colorSensorFront.red()) && robot.colorSensorFront.blue() > (robot.colorSensorFront.green())) {
-                colorFront = "blue";
+            } else if ((blueMax > redMax) && (blueMax > greenMax)) {
                 telemetry.addData("i see blue", " ");
                 telemetry.update();
                 colorFront = "blue";
-
-            } else if ((robot.colorSensorFront.green()-30) > (robot.colorSensorFront.red()) && robot.colorSensorFront.green() > (robot.colorSensorFront.blue())) {
-                colorFront = "green";
+            } else if ((greenMax > redMax) && (greenMax > blueMax)) {
                 telemetry.addData("i see green", " ");
                 telemetry.update();
                 colorFront = "green";
-
             } else {
                 telemetry.addData("i see nothing", " ");
                 telemetry.update();
                 colorFront = "no go";
-
             }
 
         }

@@ -50,10 +50,11 @@ public class RedCornerHighMidLow2 extends AutoBase{
                 .addDisplacementMarker(() -> { armToPosition(fiveConeArmTarget); extensionToPosition(1);}) //arm down and turret forward
                 .back(7)
                 .turn(Math.toRadians(94)) //turn to stack
-                .forward(12) //forward to stack 1
-                .strafeRight(10)
+                .lineTo(new Vector2d(61, 7)) //forward 12 and right 8 //12, 61, 8
+                //.forward(12) //forward to stack 1
+                //.strafeRight(10)
                 //.waitSeconds(.5)
-                .forward(12)
+                .forward(18)
                 //.addDisplacementMarker(this::correctAngle)
                 .build();
 
@@ -77,7 +78,7 @@ public class RedCornerHighMidLow2 extends AutoBase{
         TrajectorySequence PickUp2 = drive.trajectorySequenceBuilder(Score1B.end())
                 .addDisplacementMarker(() -> { turretToPosition(robot.turretForward); extensionToPosition(1);})
                 .addTemporalMarker((.5), () -> armToPosition(fourConeArmTarget))
-                .lineTo(new Vector2d(-15.5, -24))
+                .lineTo(new Vector2d(-15.5, -23))//-22
                 //.strafeRight(2)//1+4
                 //.forward(22)
                 //.strafeRight(3)
