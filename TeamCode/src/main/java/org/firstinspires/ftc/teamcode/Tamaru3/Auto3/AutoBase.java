@@ -105,6 +105,61 @@ public class AutoBase extends LinearOpMode {
         return colorFront;
     }
 
+    public void lineUpWithConeStackPickUp(){
+        while(!senseColors().equals("red")){
+            robot.fpd.setPower(.5);
+            robot.bpd.setPower(-.5);
+            robot.fsd.setPower(-.5);
+            robot.bsd.setPower(.5);
+        }
+        robot.fpd.setPower(0);
+        robot.bpd.setPower(0);
+        robot.fsd.setPower(0);
+        robot.bsd.setPower(0);
+    }
+
+    public void lineUpWithConeStackScore(){
+        while(senseColors().equals("red")){
+            robot.fpd.setPower(-.5);
+            robot.bpd.setPower(.5);
+            robot.fsd.setPower(.5);
+            robot.bsd.setPower(-.5);
+        }
+        robot.fpd.setPower(0);
+        robot.bpd.setPower(0);
+        robot.fsd.setPower(0);
+        robot.bsd.setPower(0);
+    }
+
+    public String senseColors() {
+        String color = "blank";
+        double redMax = robot.colorSensorBottom.red();
+        int blueMax = robot.colorSensorBottom.blue();
+        int greenMax = robot.colorSensorBottom.green();
+
+        while (opModeIsActive() && color.equals("blank")) {
+            if ((redMax > blueMax) && (redMax > greenMax)) {
+                telemetry.addData("i see red", " ");
+                telemetry.update();
+                color = "red";
+            } else if ((blueMax > redMax) && (blueMax > greenMax)) {
+                telemetry.addData("i see blue", " ");
+                telemetry.update();
+                color = "blue";
+            } else if ((greenMax > redMax) && (greenMax > blueMax)) {
+                telemetry.addData("i see green", " ");
+                telemetry.update();
+                color = "green";
+            } else {
+                telemetry.addData("i see nothing", " ");
+                telemetry.update();
+                color = "no go";
+            }
+
+        }
+        return color;
+    }
+
     //TODO: add some sort of timeout in case something goes wrong with the touch sensors
     public void correctAngle(){
         while(!robot.touchSensorPort.isPressed()||!robot.touchSensorStar.isPressed()) {
@@ -219,13 +274,41 @@ public class AutoBase extends LinearOpMode {
         robot.bsd.setVelocity(yVelocity + xMultiplier*xVelocity - thetaVelocity);
     }
 
-    public void distDrive(DistanceSensor distSensor){
-        while(distSensor.getDistance(DistanceUnit.CM)>10){
-            robot.fpd.setPower(.5);
-            robot.bpd.setPower(.5);
-            robot.fsd.setPower(.5);
-            robot.bsd.setPower(.5);
+    public void distDrivePort(int direction){
+        while(robot.distSensorPort.getDistance(DistanceUnit.CM)>10||robot.distSensorPort2.getDistance(DistanceUnit.CM)>10){
+            robot.fpd.setPower(direction*.25);
+            robot.bpd.setPower(direction*.25);
+            robot.fsd.setPower(direction*.25);
+            robot.bsd.setPower(direction*.25);
+
+            if(robot.distSensorPort.getDistance(DistanceUnit.CM)<10||robot.distSensorPort2.getDistance(DistanceUnit.CM)<10){
+                break;
+            }
+
+            telemetry.addData("distPort1", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            telemetry.addData("distPort2", robot.distSensorPort2.getDistance(DistanceUnit.CM));
+            telemetry.update();
         }
+        robot.fpd.setPower(0);
+        robot.bpd.setPower(0);
+        robot.fsd.setPower(0);
+        robot.bsd.setPower(0);
+    }
+
+    public void distDriveStar(int direction){
+        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>10){
+            robot.fpd.setPower(direction*.25);
+            robot.bpd.setPower(direction*.25);
+            robot.fsd.setPower(direction*.25);
+            robot.bsd.setPower(direction*.25);
+
+            telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
+            telemetry.update();
+        }
+        robot.fpd.setPower(0);
+        robot.bpd.setPower(0);
+        robot.fsd.setPower(0);
+        robot.bsd.setPower(0);
     }
 
     public void turretToPosition(double turretPosition) {

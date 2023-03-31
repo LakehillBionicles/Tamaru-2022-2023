@@ -180,11 +180,24 @@ public class TamaruTele3 extends LinearOpMode {
                 turretPosition = robot.turretStar;
             }
 
-            /*if(gamepad2.left_trigger>0){
-                robot.servoExtend.setPosition(1);
+            if (gamepad2.dpad_down) {
+                resetTurretAndExtension();
+            }
+
+            if (turretPosition == robot.turretPort) {
+                double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM)+robot.distSensorPort2.getDistance(DistanceUnit.CM))/2;
+                extendPosition = Math.min(1.33 + -0.188*distPort + 0.0104*distPort*distPort, .5);
+            } else if (turretPosition == robot.turretStar) {
+                double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
+                extendPosition = Math.min(1.45 + -0.145*distStar + 4.76E-04*distStar*distStar, .5);
             } else {
-                robot.servoExtend.setPosition(0);
-            }*/
+                extendPosition = 1;
+            }
+
+            if (gamepad2.dpad_down) {
+                turretPosition = robot.turretForward;
+                extendPosition = 1;
+            }
 
             if (gamepad2.y) {
                 //PPTposition = PPTdown;
@@ -198,13 +211,6 @@ public class TamaruTele3 extends LinearOpMode {
             } else if (gamepad2.x) {
                 //SPTposition = SPTdown;
                 extendPosition = .25;
-            }
-
-            if (gamepad2.dpad_down) {
-                turretPosition = robot.turretForward;
-                extendPosition = 1;
-                armToPosition(0);
-                setArmMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
             /////////////////////////////////////////////////MATH//////////////////////////////////////////////////////////////
@@ -230,7 +236,9 @@ public class TamaruTele3 extends LinearOpMode {
 
             if (gamepad1.left_trigger > 0) {
                 drivePowerDenom = 2;
-            } else {
+            } else if (gamepad1.right_trigger > 0){
+                drivePowerDenom = 4/3;
+            }  else {
                 drivePowerDenom = 1;
             }
 
@@ -282,9 +290,9 @@ public class TamaruTele3 extends LinearOpMode {
             //robot.servoPoleToucherPort.setPosition(PPTposition);
 
             ////////////////////////////////////////////////OTHER/////////////////////////////////////////////////////////////
-            if ((robot.distSensorHand.getDistance(DistanceUnit.CM) < 4) && !(gamepad2.left_bumper || gamepad2.right_bumper) && !(gamepad1.left_bumper || gamepad1.right_bumper)) {
+            /*if ((robot.distSensorHand.getDistance(DistanceUnit.CM) < 4) && !(gamepad2.left_bumper || gamepad2.right_bumper) && !(gamepad1.left_bumper || gamepad1.right_bumper)) {
                 handPos = robot.handClosed;
-            }
+            }*/
 
             /*if (robot.touchSensorPort.isPressed()) {
                 polePort = true;
@@ -324,7 +332,11 @@ public class TamaruTele3 extends LinearOpMode {
                 robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
             }*/
 
-            telemetry.addData("Color", senseColors());
+            telemetry.addData("portDist1", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            telemetry.addData("portDist2", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            telemetry.addData("starDist1", robot.distSensorStar.getDistance(DistanceUnit.CM));
+            telemetry.addData("starDist2", robot.distSensorStar2.getDistance(DistanceUnit.CM));
+            /*telemetry.addData("Color", senseColors());
             telemetry.addData("front: red", robot.colorSensorFront.red());
             telemetry.addData("front: green", robot.colorSensorFront.green());
             telemetry.addData("front: blue", robot.colorSensorFront.blue());
@@ -333,7 +345,7 @@ public class TamaruTele3 extends LinearOpMode {
             telemetry.addData("port: blue", robot.colorSensorPortBottom.blue());
             telemetry.addData("star: red", robot.colorSensorStarBottom.red());
             telemetry.addData("star: green", robot.colorSensorStarBottom.green());
-            telemetry.addData("star: blue", robot.colorSensorStarBottom.blue());
+            telemetry.addData("star: blue", robot.colorSensorStarBottom.blue());*/
             telemetry.update();
         }
     }
@@ -389,6 +401,11 @@ public class TamaruTele3 extends LinearOpMode {
 
         }
         return colorFront;
+    }
+
+    public void resetTurretAndExtension(){
+        turretPosition = robot.turretForward;
+        extendPosition = 1;
     }
 }
 

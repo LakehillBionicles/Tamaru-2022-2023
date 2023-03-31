@@ -38,13 +38,16 @@ public class Tamaru3Hardware extends LinearOpMode{
     public ColorSensor colorSensorStar = null;
     public ColorSensor colorSensorPortBottom = null;
     public ColorSensor colorSensorStarBottom = null;
+    public ColorSensor colorSensorBottom = null;
 
     public TouchSensor touchSensorPort = null;
     public TouchSensor touchSensorStar = null;
 
-    public DistanceSensor distSensorHand = null;
+    //public DistanceSensor distSensorHand = null;
     public DistanceSensor distSensorPort = null;
     public DistanceSensor distSensorStar = null;
+    public DistanceSensor distSensorPort2 = null;
+    public DistanceSensor distSensorStar2 = null;
 
     public RevBlinkinLedDriver lights = null;
 
@@ -54,7 +57,7 @@ public class Tamaru3Hardware extends LinearOpMode{
 
     public final double turretForward = .325, turretPort = 0, turretStar = .8;//.285, 0, .6
 
-    public final double extensionPort = .675, extensionStar = .87;//.65, .875
+    public final double extensionPort = .4, extensionStar = .75;//.675, .87
 
     static final double COUNTS_PER_MOTOR_REV_BE = 8192;
     static final double DRIVE_GEAR_REDUCTION_BE = 1.0;     // This is < 1.0 if geared UP
@@ -96,14 +99,17 @@ public class Tamaru3Hardware extends LinearOpMode{
         //servoPoleToucherStar = hwMap.get(Servo.class, "servoPoleToucherStar");
 
         colorSensorFront = hwMap.get(ColorSensor.class, "colorSensorFront");
-        colorSensorPort = hwMap.get(ColorSensor.class, "colorSensorPort");
+        //colorSensorPort = hwMap.get(ColorSensor.class, "colorSensorPort");
         //colorSensorStar = hwMap.get(ColorSensor.class, "colorSensorStar");
         colorSensorPortBottom = hwMap.get(ColorSensor.class, "colorSensorPortBottom");
         colorSensorStarBottom = hwMap.get(ColorSensor.class, "colorSensorStarBottom");
+        colorSensorBottom = hwMap.get(ColorSensor.class, "colorSensorBottom");
 
-        distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
+        //distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
+        distSensorPort2 = hwMap.get(DistanceSensor.class, "distSensorPort2");
+        distSensorStar2 = hwMap.get(DistanceSensor.class, "distSensorStar2");
 
         touchSensorPort = hwMap.get(TouchSensor.class, "touchSensorPort");
         touchSensorStar = hwMap.get(TouchSensor.class, "touchSensorStar");
