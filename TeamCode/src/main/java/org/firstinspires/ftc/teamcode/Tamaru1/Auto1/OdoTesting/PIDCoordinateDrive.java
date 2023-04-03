@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Tamaru1.Auto1.OdoTesting;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AutoBase;
 
 @Autonomous
-//@Disabled
+@Disabled
 
 //FOR NOTEBOOK: graph error vs power (to find perfect tolerance)
 

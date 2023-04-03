@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Tamaru2.TeleOp2.Current;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 
 
 @TeleOp
-//@Disabled
+@Disabled
 
 //////////////////////gamepad1 is drive; gamepad 2 is arm/hand/pre-set distances//////////////////////
 

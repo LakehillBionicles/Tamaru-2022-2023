@@ -1,8 +1,10 @@
-package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
+package org.firstinspires.ftc.teamcode.Tamaru3.Auto3.OldPaths;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+import org.firstinspires.ftc.teamcode.Tamaru3.Auto3.AutoBase;
 
 @Config
 @Disabled

@@ -5,7 +5,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -26,6 +25,8 @@ public class TamaruTele3 extends LinearOpMode {
     private PIDController armController;
 
     //the below variables are private to keep everything within this class
+
+    private RevBlinkinLedDriver.BlinkinPattern LEDColor = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_PARTY_PALETTE;
 
     //gamepad 1 (drive) variable
     private boolean polePort = false;
@@ -99,15 +100,15 @@ public class TamaruTele3 extends LinearOpMode {
             currentGamepad2.copy(gamepad2);
 
             ///////////////////////////////////////////////////////////// GAMEPAD 1 //////////////////////////////////////////////////
-            drivePower = -gamepad1.left_stick_y;
+            //drivePower = -gamepad1.left_stick_y;
             strafePower = -gamepad1.left_stick_x;
             rotatePower = -gamepad1.right_stick_x;
 
             if (gamepad1.left_bumper) {
                 handPos = robot.handClosed;
-            } else if (gamepad1.right_bumper) {
+            } /*else if (gamepad1.right_bumper) {
                 handPos = robot.handOpen;
-            }
+            }*/
 
             if (gamepad1.a) {
                 PPTposition = PPTdown;
@@ -122,45 +123,31 @@ public class TamaruTele3 extends LinearOpMode {
                 SPTposition = SPTdown;
             }
 
-            /*
-            if(gamepad1.left_trigger>0){
-                port = true;
+
+            /*if(gamepad1.dpad_up&&(robot.distSensorPort.getDistance(DistanceUnit.CM)>10||robot.distSensorPort2.getDistance(DistanceUnit.CM)>10||robot.distSensorStar.getDistance(DistanceUnit.CM)>10||robot.distSensorStar2.getDistance(DistanceUnit.CM)>10)) {
+                drivePower = -.25;
+            } else if((gamepad1.dpad_down)&&(robot.distSensorPort.getDistance(DistanceUnit.CM)>10||robot.distSensorPort2.getDistance(DistanceUnit.CM)>10||robot.distSensorStar.getDistance(DistanceUnit.CM)>10||robot.distSensorStar2.getDistance(DistanceUnit.CM)>10)) {
+                drivePower = .25;
             } else {
-                star = true;
-            }
-
-            if(port){ //add dist sensor condition
-                if(dpad_up){
-                    drive forward until distSensorPort < x;
-                } else if(dpad_down){
-                    drive forward until distSensorPort < x;
-                } else if(dpad_right){
-                    strafe right until distSensorPort < x;
-                } else if(dpad_left){
-                    strafe left until distSensorPort < x;
-                }
-            }
-
-            if(star){ //add dist sensor condition
-                if(dpad_up){
-                        drive forward until distSensorPort < x;
-                    } else if(dpad_down){
-                       drive forward until distSensorPort < x;
-                    } else if(dpad_right){
-                        strafe right until distSensorPort < x;
-                    } else if(dpad_left){
-                        strafe left until distSensorPort < x;
-                    }
-                }
-            }
-            */
-
-            /*if (gamepad1.dpad_left && !(robot.distSensorPort.getDistance(DistanceUnit.CM) < 15)) {
-                drivePower = 0.5;
-            }
-            if (gamepad1.dpad_right && !(robot.distSensorStar.getDistance(DistanceUnit.CM) < 15)) {
-                drivePower = 0.5;
+                drivePower = -gamepad1.left_stick_y;
             }*/
+
+            if((gamepad1.dpad_up&&(robot.distSensorPort.getDistance(DistanceUnit.CM)>10&&robot.distSensorPort2.getDistance(DistanceUnit.CM)>10))){
+                drivePower = .175;
+                LEDColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+            } else if((gamepad1.dpad_down&&(robot.distSensorPort.getDistance(DistanceUnit.CM)>10&&robot.distSensorPort2.getDistance(DistanceUnit.CM)>10))){
+                drivePower = -.175;
+                LEDColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+            } else if((gamepad1.dpad_right&&(robot.distSensorStar.getDistance(DistanceUnit.CM)>10/*&&robot.distSensorStar2.getDistance(DistanceUnit.CM)>10*/))){
+                drivePower = .175;
+                LEDColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+            } else if((gamepad1.dpad_left&&(robot.distSensorStar.getDistance(DistanceUnit.CM)>10/*&&robot.distSensorStar2.getDistance(DistanceUnit.CM)>10*/))){
+                drivePower = -.175;
+                LEDColor = RevBlinkinLedDriver.BlinkinPattern.RED;
+            } else {
+                drivePower = -gamepad1.left_stick_y;
+                LEDColor = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_PARTY_PALETTE;
+            }
 
             /////////////////////////////////////////////////////////// GAMEPAD 2 ////////////////////////////////////////////////////
 
@@ -172,12 +159,13 @@ public class TamaruTele3 extends LinearOpMode {
                 handPos = robot.handOpen;
             }
 
+
             if (gamepad2.dpad_up) {
                 turretPosition = robot.turretForward;
             } else if (gamepad2.dpad_left) {
-                turretPosition = robot.turretPort;
-            } else if (gamepad2.dpad_right) {
                 turretPosition = robot.turretStar;
+            } else if (gamepad2.dpad_right) {
+                turretPosition = robot.turretPort;
             }
 
             if (gamepad2.dpad_down) {
@@ -185,11 +173,12 @@ public class TamaruTele3 extends LinearOpMode {
             }
 
             if (turretPosition == robot.turretPort) {
-                double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM)+robot.distSensorPort2.getDistance(DistanceUnit.CM))/2;
-                extendPosition = Math.min(1.33 + -0.188*distPort + 0.0104*distPort*distPort, .5);
+                double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM) + robot.distSensorPort2.getDistance(DistanceUnit.CM)) / 2;
+                extendPosition = Math.max(1.33 + -0.188 * distPort + 0.0104 * distPort * distPort, .5);
             } else if (turretPosition == robot.turretStar) {
                 double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-                extendPosition = Math.min(1.45 + -0.145*distStar + 4.76E-04*distStar*distStar, .5);
+                extendPosition = Math.max(1.6 + -0.145 * distStar + 4.76E-04 * distStar * distStar, .5);
+                //Math.max(1.6 + -0.145 * distStar + 4.76E-04 * distStar * distStar, .5
             } else {
                 extendPosition = 1;
             }
@@ -236,9 +225,9 @@ public class TamaruTele3 extends LinearOpMode {
 
             if (gamepad1.left_trigger > 0) {
                 drivePowerDenom = 2;
-            } else if (gamepad1.right_trigger > 0){
-                drivePowerDenom = 4/3;
-            }  else {
+            } else if (gamepad1.right_trigger > 0) {
+                drivePowerDenom = 4 / 3;
+            } else {
                 drivePowerDenom = 1;
             }
 
@@ -286,6 +275,8 @@ public class TamaruTele3 extends LinearOpMode {
 
             robot.servoHand.setPosition(handPos);
 
+            robot.lights.setPattern(LEDColor);
+
             //robot.servoPoleToucherStar.setPosition(SPTposition);
             //robot.servoPoleToucherPort.setPosition(PPTposition);
 
@@ -332,10 +323,10 @@ public class TamaruTele3 extends LinearOpMode {
                 robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_GREEN);
             }*/
 
-            telemetry.addData("portDist1", robot.distSensorPort.getDistance(DistanceUnit.CM));
-            telemetry.addData("portDist2", robot.distSensorPort.getDistance(DistanceUnit.CM));
-            telemetry.addData("starDist1", robot.distSensorStar.getDistance(DistanceUnit.CM));
-            telemetry.addData("starDist2", robot.distSensorStar2.getDistance(DistanceUnit.CM));
+            //telemetry.addData("portDist1", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            //telemetry.addData("portDist2", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            //telemetry.addData("starDist1", robot.distSensorStar.getDistance(DistanceUnit.CM));
+            //telemetry.addData("starDist2", robot.distSensorStar2.getDistance(DistanceUnit.CM));
             /*telemetry.addData("Color", senseColors());
             telemetry.addData("front: red", robot.colorSensorFront.red());
             telemetry.addData("front: green", robot.colorSensorFront.green());
@@ -346,7 +337,7 @@ public class TamaruTele3 extends LinearOpMode {
             telemetry.addData("star: red", robot.colorSensorStarBottom.red());
             telemetry.addData("star: green", robot.colorSensorStarBottom.green());
             telemetry.addData("star: blue", robot.colorSensorStarBottom.blue());*/
-            telemetry.update();
+            //telemetry.update();
         }
     }
 
@@ -403,12 +394,19 @@ public class TamaruTele3 extends LinearOpMode {
         return colorFront;
     }
 
-    public void resetTurretAndExtension(){
+    public void resetTurretAndExtension() {
         turretPosition = robot.turretForward;
         extendPosition = 1;
     }
-}
 
+    public void lights(String color){
+        if ("red".equals(color)) {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        } else {
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.TWINKLES_FOREST_PALETTE);
+        }
+    }
+}
 
 /* LINEUP CODE FROM AUSTIN
    if (gamepad1.x) {

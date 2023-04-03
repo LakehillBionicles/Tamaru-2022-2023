@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tamaru1.TeleOp1;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Tamaru1.TemaruHardware;
 import org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AutoBase;
 
 @TeleOp
-
+@Disabled
 public class testlaksdnfl extends AutoBase {
 
     TemaruHardware robot = new TemaruHardware();

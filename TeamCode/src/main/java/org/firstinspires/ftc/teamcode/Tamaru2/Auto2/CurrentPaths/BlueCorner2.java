@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
  * Other Notes: doesn't work very well, made quickly based on RedCorner2
  */
 
+@Disabled
 @Config
 @Autonomous
 public class BlueCorner2 extends LinearOpMode {

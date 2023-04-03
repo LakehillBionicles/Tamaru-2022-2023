@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tamaru2.TeleOp2.Old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 
 
 @TeleOp
-//@Disabled
+@Disabled
 
     /*
     DRIVE

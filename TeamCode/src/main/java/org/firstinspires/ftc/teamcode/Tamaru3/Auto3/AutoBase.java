@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -84,20 +86,12 @@ public class AutoBase extends LinearOpMode {
 
         while (opModeIsActive() && colorFront.equals("blank")) {
             if ((redMax > blueMax) && (redMax > greenMax)) {
-                telemetry.addData("i see red", " ");
-                telemetry.update();
                 colorFront = "red";
             } else if ((blueMax > redMax) && (blueMax > greenMax)) {
-                telemetry.addData("i see blue", " ");
-                telemetry.update();
                 colorFront = "blue";
             } else if ((greenMax > redMax) && (greenMax > blueMax)) {
-                telemetry.addData("i see green", " ");
-                telemetry.update();
                 colorFront = "green";
             } else {
-                telemetry.addData("i see nothing", " ");
-                telemetry.update();
                 colorFront = "no go";
             }
 
@@ -105,8 +99,9 @@ public class AutoBase extends LinearOpMode {
         return colorFront;
     }
 
-    public void lineUpWithConeStackPickUp(){
-        while(!senseColors().equals("red")){
+    public void lineUpWithConeStackPickUpRight(String color){
+        resetRuntime();
+        while(!senseColors(robot.colorSensorBottom).equals(color) && getRuntime()<1){
             robot.fpd.setPower(.5);
             robot.bpd.setPower(-.5);
             robot.fsd.setPower(-.5);
@@ -118,8 +113,9 @@ public class AutoBase extends LinearOpMode {
         robot.bsd.setPower(0);
     }
 
-    public void lineUpWithConeStackScore(){
-        while(senseColors().equals("red")){
+    public void lineUpWithConeStackPickUpLeft(String color){
+        resetRuntime();
+        while(senseColors(robot.colorSensorBottom).equals(color) && getRuntime()<1){
             robot.fpd.setPower(-.5);
             robot.bpd.setPower(.5);
             robot.fsd.setPower(.5);
@@ -131,11 +127,25 @@ public class AutoBase extends LinearOpMode {
         robot.bsd.setPower(0);
     }
 
-    public String senseColors() {
+    public void lineUpWithConeStackScore(String color){
+        resetRuntime();
+        while(!senseColors(robot.colorSensorFront).equals(color) && getRuntime()<.5){
+            robot.fpd.setPower(-.5);
+            robot.bpd.setPower(.5);
+            robot.fsd.setPower(.5);
+            robot.bsd.setPower(-.5);
+        }
+        robot.fpd.setPower(0);
+        robot.bpd.setPower(0);
+        robot.fsd.setPower(0);
+        robot.bsd.setPower(0);
+    }
+
+    public String senseColors(ColorSensor colorSensor) {
         String color = "blank";
-        double redMax = robot.colorSensorBottom.red();
-        int blueMax = robot.colorSensorBottom.blue();
-        int greenMax = robot.colorSensorBottom.green();
+        double redMax = colorSensor.red();
+        int blueMax = colorSensor.blue();
+        int greenMax = colorSensor.green();
 
         while (opModeIsActive() && color.equals("blank")) {
             if ((redMax > blueMax) && (redMax > greenMax)) {
@@ -160,9 +170,9 @@ public class AutoBase extends LinearOpMode {
         return color;
     }
 
-    //TODO: add some sort of timeout in case something goes wrong with the touch sensors
     public void correctAngle(){
-        while(!robot.touchSensorPort.isPressed()||!robot.touchSensorStar.isPressed()) {
+        resetRuntime();
+        while((!robot.touchSensorPort.isPressed()||!robot.touchSensorStar.isPressed())&&getRuntime()<.75) {
             while (!robot.touchSensorPort.isPressed() && robot.touchSensorStar.isPressed()) {
                 robot.fpd.setPower(.25);
                 robot.bpd.setPower(.25);
@@ -274,12 +284,13 @@ public class AutoBase extends LinearOpMode {
         robot.bsd.setVelocity(yVelocity + xMultiplier*xVelocity - thetaVelocity);
     }
 
-    public void distDrivePort(int direction){
-        while(robot.distSensorPort.getDistance(DistanceUnit.CM)>10||robot.distSensorPort2.getDistance(DistanceUnit.CM)>10){
-            robot.fpd.setPower(direction*.25);
-            robot.bpd.setPower(direction*.25);
-            robot.fsd.setPower(direction*.25);
-            robot.bsd.setPower(direction*.25);
+    public void distDrivePort(int direction, double timeout){
+        resetRuntime();
+        while((robot.distSensorPort.getDistance(DistanceUnit.CM)>10||robot.distSensorPort2.getDistance(DistanceUnit.CM)>10)&&getRuntime()<timeout){
+            robot.fpd.setPower(direction*.2);
+            robot.bpd.setPower(direction*.2);
+            robot.fsd.setPower(direction*.2);
+            robot.bsd.setPower(direction*.2);
 
             if(robot.distSensorPort.getDistance(DistanceUnit.CM)<10||robot.distSensorPort2.getDistance(DistanceUnit.CM)<10){
                 break;
@@ -295,12 +306,31 @@ public class AutoBase extends LinearOpMode {
         robot.bsd.setPower(0);
     }
 
-    public void distDriveStar(int direction){
-        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>10){
-            robot.fpd.setPower(direction*.25);
-            robot.bpd.setPower(direction*.25);
-            robot.fsd.setPower(direction*.25);
-            robot.bsd.setPower(direction*.25);
+    public void strafeDist(DistanceSensor distSensor, double targetDist, int direction){
+        resetRuntime();
+        while((distSensor.getDistance(DistanceUnit.CM)>targetDist||distSensor.getDistance(DistanceUnit.CM)>targetDist)&&getRuntime()<2){
+            robot.fpd.setPower(direction*.4);
+            robot.bpd.setPower(-direction*.4);
+            robot.fsd.setPower(-direction*.4);
+            robot.bsd.setPower(direction*.4);
+
+            if(distSensor.getDistance(DistanceUnit.CM)<targetDist||distSensor.getDistance(DistanceUnit.CM)<targetDist){
+                break;
+            }
+        }
+        robot.fpd.setPower(0);
+        robot.bpd.setPower(0);
+        robot.fsd.setPower(0);
+        robot.bsd.setPower(0);
+    }
+
+    public void distDriveStar(int direction, double timeout){
+        resetRuntime();
+        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>10 && getRuntime()<timeout){
+            robot.fpd.setPower(direction*.2);
+            robot.bpd.setPower(direction*.2);
+            robot.fsd.setPower(direction*.2);
+            robot.bsd.setPower(direction*.2);
 
             telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
             telemetry.update();
@@ -319,4 +349,20 @@ public class AutoBase extends LinearOpMode {
         robot.servoExtend.setPosition(extensionPosition);
     }
 
+    public void lights(String color){
+        switch (color) {
+            case "blue":
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                break;
+            case "green":
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                break;
+            case "red":
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                break;
+            default:
+                robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                break;
+        }
+    }
 }

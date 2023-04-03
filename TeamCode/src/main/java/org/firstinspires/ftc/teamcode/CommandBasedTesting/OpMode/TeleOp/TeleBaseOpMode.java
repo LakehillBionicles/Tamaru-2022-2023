@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -19,6 +20,8 @@ import org.firstinspires.ftc.teamcode.CommandBasedTesting.Subsystems.TurretSubsy
  * initializes all subsystems, gamepads, and hardware
  * used in TestTele
  */
+@Disabled
+
 public class TeleBaseOpMode extends CommandOpMode {
     public Servo servoHand, servoExtend, servoTurret;
     public DcMotorEx fpd, bpd, fsd, bsd;

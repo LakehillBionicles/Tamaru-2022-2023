@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -20,6 +21,8 @@ import org.firstinspires.ftc.teamcode.CommandBasedTesting.Subsystems.HandSubsyst
  * first successful attempt at using CommandOpMode
  * opens and closes the hand
  */
+@Disabled
+
 @TeleOp
 @Config
 public class TestHand extends CommandOpMode {

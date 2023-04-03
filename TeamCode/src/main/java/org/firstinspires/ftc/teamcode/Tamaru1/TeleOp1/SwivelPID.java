@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Tamaru1.TemaruHardware;
 import org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AutoBase;
 
 @TeleOp
-//@Disabled
+@Disabled
 
 //////////////////////gamepad1 is drive; gamepad 2 is arm/hand/pre-set distances//////////////////////
 

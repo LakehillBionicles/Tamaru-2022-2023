@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToMidPolePort;
@@ -17,6 +18,8 @@ import org.firstinspires.ftc.teamcode.CommandBasedTesting.Subsystems.LinearArmSu
  * controls drive, arm, hand, and turret
  * baseControl is gamepad1, armControl is gamepad2
  */
+@Disabled
+
 @TeleOp
 @Config
 public class TestTele extends TeleBaseOpMode {

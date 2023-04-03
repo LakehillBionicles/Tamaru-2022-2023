@@ -1,12 +1,15 @@
-package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
+package org.firstinspires.ftc.teamcode.Tamaru3.Auto3.OldPaths;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Tamaru3.Auto3.AutoBase;
 
+@Disabled
 @TeleOp
-public class SensorTesting extends AutoBase{
+public class SensorTesting extends AutoBase {
 
     @Override
     public void runOpMode() {
@@ -55,7 +58,7 @@ public class SensorTesting extends AutoBase{
 
             telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
             telemetry.addData("distPort1", robot.distSensorPort.getDistance(DistanceUnit.CM));
-            telemetry.addData("distStar2", robot.distSensorStar2.getDistance(DistanceUnit.CM));
+            //telemetry.addData("distStar2", robot.distSensorStar2.getDistance(DistanceUnit.CM));
             telemetry.addData("distPort2", robot.distSensorPort2.getDistance(DistanceUnit.CM));
             telemetry.update();
         }

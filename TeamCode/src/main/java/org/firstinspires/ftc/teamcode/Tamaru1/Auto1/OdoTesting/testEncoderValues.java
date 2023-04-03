@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.Tamaru1.Auto1.OdoTesting;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AutoBase;
 
 @Autonomous
-//@Disabled
+@Disabled
 
 public class testEncoderValues extends AutoBase {
 

@@ -3,12 +3,15 @@ package org.firstinspires.ftc.teamcode.CommandBasedTesting.OpMode.Auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToHighPoleStar;
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToLowPolePort;
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToStack.ArmToFiveCones;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 
+@Disabled
 @Config
 @Autonomous(group="CommandBased")
 public class Testing extends AutoBaseOpMode {

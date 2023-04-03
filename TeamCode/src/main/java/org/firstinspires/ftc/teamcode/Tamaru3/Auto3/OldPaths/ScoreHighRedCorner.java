@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Tamaru3.Auto3;
+package org.firstinspires.ftc.teamcode.Tamaru3.Auto3.OldPaths;
 
 import static org.firstinspires.ftc.teamcode.CoordinateBased.field.Location.*;
 
@@ -10,10 +10,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.CoordinateBased.field;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Tamaru3.Auto3.AutoBase;
+
 @Disabled
 @Config
 @Autonomous(name = "ScoreHighRedCorner", group = "TrajectoryAutos")
-public class ScoreHighRedCorner extends AutoBase{
+public class ScoreHighRedCorner extends AutoBase {
 
     @Override
     public void runOpMode(){

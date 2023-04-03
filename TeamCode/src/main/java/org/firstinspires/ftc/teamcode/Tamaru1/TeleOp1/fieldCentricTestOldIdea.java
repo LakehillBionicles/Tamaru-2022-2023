@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Tamaru1.TemaruHardware;
 import org.firstinspires.ftc.teamcode.Tamaru1.Auto1.AutoBase;
 
 @TeleOp
-//@Disabled
+@Disabled
 
 public class fieldCentricTestOldIdea extends LinearOpMode {
 

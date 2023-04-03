@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.Tamaru1.TemaruHardware.armSpeed;
 import static org.firstinspires.ftc.teamcode.Tamaru1.TemaruHardware.closeHandPos;
 import static org.firstinspires.ftc.teamcode.Tamaru1.TemaruHardware.openHandPos;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 @TeleOp
-//@Disabled
+@Disabled
 public class TeleOp1Driver extends LinearOpMode {
     TemaruHardware robot = new TemaruHardware();
 

@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Tamaru2.TeleOp2.Old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Tamaru2.BaseClasses.Tamaru2Hardware;
 
 @TeleOp
+@Disabled
 
 public class testMotors extends LinearOpMode {
     Tamaru2Hardware robot = new Tamaru2Hardware();

@@ -47,7 +47,7 @@ public class Tamaru3Hardware extends LinearOpMode{
     public DistanceSensor distSensorPort = null;
     public DistanceSensor distSensorStar = null;
     public DistanceSensor distSensorPort2 = null;
-    public DistanceSensor distSensorStar2 = null;
+    //public DistanceSensor distSensorStar2 = null;
 
     public RevBlinkinLedDriver lights = null;
 
@@ -57,7 +57,7 @@ public class Tamaru3Hardware extends LinearOpMode{
 
     public final double turretForward = .325, turretPort = 0, turretStar = .8;//.285, 0, .6
 
-    public final double extensionPort = .4, extensionStar = .75;//.675, .87
+    public final double extensionPort = .4, extensionStar = .675;//.675, .87
 
     static final double COUNTS_PER_MOTOR_REV_BE = 8192;
     static final double DRIVE_GEAR_REDUCTION_BE = 1.0;     // This is < 1.0 if geared UP
@@ -74,7 +74,6 @@ public class Tamaru3Hardware extends LinearOpMode{
     }
 
     @Override
-
     public void runOpMode() {
     }
 
@@ -109,7 +108,7 @@ public class Tamaru3Hardware extends LinearOpMode{
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
         distSensorPort2 = hwMap.get(DistanceSensor.class, "distSensorPort2");
-        distSensorStar2 = hwMap.get(DistanceSensor.class, "distSensorStar2");
+        //distSensorStar2 = hwMap.get(DistanceSensor.class, "distSensorStar2");
 
         touchSensorPort = hwMap.get(TouchSensor.class, "touchSensorPort");
         touchSensorStar = hwMap.get(TouchSensor.class, "touchSensorStar");
