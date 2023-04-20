@@ -13,9 +13,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.CommandBasedTesting.Subsystems.LinearArmSubsystem;
+
 @Config
 public class ArmSubsystem extends SubsystemBase {
-    DcMotorEx armPort = null, armStar = null;
+    private final DcMotorEx armPort, armStar;
 
     public enum Height {
         GROUND(0),
@@ -33,11 +35,10 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
-    public ArmSubsystem(HardwareMap HardwareMap){
-        armPort = HardwareMap.get(DcMotorEx.class, "armPort");
-        armStar = HardwareMap.get(DcMotorEx.class, "armStar");
+    public ArmSubsystem(DcMotorEx motor1, DcMotorEx motor2){
+        this.armPort = motor1; this.armStar = motor2;
 
-        armPort.setDirection(DcMotorEx.Direction.FORWARD);
+        armPort.setDirection(DcMotorEx.Direction.REVERSE);
         armStar.setDirection(DcMotorEx.Direction.FORWARD);
 
         armPort.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
@@ -47,15 +48,12 @@ public class ArmSubsystem extends SubsystemBase {
         armStar.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
-    public void setArmPower(double power) {
-        armPort.setPower(power);
-        armStar.setPower(power);
-    }
-
-    public void armToPosition(Height targetHeight, double power){
-        setArmTarget(targetHeight.getHeight());
-        setArmMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setArmPower(power);
+    public Command setArmToHeight(LinearArmSubsystem.Height height) {
+        return new InstantCommand(() -> {
+            setArmTarget(height.getHeight());
+            setArmMode(DcMotor.RunMode.RUN_TO_POSITION);
+            setArmPower(1);
+        }, this);
     }
 
     public void setArmMode(DcMotorEx.RunMode runMode){
@@ -74,6 +72,17 @@ public class ArmSubsystem extends SubsystemBase {
 
         armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void setArmPower(double power) {
+        armPort.setPower(power);
+        armStar.setPower(power);
+    }
+
+    public void armToPosition(Height targetHeight, double power){
+        setArmTarget(targetHeight.getHeight());
+        setArmMode(DcMotor.RunMode.RUN_TO_POSITION);
+        setArmPower(power);
     }
 
 }

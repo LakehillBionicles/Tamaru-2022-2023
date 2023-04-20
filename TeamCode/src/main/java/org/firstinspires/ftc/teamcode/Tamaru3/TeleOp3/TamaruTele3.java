@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Tamaru3.TeleOp3;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
  */
 
 @TeleOp
-//@Disabled
+@Disabled
 public class TamaruTele3 extends LinearOpMode {
     Tamaru3Hardware robot = new Tamaru3Hardware();
     private PIDController armController;

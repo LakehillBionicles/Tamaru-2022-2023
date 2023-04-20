@@ -23,6 +23,9 @@ import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
 
 public class ThreemaruBase extends CommandOpMode {
     public DistanceSensor distSensorHand, distSensorStar, distSensorPort;
+    public DcMotorEx fpd, bpd, fsd, bsd;
+    public DcMotorEx armPort, armStar;
+    public Servo hand1, hand2, servoExtend, servoTurret;
 
     public DriveSubsystem ThreemaruDrive;
     public ArmSubsystem ThreemaruArm;
@@ -41,11 +44,16 @@ public class ThreemaruBase extends CommandOpMode {
         baseControl = new GamepadEx(gamepad1);
         armControl = new GamepadEx(gamepad2);
 
-        ThreemaruDrive = new DriveSubsystem(hwMap);
-        ThreemaruArm = new ArmSubsystem(hwMap);
-        ThreemaruHand = new HandSubsystem(hwMap);
-        ThreemaruExtension = new ExtensionSubsystem(hwMap);
-        ThreemaruTurret = new TurretSubsystem(hwMap);
+        ThreemaruDrive = new DriveSubsystem(fpd, bpd, fsd, bsd);
+        ThreemaruArm = new ArmSubsystem(armPort, armStar);
+        ThreemaruHand = new HandSubsystem(hand1, hand2);
+        ThreemaruExtension = new ExtensionSubsystem(servoExtend);
+        ThreemaruTurret = new TurretSubsystem(servoTurret);
+
+        fpd = hwMap.get(DcMotorEx.class, "fpd");
+        bpd = hwMap.get(DcMotorEx.class, "bpd");
+        fsd = hwMap.get(DcMotorEx.class, "fsd");
+        bsd = hwMap.get(DcMotorEx.class, "bsd");
 
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");

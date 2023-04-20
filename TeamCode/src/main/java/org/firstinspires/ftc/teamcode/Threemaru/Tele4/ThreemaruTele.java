@@ -2,41 +2,51 @@ package org.firstinspires.ftc.teamcode.Threemaru.Tele4;
 
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.*;
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.*;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ExtensionSubsystem.ExtendPos.*;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ExtensionSubsystem;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruBase;
 
 @TeleOp
 //@Disabled
-public class ThreemaruTele extends ThreemaruBase {
+public class ThreemaruTele extends LinearOpMode {
+    ThreemaruHardware robot = new ThreemaruHardware();
     public double drivePower, strafePower, rotPower;
-    public double extendPosition;
-    public int drivePowerDenom;
-    public HandSubsystem.HandPos handPos;
-    public TurretSubsystem.TurretPos turretPosition;
-
-    @Override
-    public void initialize() { super.initialize(); }
+    public double extendPosition = RETRACTED.getPosition();
+    public int drivePowerDenom = 1;
+    public HandSubsystem.HandPos handPos1 = OPEN1;
+    public HandSubsystem.HandPos handPos2 = OPEN2;
+    public TurretSubsystem.TurretPos turretPosition = FORWARD;
 
     public void runOpMode() {
+        robot.init(hardwareMap);
+
         waitForStart();
 
         while (opModeIsActive()) {
-            ThreemaruDrive.setDrivePower(getDrivePower(), -gamepad1.left_stick_y/getDrivePowerDenom(), rotPower = gamepad1.right_stick_x/getDrivePowerDenom());
+            robot.fpd.setPower(getDrivePower() - -gamepad1.left_stick_y/getDrivePowerDenom() + gamepad1.right_stick_x/getDrivePowerDenom());
+            robot.bpd.setPower(getDrivePower() + -gamepad1.left_stick_y/getDrivePowerDenom() + gamepad1.right_stick_x/getDrivePowerDenom());
+            robot.fsd.setPower(getDrivePower() + -gamepad1.left_stick_y/getDrivePowerDenom() - gamepad1.right_stick_x/getDrivePowerDenom());
+            robot.bsd.setPower(getDrivePower() - -gamepad1.left_stick_y/getDrivePowerDenom() - gamepad1.right_stick_x/getDrivePowerDenom());
+
+            robot.armPort.setPower(-gamepad2.left_stick_y);
+            robot.armStar.setPower(-gamepad2.left_stick_y);
+
+            robot.servoHand1.setPosition(getHandPos1().getPosition());
+            robot.servoHand2.setPosition(getHandPos2().getPosition());
+            robot.servoExtend.setPosition(getExtendPosition());
+            robot.servoTurret.setPosition(getTurretPosition().getPosition());
+
+            /*ThreemaruDrive.setDrivePower(getDrivePower(), -gamepad1.left_stick_y/getDrivePowerDenom(), gamepad1.right_stick_x/getDrivePowerDenom());
             ThreemaruArm.setArmPower(-gamepad1.left_stick_y);
             ThreemaruHand.setHandPos(getHandPos());
             ThreemaruExtension.setExtensionPos(getExtendPosition());
-            ThreemaruTurret.setTurretPos(getTurretPosition());
+            ThreemaruTurret.setTurretPos(getTurretPosition());*/
         }
     }
 
@@ -52,13 +62,13 @@ public class ThreemaruTele extends ThreemaruBase {
     }
 
     public double getDrivePower() {
-        if ((gamepad1.dpad_up && (distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
+        if ((gamepad1.dpad_up && (robot.distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = .175;
-        } else if ((gamepad1.dpad_down && (distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
+        } else if ((gamepad1.dpad_down && (robot.distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = -.175;
-        } else if ((gamepad1.dpad_right && (distSensorStar.getDistance(DistanceUnit.CM) > 10))) {
+        } else if ((gamepad1.dpad_right && (robot.distSensorStar.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = .175;
-        } else if ((gamepad1.dpad_left && (distSensorStar.getDistance(DistanceUnit.CM) > 10))) {
+        } else if ((gamepad1.dpad_left && (robot.distSensorStar.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = -.175;
         } else {
             drivePower = -gamepad1.left_stick_y/getDrivePowerDenom();
@@ -66,18 +76,32 @@ public class ThreemaruTele extends ThreemaruBase {
         return drivePower;
     }
 
-    public HandSubsystem.HandPos getHandPos() {
+    public HandSubsystem.HandPos getHandPos1() {
         if (gamepad1.left_bumper) {
-            handPos = CLOSED;
+            handPos1 = CLOSED1;
         }
 
         if (gamepad2.left_bumper) {
-            handPos = CLOSED;
+            handPos1 = CLOSED1;
         } else if (gamepad2.right_bumper) {
-            handPos = OPEN;
+            handPos1 = OPEN1;
         }
 
-        return handPos;
+        return handPos1;
+    }
+
+    public HandSubsystem.HandPos getHandPos2() {
+        if (gamepad1.left_bumper) {
+            handPos2 = CLOSED2;
+        }
+
+        if (gamepad2.left_bumper) {
+            handPos2 = CLOSED2;
+        } else if (gamepad2.right_bumper) {
+            handPos2 = OPEN2;
+        }
+
+        return handPos2;
     }
 
     public TurretSubsystem.TurretPos getTurretPosition() {
@@ -94,26 +118,22 @@ public class ThreemaruTele extends ThreemaruBase {
     }
 
     public double getExtendPosition() {
-        if (turretPosition == PORT) {
-            double distPort = (distSensorPort.getDistance(DistanceUnit.CM));
+        /*if (turretPosition == PORT) {
+            double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
             extendPosition = Math.max(1.33 + -0.188 * distPort + 0.0104 * distPort * distPort, .5);
         } else if (turretPosition == STAR) {
-            double distStar = distSensorStar.getDistance(DistanceUnit.CM);
+            double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
             extendPosition = Math.max(1.6 + -0.145 * distStar + 4.76E-04 * distStar * distStar, .5);
-        }
+        }*/
 
         if (gamepad2.dpad_down) {
-            extendPosition = 1;
+            extendPosition = RETRACTED.getPosition();
         }
 
         if (gamepad2.y) {
-            extendPosition = 1;
+            extendPosition = EXTENDED.getPosition();
         } else if (gamepad2.b) {
-            extendPosition = 0.75;
-        } else if (gamepad2.a) {
-            extendPosition = 0.5;
-        } else if (gamepad2.x) {
-            extendPosition = .25;
+            extendPosition = RETRACTED.getPosition();
         }
 
         return extendPosition;

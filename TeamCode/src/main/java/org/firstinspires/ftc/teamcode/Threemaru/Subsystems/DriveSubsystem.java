@@ -9,11 +9,8 @@ public class DriveSubsystem extends SubsystemBase {
     private final DcMotorEx fpd, bpd, fsd, bsd;
 
 
-    public DriveSubsystem(HardwareMap HardwareMap) {
-        fpd = HardwareMap.get(DcMotorEx.class, "fpd");
-        fsd = HardwareMap.get(DcMotorEx.class, "fsd");
-        bpd = HardwareMap.get(DcMotorEx.class, "bpd");
-        bsd = HardwareMap.get(DcMotorEx.class, "bsd");
+    public DriveSubsystem(DcMotorEx fpd, DcMotorEx bpd, DcMotorEx fsd, DcMotorEx bsd) {
+        this.fpd = fpd; this.bpd = bpd; this.fsd = fsd; this.bsd = bsd;
 
         fpd.setDirection(DcMotorEx.Direction.FORWARD);
         bpd.setDirection(DcMotorEx.Direction.FORWARD);
@@ -32,10 +29,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setDrivePower(double drivePower, double strafePower, double rotPower){
-        fpd.setVelocity(drivePower - strafePower + rotPower);
-        bpd.setVelocity(drivePower + strafePower + rotPower);
-        fsd.setVelocity(drivePower + strafePower - rotPower);
-        bsd.setVelocity(drivePower - strafePower - rotPower);
+        fpd.setPower(drivePower - strafePower + rotPower);
+        bpd.setPower(drivePower + strafePower + rotPower);
+        fsd.setPower(drivePower + strafePower - rotPower);
+        bsd.setPower(drivePower - strafePower - rotPower);
     }
 
     public void resetDrive(){
