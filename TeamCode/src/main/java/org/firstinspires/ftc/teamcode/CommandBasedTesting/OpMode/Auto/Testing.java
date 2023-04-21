@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToHighPoleStar;
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToPole.armToLowPolePort;
 import org.firstinspires.ftc.teamcode.CommandBasedTesting.Commands.ArmCommands.ArmToStack.ArmToFiveCones;
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
 
 @Disabled
 @Config

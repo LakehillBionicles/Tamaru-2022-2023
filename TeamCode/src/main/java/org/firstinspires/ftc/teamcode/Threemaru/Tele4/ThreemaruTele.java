@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
 //@Disabled
 public class ThreemaruTele extends LinearOpMode {
     ThreemaruHardware robot = new ThreemaruHardware();
-    public double drivePower, strafePower, rotPower;
+    public double drivePower, strafePower, rotPower, armPower;
     public double extendPosition = RETRACTED.getPosition();
     public int drivePowerDenom = 1;
     public HandSubsystem.HandPos handPos1 = OPEN1;
@@ -29,24 +29,18 @@ public class ThreemaruTele extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.fpd.setPower(getDrivePower() - -gamepad1.left_stick_y/getDrivePowerDenom() + gamepad1.right_stick_x/getDrivePowerDenom());
-            robot.bpd.setPower(getDrivePower() + -gamepad1.left_stick_y/getDrivePowerDenom() + gamepad1.right_stick_x/getDrivePowerDenom());
-            robot.fsd.setPower(getDrivePower() + -gamepad1.left_stick_y/getDrivePowerDenom() - gamepad1.right_stick_x/getDrivePowerDenom());
-            robot.bsd.setPower(getDrivePower() - -gamepad1.left_stick_y/getDrivePowerDenom() - gamepad1.right_stick_x/getDrivePowerDenom());
+            robot.fpd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x + gamepad2.right_stick_x);
+            robot.bpd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x + gamepad2.right_stick_x);
+            robot.fsd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x - gamepad2.right_stick_x);
+            robot.bsd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x - gamepad2.right_stick_x);
 
-            robot.armPort.setPower(-gamepad2.left_stick_y);
-            robot.armStar.setPower(-gamepad2.left_stick_y);
+            robot.armStar.setPower(getArmPower());
+            robot.armPort.setPower(getArmPower());
 
             robot.servoHand1.setPosition(getHandPos1().getPosition());
             robot.servoHand2.setPosition(getHandPos2().getPosition());
             robot.servoExtend.setPosition(getExtendPosition());
-            robot.servoTurret.setPosition(getTurretPosition().getPosition());
-
-            /*ThreemaruDrive.setDrivePower(getDrivePower(), -gamepad1.left_stick_y/getDrivePowerDenom(), gamepad1.right_stick_x/getDrivePowerDenom());
-            ThreemaruArm.setArmPower(-gamepad1.left_stick_y);
-            ThreemaruHand.setHandPos(getHandPos());
-            ThreemaruExtension.setExtensionPos(getExtendPosition());
-            ThreemaruTurret.setTurretPos(getTurretPosition());*/
+            //robot.servoTurret.setPosition(getTurretPosition().getPosition());
         }
     }
 
@@ -71,7 +65,7 @@ public class ThreemaruTele extends LinearOpMode {
         } else if ((gamepad1.dpad_left && (robot.distSensorStar.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = -.175;
         } else {
-            drivePower = -gamepad1.left_stick_y/getDrivePowerDenom();
+            drivePower = -gamepad2.left_stick_y/getDrivePowerDenom();
         }
         return drivePower;
     }
@@ -137,5 +131,16 @@ public class ThreemaruTele extends LinearOpMode {
         }
 
         return extendPosition;
+    }
+
+    public double getArmPower(){
+        if(gamepad2.dpad_up){
+            armPower = 1;
+        } else if(gamepad2.dpad_down){
+            armPower = -1;
+        } else {
+            armPower = 0;
+        }
+        return armPower;
     }
 }

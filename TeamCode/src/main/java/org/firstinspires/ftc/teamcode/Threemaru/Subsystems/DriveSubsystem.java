@@ -12,9 +12,9 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem(DcMotorEx fpd, DcMotorEx bpd, DcMotorEx fsd, DcMotorEx bsd) {
         this.fpd = fpd; this.bpd = bpd; this.fsd = fsd; this.bsd = bsd;
 
-        fpd.setDirection(DcMotorEx.Direction.FORWARD);
+        fpd.setDirection(DcMotorEx.Direction.REVERSE);
         bpd.setDirection(DcMotorEx.Direction.FORWARD);
-        fsd.setDirection(DcMotorEx.Direction.FORWARD);
+        fsd.setDirection(DcMotorEx.Direction.REVERSE);
         bsd.setDirection(DcMotorEx.Direction.REVERSE);
 
         fpd.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);

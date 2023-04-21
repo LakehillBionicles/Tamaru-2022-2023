@@ -18,8 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class ThreemaruHardware extends LinearOpMode{
     public DcMotorEx fpd = null;
     public DcMotorEx fsd = null;
-    public DcMotorEx bpd = null;
-    public DcMotorEx bsd = null;
+    public DcMotorEx bpd = null;//POW
+    public DcMotorEx bsd = null;//BOW
+    public DcMotorEx SOW = null;
 
     public DcMotorEx armPort = null, armStar = null;
 
@@ -48,6 +49,7 @@ public class ThreemaruHardware extends LinearOpMode{
         fsd = hwMap.get(DcMotorEx.class, "fsd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
+        SOW = hwMap.get(DcMotorEx.class, "SOW");
 
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");
@@ -60,10 +62,10 @@ public class ThreemaruHardware extends LinearOpMode{
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
 
-        fpd.setDirection(DcMotorSimple.Direction.FORWARD);//POW
-        fsd.setDirection(DcMotorSimple.Direction.FORWARD);
-        bpd.setDirection(DcMotorSimple.Direction.FORWARD);//BOW
-        bsd.setDirection(DcMotorSimple.Direction.FORWARD);//SOW
+        fpd.setDirection(DcMotorSimple.Direction.REVERSE);
+        fsd.setDirection(DcMotorSimple.Direction.REVERSE);
+        bpd.setDirection(DcMotorSimple.Direction.FORWARD);
+        bsd.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armPort.setDirection(DcMotorSimple.Direction.REVERSE);
         armStar.setDirection(DcMotorSimple.Direction.FORWARD);

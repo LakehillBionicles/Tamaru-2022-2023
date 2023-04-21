@@ -26,4 +26,7 @@ public class ExtensionSubsystem extends SubsystemBase {
     public ExtensionSubsystem(Servo servo) {this.extension = servo;}
 
     public Command setExtensionPosition(double position) {return new InstantCommand(()->extension.setPosition(position));}
+    public Command setExtensionExtended() {return new InstantCommand(()->extension.setPosition(ExtendPos.EXTENDED.getPosition()));}
+    public Command setExtensionRetracted() {return new InstantCommand(()->extension.setPosition(ExtendPos.RETRACTED.getPosition()));}
+
 }

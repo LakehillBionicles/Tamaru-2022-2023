@@ -12,7 +12,7 @@ public class HandSubsystem extends SubsystemBase {
 
     public enum HandPos {
         OPEN1(.25), CLOSED1(.6),
-        OPEN2(.5), CLOSED2(0);
+        OPEN2(.4), CLOSED2(0);
 
         public final double position;
 
@@ -30,9 +30,9 @@ public class HandSubsystem extends SubsystemBase {
         this.hand2 = servo2;
     }
 
-    public Command grab() { return new InstantCommand(() -> setHandPos(HandPos.CLOSED1, HandPos.CLOSED2)); }
+    public Command grab() { return new InstantCommand(() -> setHandPos(HandPos.CLOSED1, HandPos.CLOSED2), this); }
 
-    public Command release() { return new InstantCommand(() -> setHandPos(HandPos.OPEN1, HandPos.OPEN2)); }
+    public Command release() { return new InstantCommand(() -> setHandPos(HandPos.OPEN1, HandPos.OPEN2), this); }
 
 
     public void setHandPos(HandPos targetPos1, HandPos targetPos2){

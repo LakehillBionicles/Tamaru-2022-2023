@@ -55,7 +55,6 @@ public class TeleBaseOpMode extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-
     }
 
     protected void initHardware() {

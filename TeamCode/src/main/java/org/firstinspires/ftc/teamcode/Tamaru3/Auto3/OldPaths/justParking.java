@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
 @Disabled
 @Config
 @Autonomous(name = "Just Parking", group = "TrajectoryAutos")
