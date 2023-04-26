@@ -14,6 +14,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.util.Encoder;
+
+import java.util.Base64;
 
 public class ThreemaruHardware extends LinearOpMode{
     public DcMotorEx fpd = null;
@@ -21,6 +24,7 @@ public class ThreemaruHardware extends LinearOpMode{
     public DcMotorEx bpd = null;//POW
     public DcMotorEx bsd = null;//BOW
     public DcMotorEx SOW = null;
+    public DcMotorEx POW = null;
 
     public DcMotorEx armPort = null, armStar = null;
 
@@ -50,6 +54,7 @@ public class ThreemaruHardware extends LinearOpMode{
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
         SOW = hwMap.get(DcMotorEx.class, "SOW");
+        POW = hwMap.get(DcMotorEx.class, "POW");
 
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");
@@ -66,7 +71,8 @@ public class ThreemaruHardware extends LinearOpMode{
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
         bpd.setDirection(DcMotorSimple.Direction.FORWARD);
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        SOW.setDirection(DcMotorSimple.Direction.REVERSE);
+        POW.setDirection(DcMotorSimple.Direction.REVERSE);
         armPort.setDirection(DcMotorSimple.Direction.REVERSE);
         armStar.setDirection(DcMotorSimple.Direction.FORWARD);
 
