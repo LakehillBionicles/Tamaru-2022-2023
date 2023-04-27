@@ -28,13 +28,12 @@ public class AprilTagDemo extends LinearOpMode
     // You will need to do your own calibration for other configurations!
 
     //c920 intrinsics
-    /*
+
     double fx = 578.272;
     double fy = 578.272;
     double cx = 402.145;
     double cy = 221.506;
 
-     */
     //c270 intrinsics
     /*
     double fx = 1078.03779;
@@ -44,11 +43,6 @@ public class AprilTagDemo extends LinearOpMode
 
      */
     //It might also be this for c270
-    double fx = 1430;
-    double fy = 1430;
-    double cx = 480;
-    double cy = 620;
-
     // UNITS ARE METERS
     double tagsize = 0.166;
 
