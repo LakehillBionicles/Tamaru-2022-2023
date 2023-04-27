@@ -176,6 +176,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public void telemetryForVision(){
         while (!isStarted()) {
             telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
+            telemetry.update();
         }
     }
     public void encoderDrive(double speed, double leftInches, double rightInches) {

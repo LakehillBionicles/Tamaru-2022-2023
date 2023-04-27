@@ -17,22 +17,28 @@ public class ThreemaruJustParkBlueCorner extends ThreemaruAutoBase{
 
         resetArm();
         resetDrive();
-
-        waitForStart();
+        scanSignalSleeve();
+        telemetryForVision();
+        while (!isStarted()) {
+            telemetry.addData("Detected tag ID=%d", sideOfSleeve);
+            telemetry.update();
+        }
 
         if (opModeIsActive()){
-            encoderDrive(0.5, 17, 17);
-            sleep(200);//Make sure it stops
-            encoderDrive(0.5, 13, 13);
+            encoderDrive(0.5, 28, 28);
             if(sideOfSleeve == 1){
-                rotate90Left();
+                telemetry.addData("in loop?", "YES");
+                encoderDrive(0.5,-8,8);
                 encoderDrive(0.5,13,13);
             }else if(sideOfSleeve == 2){
+                telemetry.addData("in loop2?", "YES");
                 stop();
             }else{
-                rotate90Right();
+                telemetry.addData("in loop else?", "YES");
+                encoderDrive(0.5,8,-8);
                 encoderDrive(0.5,13,13);
             }
+            telemetry.update();
 
         }
     }
