@@ -95,22 +95,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         resetArm();
         resetDrive();
-        detectAprilTag();
+        ScanSignalSleeve();
         telemetryForVision();
 
     }
 
     public void ScanSignalSleeve(){
-
-    }
-
-    public void telemetryForVision(){
-        while (!isStarted()) {
-            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
-            telemetry.update();
-        }
-    }
-    public void detectAprilTag(){
         int sideOfSleeve;
         boolean stayInLoop = true;
         while (!opModeIsActive()&& stayInLoop){
@@ -171,6 +161,13 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
 
             sleep(20);
+        }
+    }
+
+    public void telemetryForVision(){
+        while (!isStarted()) {
+            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
+            telemetry.update();
         }
     }
     public void encoderDrive(double speed, double leftInches, double rightInches) {
