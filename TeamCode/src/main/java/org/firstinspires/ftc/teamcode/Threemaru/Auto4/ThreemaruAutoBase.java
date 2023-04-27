@@ -65,6 +65,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     final float DECIMATION_LOW = 2;
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
+    int sideOfSleeve;
 
     @Override
     public void runOpMode(){
@@ -95,13 +96,21 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         resetArm();
         resetDrive();
-        ScanSignalSleeve();
+        scanSignalSleeve();
         telemetryForVision();
 
     }
+    public void rotate90Left(){
+        encoderDrive(0.5,-8,-8);
+    }
+    public void rotate180(){
+        encoderDrive(0.5,-16,-16);
+    }
+    public void rotate90Right(){
+        encoderDrive(0.5,8,8);
+    }
 
-    public void ScanSignalSleeve(){
-        int sideOfSleeve;
+    public void scanSignalSleeve(){
         boolean stayInLoop = true;
         while (!opModeIsActive()&& stayInLoop){
             telemetry.addData("isItInOpMode","yes");
@@ -166,8 +175,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     public void telemetryForVision(){
         while (!isStarted()) {
-            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
-            telemetry.update();
+            telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
         }
     }
     public void encoderDrive(double speed, double leftInches, double rightInches) {
