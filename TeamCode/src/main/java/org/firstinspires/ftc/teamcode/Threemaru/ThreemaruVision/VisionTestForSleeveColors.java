@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous(name = "Signal Sleeve Test")
 public class VisionTestForSleeveColors extends LinearOpMode {
 
-    private SleeveDetection sleeveDetection;
+    private sleeveDetection sleeveDetection;
     private OpenCvCamera camera;
 
     // Name of the Webcam to be set in the config
@@ -19,7 +19,7 @@ public class VisionTestForSleeveColors extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
-        sleeveDetection = new SleeveDetection();
+        sleeveDetection = new sleeveDetection();
         camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
