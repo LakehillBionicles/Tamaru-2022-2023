@@ -25,45 +25,12 @@ import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 public class ThreemaruAutoBase extends LinearOpMode {
     public ThreemaruHardware robot = new ThreemaruHardware();
 
-    private PIDController armPID;
-    public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
-
-    private PIDController yController;
-    private PIDController xController;
-    private PIDController thetaController;
-    private PIDController armController;
-
-    public static double py = 0.0, iy = 0.0, dy = 0.0;
-    public static double px = 0.0, ix = 0.0, dx = 0.0;
-    public static double pTheta = 0.0, iTheta = 0.0, dTheta = 0.0;
-
-    public static double max = 2500;
-    public static double xMultiplier = 1;
-
-    public final double COUNTS_PER_ODO_REV = 8192;
-    public final double ODO_GEAR_REDUCTION = (1.0); // This is < 1.0 if geared UP
-    public final double ODO_WHEEL_DIAMETER_INCHES = 2.0;  // For figuring circumference
-    public final double ODO_COUNTS_PER_INCH = ((COUNTS_PER_ODO_REV * ODO_GEAR_REDUCTION) /
-            (ODO_WHEEL_DIAMETER_INCHES * 3.1415));
-
-    public final double WHEEL_COUNTS_PER_INCH = 22.48958;
-
-    public final double odoWheelGap = 12.5;
-
     public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
-    private Coordinates targetCoordinates;
-
-    public String sleeveColor = "";
 
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-
-        armPID = new PIDController(pArm, iArm, dArm);
-        yController = new PIDController(py, iy, dy);
-        xController = new PIDController(px, ix, dx);
-        thetaController = new PIDController(pTheta, iTheta, dTheta);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -71,6 +38,46 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         resetArm();
         resetDrive();
+    }
+
+    public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            newLeftTarget = (robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition())/2 + (int) (leftInches * ThreemaruHardware.COUNTS_PER_INCH);
+            newRightTarget = (robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/2 + (int) (leftInches * ThreemaruHardware.COUNTS_PER_INCH);
+
+            robot.fpd.setTargetPosition(newLeftTarget);
+            robot.bpd.setTargetPosition(newRightTarget);
+            robot.fsd.setTargetPosition(newLeftTarget);
+            robot.bsd.setTargetPosition(newRightTarget);
+
+            robot.fpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.bpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.fsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.bsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            robot.runtime.reset();
+            robot.fpd.setPower(Math.abs(speed));
+            robot.bpd.setPower(Math.abs(speed));
+            robot.fsd.setPower(Math.abs(speed));
+            robot.bsd.setPower(Math.abs(speed));
+
+            while (opModeIsActive() && (robot.runtime.seconds() < timeoutS) && (robot.fpd.isBusy() && robot.bpd.isBusy() && robot.fsd.isBusy() && robot.bsd.isBusy())) {}
+
+            robot.fpd.setPower(0);
+            robot.bpd.setPower(0);
+            robot.fsd.setPower(0);
+            robot.bsd.setPower(0);
+
+            robot.fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 
     public String senseColors(ColorSensor colorSensor) {

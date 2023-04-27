@@ -1,33 +1,21 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Tele4;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.util.Encoder;
-
-import java.util.Base64;
 
 public class ThreemaruHardware extends LinearOpMode{
     public DcMotorEx fpd = null;
     public DcMotorEx fsd = null;
     public DcMotorEx bpd = null;//POW
     public DcMotorEx bsd = null;//BOW
-    public DcMotorEx SOW = null;
-    public DcMotorEx POW = null;
 
     public DcMotorEx armPort = null, armStar = null;
-
     public Servo servoHand1 = null, servoHand2 = null;
     public Servo servoTurret = null;
     public Servo servoExtend = null;
@@ -35,7 +23,10 @@ public class ThreemaruHardware extends LinearOpMode{
     public DistanceSensor distSensorPort = null;
     public DistanceSensor distSensorStar = null;
 
-    private ElapsedTime runtime = new ElapsedTime();
+    public static final double COUNTS_PER_MOTOR_REV = 28, DRIVE_GEAR_REDUCTION = 1/18.8803, WHEEL_DIAMETER_INCHES = 1.8898*2;
+    public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
+    public ElapsedTime runtime = new ElapsedTime();
 
     HardwareMap hwMap = null;
 
@@ -43,8 +34,7 @@ public class ThreemaruHardware extends LinearOpMode{
     }
 
     @Override
-    public void runOpMode() {
-    }
+    public void runOpMode() {}
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -53,8 +43,6 @@ public class ThreemaruHardware extends LinearOpMode{
         fsd = hwMap.get(DcMotorEx.class, "fsd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
-        SOW = hwMap.get(DcMotorEx.class, "SOW");
-        POW = hwMap.get(DcMotorEx.class, "POW");
 
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");
@@ -71,8 +59,6 @@ public class ThreemaruHardware extends LinearOpMode{
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
         bpd.setDirection(DcMotorSimple.Direction.FORWARD);
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        SOW.setDirection(DcMotorSimple.Direction.REVERSE);
-        POW.setDirection(DcMotorSimple.Direction.REVERSE);
         armPort.setDirection(DcMotorSimple.Direction.REVERSE);
         armStar.setDirection(DcMotorSimple.Direction.FORWARD);
 

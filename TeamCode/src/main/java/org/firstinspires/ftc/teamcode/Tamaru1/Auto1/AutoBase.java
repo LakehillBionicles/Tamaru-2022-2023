@@ -24,7 +24,6 @@ public class AutoBase extends LinearOpMode {
     //BNO055IMU imu;
     //Orientation angles;
 
-
     static final double FEET_PER_METER = 3.28084;
 
 
