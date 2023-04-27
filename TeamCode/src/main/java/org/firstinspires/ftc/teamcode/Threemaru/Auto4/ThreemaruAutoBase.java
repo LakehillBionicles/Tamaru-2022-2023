@@ -95,6 +95,10 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     }
 
+    public void ScanSignalSleeve(){
+
+    }
+
     public void telemetryForVision(){
         while (!isStarted()) {
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
