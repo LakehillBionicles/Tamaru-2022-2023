@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamCode.Threemaru;
+package org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -78,12 +79,12 @@ public class ConeDetectionRed extends OpenCvPipeline {
 */      Point Bar_point1A = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-        Point Bar_point1B = new Point(
+    Point Bar_point1B = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-        Point Bar_point2A = new Point(
-                SLEEVE_TOPLEFT_ANCHOR_POINT.x-22,
-                SLEEVE_TOPLEFT_ANCHOR_POINT.y);
+    Point Bar_point2A = new Point(
+            SLEEVE_TOPLEFT_ANCHOR_POINT.x-22,
+            SLEEVE_TOPLEFT_ANCHOR_POINT.y);
     Point Bar_point2B = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x-22 + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
@@ -440,20 +441,20 @@ public class ConeDetectionRed extends OpenCvPipeline {
             }
         }
         if(numberOfBarsFilled>0 ){
-        centerOfBars = (bar12 + bar11 + bar10 + bar9 + bar8 + bar7 + bar6 + bar5 + bar4 + bar3 + bar2 + bar1)/numberOfBarsFilled;
+            centerOfBars = (bar12 + bar11 + bar10 + bar9 + bar8 + bar7 + bar6 + bar5 + bar4 + bar3 + bar2 + bar1)/numberOfBarsFilled;
             Point CenterofBarsPointA = new Point(
                     centerOfBars+25,
                     SLEEVE_TOPLEFT_ANCHOR_POINT.y+95);
             Point CenterofBarsPointB = new Point(
                     centerOfBars+15,
                     SLEEVE_TOPLEFT_ANCHOR_POINT.y+105);
-        Imgproc.rectangle(
-                input,
-                CenterofBarsPointA,
-                CenterofBarsPointB,
-                GREEN,
-                2
-        );}
+            Imgproc.rectangle(
+                    input,
+                    CenterofBarsPointA,
+                    CenterofBarsPointB,
+                    GREEN,
+                    2
+            );}
         if(numberOfBarsFilled>0){
             otherCenterOfBars = otherCenterOfBars/numberOfBarsFilled;
         }

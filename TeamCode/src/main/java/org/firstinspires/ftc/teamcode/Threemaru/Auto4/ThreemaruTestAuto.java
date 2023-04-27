@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -17,20 +19,15 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
     public void runOpMode() {
         super.runOpMode();
         robot.init(hardwareMap);
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        Pose2d startPose = new Pose2d(0, 0, 0);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         resetArm();
         resetDrive();
 
-        TrajectorySequence ScorePreload = drive.trajectorySequenceBuilder(startPose)
-                .forward(24)
-                .build();
-
         waitForStart();
 
-        if (isStopRequested()) return;
-        drive.followTrajectorySequence(ScorePreload);
+        while(opModeIsActive()){
+            encoderDrive(1, 60, 60);
+        }
     }
 }

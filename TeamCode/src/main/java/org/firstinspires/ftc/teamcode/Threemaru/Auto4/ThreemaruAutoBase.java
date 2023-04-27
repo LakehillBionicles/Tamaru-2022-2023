@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDController;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,12 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
-import org.firstinspires.ftc.teamcode.CoordinateBased.field.*;
 import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 
 
-@Config
 public class ThreemaruAutoBase extends LinearOpMode {
     public ThreemaruHardware robot = new ThreemaruHardware();
 
@@ -40,44 +34,24 @@ public class ThreemaruAutoBase extends LinearOpMode {
         resetDrive();
     }
 
-    public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
+    public void encoderDrive(double speed, double leftInches, double rightInches) {
+        int leftTarget = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition())/2 + (int) (leftInches * robot.COUNTS_PER_INCH);
+        int rightTarget = (robot.fsd.getCurrentPosition() + robot.bsd.getCurrentPosition())/2 + (int) (rightInches * robot.COUNTS_PER_INCH);
 
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
+        robot.fpd.setTargetPosition(leftTarget);
+        robot.bpd.setTargetPosition(leftTarget);
+        robot.fsd.setTargetPosition(rightTarget);
+        robot.bsd.setTargetPosition(rightTarget);
 
-            newLeftTarget = (robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition())/2 + (int) (leftInches * ThreemaruHardware.COUNTS_PER_INCH);
-            newRightTarget = (robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/2 + (int) (leftInches * ThreemaruHardware.COUNTS_PER_INCH);
+        robot.fpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.fsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            robot.fpd.setTargetPosition(newLeftTarget);
-            robot.bpd.setTargetPosition(newRightTarget);
-            robot.fsd.setTargetPosition(newLeftTarget);
-            robot.bsd.setTargetPosition(newRightTarget);
-
-            robot.fpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.bpd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.fsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.bsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            robot.runtime.reset();
-            robot.fpd.setPower(Math.abs(speed));
-            robot.bpd.setPower(Math.abs(speed));
-            robot.fsd.setPower(Math.abs(speed));
-            robot.bsd.setPower(Math.abs(speed));
-
-            while (opModeIsActive() && (robot.runtime.seconds() < timeoutS) && (robot.fpd.isBusy() && robot.bpd.isBusy() && robot.fsd.isBusy() && robot.bsd.isBusy())) {}
-
-            robot.fpd.setPower(0);
-            robot.bpd.setPower(0);
-            robot.fsd.setPower(0);
-            robot.bsd.setPower(0);
-
-            robot.fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        robot.fpd.setPower(1);
+        robot.bpd.setPower(1);
+        robot.fsd.setPower(1);
+        robot.bsd.setPower(1);
     }
 
     public String senseColors(ColorSensor colorSensor) {

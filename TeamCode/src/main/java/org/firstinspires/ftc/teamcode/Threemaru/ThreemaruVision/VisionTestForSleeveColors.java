@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Threemaru
+package org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -7,7 +7,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "Signal Sleeve Test")
-public class VisionTest extends LinearOpMode {
+public class VisionTestForSleeveColors extends LinearOpMode {
 
     private SleeveDetection sleeveDetection;
     private OpenCvCamera camera;

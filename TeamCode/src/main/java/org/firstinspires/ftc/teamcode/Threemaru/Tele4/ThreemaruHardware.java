@@ -1,21 +1,28 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Tele4;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class ThreemaruHardware extends LinearOpMode{
     public DcMotorEx fpd = null;
     public DcMotorEx fsd = null;
-    public DcMotorEx bpd = null;//POW
-    public DcMotorEx bsd = null;//BOW
+    public DcMotorEx bpd = null;
+    public DcMotorEx bsd = null;
 
     public DcMotorEx armPort = null, armStar = null;
+
     public Servo servoHand1 = null, servoHand2 = null;
     public Servo servoTurret = null;
     public Servo servoExtend = null;
@@ -23,18 +30,19 @@ public class ThreemaruHardware extends LinearOpMode{
     public DistanceSensor distSensorPort = null;
     public DistanceSensor distSensorStar = null;
 
-    public static final double COUNTS_PER_MOTOR_REV = 28, DRIVE_GEAR_REDUCTION = 1/18.8803, WHEEL_DIAMETER_INCHES = 1.8898*2;
+    public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898*2;
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     public ElapsedTime runtime = new ElapsedTime();
 
     HardwareMap hwMap = null;
 
-    public ThreemaruHardware(){
+    public void ThreemaruHardware(){
     }
 
     @Override
-    public void runOpMode() {}
+    public void runOpMode() {
+    }
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -59,8 +67,9 @@ public class ThreemaruHardware extends LinearOpMode{
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
         bpd.setDirection(DcMotorSimple.Direction.FORWARD);
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        armPort.setDirection(DcMotorSimple.Direction.REVERSE);
-        armStar.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        armPort.setDirection(DcMotorSimple.Direction.FORWARD);//formerly BOW
+        armStar.setDirection(DcMotorSimple.Direction.FORWARD);//formerly POW
 
         fpd.setPower(0);
         fsd.setPower(0);
@@ -70,10 +79,10 @@ public class ThreemaruHardware extends LinearOpMode{
         armPort.setPower(0);
         armStar.setPower(0);
 
-        fpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
