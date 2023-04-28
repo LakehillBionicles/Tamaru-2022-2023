@@ -16,22 +16,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetectionBlue;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetectionRed;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.sleeveDetection;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
 
-public class ThreemaruAutoBase extends LinearOpMode {
+public class ThreemaruAutoBase extends LinearOpMode{
     public ThreemaruHardware robot = new ThreemaruHardware();
 
     public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    private ConeDetectionRed ConeDetectionRed;
+    private ConeDetectionBlue ConeDetectionBlue;
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -98,6 +103,9 @@ public class ThreemaruAutoBase extends LinearOpMode {
         resetDrive();
         scanSignalSleeve();
         telemetryForVision();
+
+    }
+    public void creatingVariablesForDetectingCones(){
 
     }
     public void detectingRedCone(){
