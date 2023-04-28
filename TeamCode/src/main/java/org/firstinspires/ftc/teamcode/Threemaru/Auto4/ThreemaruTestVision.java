@@ -19,5 +19,6 @@ public class ThreemaruTestVision extends ThreemaruAutoBase{
         while(opModeIsActive()){
             detectingCones();
         }
+        stop();
     }
 }
