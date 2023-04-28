@@ -2,36 +2,20 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.AprilTagDetectionPipeline;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetectionBlue;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetectionRed;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.sleeveDetection;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
@@ -46,35 +30,12 @@ public class ThreemaruAutoBase extends LinearOpMode{
 
     public static double py = 0.0275, iy = 0.00055, dy = 0;
     public static double maxVelocity = 4000;
+    private String webcamName = "Webcam 1";
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-    private ConeDetectionRed ConeDetectionRed;
-    private ConeDetectionBlue ConeDetectionBlue;
-
+    private ConeDetection ConeDetection;
     static final double FEET_PER_METER = 3.28084;
-    public enum TelemetryBars{
-        ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
-
-    }
-    public enum ParkingPosition {
-        NOTSEEN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
-    }
-    private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(265, 10);
-    private volatile ParkingPosition position = ParkingPosition.NOTSEEN;
-    private volatile TelemetryBars barsPosition = TelemetryBars.ZERO;
-    // Width and height for the bounding box
-    public static int REGION_WIDTH = 22;
-    public static int REGION_HEIGHT = 200;
-
-    // Color definitions
-    private String webcamName = "Webcam 1";
-    private final Scalar
-            BLUE = new Scalar(0,0,255),
-            GREEN  = new Scalar(0, 255, 0),
-            CYAN    = new Scalar(0, 255, 255),
-            RED = new Scalar(255, 0, 0);
-
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -107,7 +68,6 @@ public class ThreemaruAutoBase extends LinearOpMode{
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
     int sideOfSleeve;
-
     @Override
     public void runOpMode(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -132,7 +92,6 @@ public class ThreemaruAutoBase extends LinearOpMode{
         robot.init(hardwareMap);
         driveController = new PIDController(py, iy, dy);
 
-
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
@@ -141,107 +100,25 @@ public class ThreemaruAutoBase extends LinearOpMode{
         resetDrive();
         scanSignalSleeve();
         telemetryForVision();
-        creatingVariablesForDetectingCones();
+        detectingCones();
         waitForStart();
     }
-    public void creatingVariablesForDetectingCones(){
+    public void detectingCones(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
-        ConeDetectionBlue = new ConeDetectionBlue();
-        camera.setPipeline(ConeDetectionBlue);
+        ConeDetection = new ConeDetection();
+        camera.setPipeline(ConeDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
-
             @Override
             public void onError(int errorCode) {
-            }
-            Point Bar_point1A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point1B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point2A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-22,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point2B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-22 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point3A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-44,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point3B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-44 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point4A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-66,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point4B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-66 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point5A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-88,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point5B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-88 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point6A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-110,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point6B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-110 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point7A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-132,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point7B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-132 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point8A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-154,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point8B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-154 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y+ REGION_HEIGHT);
-            Point Bar_point9A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-176,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point9B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-176 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point10A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-198,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point10B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-198 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point11A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-220,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point11B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-220 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            Point Bar_point12A = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-242,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y);
-            Point Bar_point12B = new Point(
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.x-242 + REGION_WIDTH,
-                    SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-            // Running variable storing the parking position
-        });
-
-    }
-    //I don't know if we want this in a seperate class
-    public void detectingRedCone(){
-
-    }
-    public void detectingBlueCone(){
-
-    }
+                                         }
+        })
+    ;}
     public void rotate90Left(){
         encoderDrive(0.5,-8,-8);
     }

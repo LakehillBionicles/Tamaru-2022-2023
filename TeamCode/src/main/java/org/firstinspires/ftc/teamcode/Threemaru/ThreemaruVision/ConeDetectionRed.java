@@ -293,7 +293,6 @@ public class ConeDetectionRed extends OpenCvPipeline {
                 BLUE,
                 2
         );
-        for (int i = 0; i < 13; i++) {
             if ((sumColors1.val[0] / (sumColors1.val[1] + sumColors1.val[2])) > 0.7) {
                 numberOfBarsFilled++;
                 bar1 = 254;
@@ -439,7 +438,6 @@ public class ConeDetectionRed extends OpenCvPipeline {
                         2
                 );
             }
-        }
         if(numberOfBarsFilled>0 ){
             centerOfBars = (bar12 + bar11 + bar10 + bar9 + bar8 + bar7 + bar6 + bar5 + bar4 + bar3 + bar2 + bar1)/numberOfBarsFilled;
             Point CenterofBarsPointA = new Point(
