@@ -53,6 +53,26 @@ public class ThreemaruAutoBase extends LinearOpMode{
     private ConeDetectionBlue ConeDetectionBlue;
 
     static final double FEET_PER_METER = 3.28084;
+    public enum TelemetryBars{
+        ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
+
+    }
+    public enum ParkingPosition {
+        NOTSEEN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
+    }
+    private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(265, 10);
+
+    // Width and height for the bounding box
+    public static int REGION_WIDTH = 22;
+    public static int REGION_HEIGHT = 200;
+
+    // Color definitions
+    private final Scalar
+            BLUE = new Scalar(0,0,255),
+            GREEN  = new Scalar(0, 255, 0),
+            CYAN    = new Scalar(0, 255, 255),
+            RED = new Scalar(255, 0, 0);
+
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -139,7 +159,6 @@ public class ThreemaruAutoBase extends LinearOpMode{
     public void rotate90Right(){
         encoderDrive(0.5,8,8);
     }
-
     public void scanSignalSleeve(){
         boolean stayInLoop = true;
         while (!opModeIsActive()&& stayInLoop){

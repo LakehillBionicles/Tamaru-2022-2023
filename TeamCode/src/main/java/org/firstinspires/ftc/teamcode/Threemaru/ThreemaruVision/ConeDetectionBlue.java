@@ -149,7 +149,7 @@ public class ConeDetectionBlue extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
     // Running variable storing the parking position
     private volatile ParkingPosition position = ParkingPosition.NOTSEEN;
-    private volatile TelemetryBars barsPosition = TelemetryBars.ZERO;
+    private final TelemetryBars barsPosition = TelemetryBars.ZERO;
 
     @Override
     public Mat processFrame(Mat input) {
@@ -481,8 +481,5 @@ public class ConeDetectionBlue extends OpenCvPipeline {
     }
 
     // Returns an enum being the current position where the robot will park
-    public ParkingPosition getPosition() {
-        return position;
-    }
-
+    public ParkingPosition getPosition() {return position;}
 }
