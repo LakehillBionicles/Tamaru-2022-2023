@@ -23,11 +23,30 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
 
         resetArm();
         resetDrive();
+        scanSignalSleeve();
+        telemetryForVision();
+        robot.servoHand1.setPosition(.25);
+        robot.servoHand2.setPosition(.4);
+        robot.servoExtend.setPosition(.5);
 
         waitForStart();
 
         while(opModeIsActive()){
-            encoderDrive(1, 60, 60);
+            PIDDrive(73, 5);
+            /*distDriveStar(-1, 2);
+            encoderDrive(.5, -12, -12);
+            encoderDrive(.5, -9, 9);
+            encoderDrive(.5, 10, 10);
+            distDrivePort(1, 10);
+            extensionToPosition(0);
+            extensionToPosition(.5);
+            if(sideOfSleeve == 1){
+                encoderDrive(0.5,12,12);
+            }else if(sideOfSleeve == 2){
+                encoderDrive(.5, -6, -6);
+            }else{
+                encoderDrive(.5,-30,-30);
+            }*/
         }
     }
 }

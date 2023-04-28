@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -40,6 +41,12 @@ public class ThreemaruAutoBase extends LinearOpMode{
 
     public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
+
+    private PIDController driveController;
+
+    public static double py = 0.0275, iy = 0.00055, dy = 0;
+    public static double maxVelocity = 4000;
+
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     private ConeDetectionRed ConeDetectionRed;
@@ -101,6 +108,8 @@ public class ThreemaruAutoBase extends LinearOpMode{
 
 
         robot.init(hardwareMap);
+        driveController = new PIDController(py, iy, dy);
+
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -220,6 +229,29 @@ public class ThreemaruAutoBase extends LinearOpMode{
         while(robot.fpd.isBusy()&&robot.bpd.isBusy()&&robot.fsd.isBusy()&&robot.bsd.isBusy()){}
 
         sleep(250);
+    }
+
+    public void PIDDrive(double target, double timeout) {
+        driveController.setPID(py, iy, dy);
+
+        driveController.setSetPoint(target);
+
+        driveController.setTolerance(.1);
+
+        double robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+
+        resetRuntime();
+        while (((!driveController.atSetPoint()) && (getRuntime() < timeout))) {
+            robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+
+            double pid = driveController.calculate(robotY, driveController.getSetPoint());
+            double velocityY = pid * maxVelocity;
+
+            robot.fpd.setVelocity(velocityY);
+            robot.bpd.setVelocity(velocityY);
+            robot.fsd.setVelocity(velocityY);
+            robot.bsd.setVelocity(velocityY);
+        }
     }
     public String senseColors(ColorSensor colorSensor) {
         String color = "blank";
