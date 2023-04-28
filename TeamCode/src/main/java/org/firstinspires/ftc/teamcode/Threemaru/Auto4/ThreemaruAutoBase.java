@@ -61,7 +61,8 @@ public class ThreemaruAutoBase extends LinearOpMode{
         NOTSEEN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
     }
     private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(265, 10);
-
+    private volatile ParkingPosition position = ParkingPosition.NOTSEEN;
+    private volatile TelemetryBars barsPosition = TelemetryBars.ZERO;
     // Width and height for the bounding box
     public static int REGION_WIDTH = 22;
     public static int REGION_HEIGHT = 200;
