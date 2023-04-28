@@ -100,6 +100,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
         telemetryForVision();
 
     }
+    public void detectingRedCone(){
+
+    }
+    public void detectingBlueCone(){
+
+    }
     public void rotate90Left(){
         encoderDrive(0.5,-8,-8);
     }
