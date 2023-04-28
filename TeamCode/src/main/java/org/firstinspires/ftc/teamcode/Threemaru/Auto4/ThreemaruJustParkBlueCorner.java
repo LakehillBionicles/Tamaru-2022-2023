@@ -13,30 +13,26 @@ public class ThreemaruJustParkBlueCorner extends ThreemaruAutoBase{
     public void runOpMode() {
         super.runOpMode();
         robot.init(hardwareMap);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
         resetArm();
         resetDrive();
         scanSignalSleeve();
         telemetryForVision();
-        while (!isStarted()) {
-            telemetry.addData("Detected tag ID=%d", sideOfSleeve);
-            telemetry.update();
-        }
-
-        if (opModeIsActive()){
+        waitForStart();
+        if(opModeIsActive()){
             encoderDrive(0.5, 28, 28);
+            telemetry.addData("in loop?", "YES");
+            telemetry.update();
             if(sideOfSleeve == 1){
                 telemetry.addData("in loop?", "YES");
-                encoderDrive(0.5,-8,8);
-                encoderDrive(0.5,13,13);
+                encoderDrive(0.5,-9,9);
+                encoderDrive(0.5,20,20);
             }else if(sideOfSleeve == 2){
                 telemetry.addData("in loop2?", "YES");
                 stop();
             }else{
                 telemetry.addData("in loop else?", "YES");
-                encoderDrive(0.5,8,-8);
-                encoderDrive(0.5,13,13);
+                encoderDrive(0.5,9,-9);
+                encoderDrive(0.5,20,20);
             }
             telemetry.update();
 

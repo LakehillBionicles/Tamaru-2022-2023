@@ -174,10 +174,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
     }
 
     public void telemetryForVision(){
-        while (!isStarted()) {
             telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
             telemetry.update();
-        }
     }
     public void encoderDrive(double speed, double leftInches, double rightInches) {
         int leftTarget = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition())/2 + (int) (leftInches * robot.COUNTS_PER_INCH);
@@ -193,12 +191,15 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.fsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.bsd.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.fpd.setPower(1);
-        robot.bpd.setPower(1);
-        robot.fsd.setPower(1);
-        robot.bsd.setPower(1);
-    }
+        robot.fpd.setPower(speed);
+        robot.bpd.setPower(speed);
+        robot.fsd.setPower(speed);
+        robot.bsd.setPower(speed);
 
+        while(robot.fpd.isBusy()&&robot.bpd.isBusy()&&robot.fsd.isBusy()&&robot.bsd.isBusy()){}
+
+        sleep(250);
+    }
     public String senseColors(ColorSensor colorSensor) {
         String color = "blank";
         double redMax = colorSensor.red();
