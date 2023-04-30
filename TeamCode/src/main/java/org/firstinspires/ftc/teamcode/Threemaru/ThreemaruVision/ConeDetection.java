@@ -153,7 +153,7 @@ public class ConeDetection extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.x-242 + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
     // Running variable storing the parking position
-    private volatile ConeDetection.ParkingPosition position = ParkingPosition.NOTSEEN;
+    private static volatile ConeDetection.ParkingPosition position = ParkingPosition.NOTSEEN;
     private final TelemetryBars barsPosition = TelemetryBars.ZERO;
 
     @Override
@@ -724,6 +724,6 @@ public class ConeDetection extends OpenCvPipeline {
     }
 
     // Returns an enum being the current position where the robot will park
-    public ParkingPosition getPosition(){return position;}
+    public static ParkingPosition getPosition(){return position;}
 }
 

@@ -3,12 +3,7 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
 
 //@Disabled
 @Config
@@ -16,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectoryse
 public class ThreemaruTestAuto extends ThreemaruAutoBase {
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()throws InterruptedException {
         super.runOpMode();
         robot.init(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
