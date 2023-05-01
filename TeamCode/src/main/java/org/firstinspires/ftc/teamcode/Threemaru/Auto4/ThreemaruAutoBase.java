@@ -72,7 +72,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
         robot.init(hardwareMap);
         driveController = new PIDController(py, iy, dy);
 

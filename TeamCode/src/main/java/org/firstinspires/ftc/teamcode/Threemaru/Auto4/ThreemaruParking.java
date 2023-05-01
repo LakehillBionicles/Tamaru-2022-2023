@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name = "JustParking")
 public class ThreemaruParking extends ThreemaruAutoBase{
     @Override
-    public void runOpMode()throws InterruptedException {
+    public void runOpMode() {
         super.runOpMode();
         robot.init(hardwareMap);
         resetArm();

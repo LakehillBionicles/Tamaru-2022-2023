@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class ThreemaruTestAuto extends ThreemaruAutoBase {
 
     @Override
-    public void runOpMode()throws InterruptedException {
+    public void runOpMode() {
         super.runOpMode();
         robot.init(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

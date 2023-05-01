@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 @Autonomous(name = "TestVision")
 public class ThreemaruTestVision extends ThreemaruAutoBase {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         super.runOpMode();
         robot.init(hardwareMap);
         resetArm();
