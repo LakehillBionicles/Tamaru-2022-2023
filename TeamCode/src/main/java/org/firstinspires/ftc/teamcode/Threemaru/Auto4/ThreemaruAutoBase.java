@@ -84,6 +84,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
         resetDrive();
         scanSignalSleeve();
         telemetryForVision();
+        resetCamera();
         detectingCones();
         waitForStart();
     }
