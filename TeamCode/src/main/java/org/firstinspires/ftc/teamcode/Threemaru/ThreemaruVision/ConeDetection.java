@@ -12,6 +12,8 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
+import java.util.ArrayList;
+
 public class ConeDetection extends OpenCvPipeline {
 
 
@@ -156,6 +158,8 @@ public class ConeDetection extends OpenCvPipeline {
     // Running variable storing the parking position
     private static volatile ConeDetection.ParkingPosition bluePosition = ParkingPosition.NOTSEEN;
     private static volatile ConeDetection.RedParkingPosition redPosition = RedParkingPosition.NOTSEEN;
+
+    ArrayList<Integer> barAmounts= new ArrayList<Integer>();
     @Override
     public Mat processFrame(Mat input) {
         // Get the submat frame, and then sum all the values
@@ -167,33 +171,8 @@ public class ConeDetection extends OpenCvPipeline {
         //or you can increase averageRedAndGreenValueForCone
         double redTolerance = 0.7;
         double blueTolerance = 0.7;
-
-        int bar1= 0;
-        int bar2= 0;
-        int bar3= 0;
-        int bar4 = 0;
-        int bar5= 0;
-        int bar6= 0;
-        int bar7= 0;
-        int bar8= 0;
-        int bar9= 0;
-        int bar10= 0;
-        int bar11= 0;
-        int bar12= 0;
+        int addedBars = 0;
         //Base bar is blue I'm just to lazy to name it blueBar
-        int redBar1= 0;
-        int redBar2= 0;
-        int redBar3= 0;
-        int redBar4 = 0;
-        int redBar5= 0;
-        int redBar6= 0;
-        int redBar7= 0;
-        int redBar8= 0;
-        int redBar9= 0;
-        int redBar10= 0;
-        int redBar11= 0;
-        int redBar12= 0;
-
         //These are not used for telemetry
         int driveBar1= 1;
         int driveBar2= 2;
@@ -380,7 +359,7 @@ public class ConeDetection extends OpenCvPipeline {
         /*
             if ((sumColors1.val[2] / (sumColors1.val[0] + sumColors1.val[1])) > blueTolerance) {
                 numberOfBarsFilled++;
-                bar1 = 254;
+                addedBars = addedBars + 254;
                 otherCenterOfBars = driveBar12 + otherCenterOfBars;
                 Imgproc.rectangle(
                         input,
@@ -392,7 +371,7 @@ public class ConeDetection extends OpenCvPipeline {
             }
             if ((sumColors2.val[2] / (sumColors2.val[0] + sumColors2.val[1])) > blueTolerance) {
                 numberOfBarsFilled++;
-                bar2 = 232;
+                addedBars = addedBars + 232;
                 otherCenterOfBars = driveBar11 + otherCenterOfBars;
                 Imgproc.rectangle(
                         input,
@@ -405,7 +384,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors3.val[2] / (sumColors3.val[0] + sumColors3.val[1])) > blueTolerance) {
                 numberOfBarsFilled++;
                 otherCenterOfBars = driveBar10 + otherCenterOfBars;
-                bar3 = 210;
+                addedBars = addedBars + 210;
                 Imgproc.rectangle(
                         input,
                         Bar_point3A,
@@ -417,7 +396,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors4.val[2] / (sumColors4.val[0] + sumColors4.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar9 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar4 = 188;
+                addedBars = addedBars + 188;
                 Imgproc.rectangle(
                         input,
                         Bar_point4A,
@@ -431,7 +410,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors5.val[2] / (sumColors5.val[0] + sumColors5.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar8 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar5 = 166;
+                addedBars = addedBars + 166;
                 Imgproc.rectangle(
                         input,
                         Bar_point5A,
@@ -443,7 +422,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors6.val[2] / (sumColors6.val[0] + sumColors6.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar7 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar6 = 144;
+                addedBars = addedBars + 144;
                 Imgproc.rectangle(
                         input,
                         Bar_point6A,
@@ -455,7 +434,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors7.val[2] / (sumColors7.val[0] + sumColors7.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar6 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar7 = 122;
+                addedBars = addedBars + 122;
                 Imgproc.rectangle(
                         input,
                         Bar_point7A,
@@ -466,8 +445,8 @@ public class ConeDetection extends OpenCvPipeline {
             }
             if ((sumColors8.val[2] / (sumColors8.val[0] + sumColors8.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar5 + otherCenterOfBars;
+                addedBars = addedBars + 100;
                 numberOfBarsFilled++;
-                bar8 = 100;
                 Imgproc.rectangle(
                         input,
                         Bar_point8A,
@@ -479,7 +458,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors9.val[2] / (sumColors9.val[0] + sumColors9.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar4 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar9 = 78;
+                addedBars = addedBars + 78;
                 Imgproc.rectangle(
                         input,
                         Bar_point9A,
@@ -491,7 +470,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors10.val[2] / (sumColors10.val[0] + sumColors10.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar3 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar10 = 56;
+                addedBars = addedBars + 56;
 
                 Imgproc.rectangle(
                         input,
@@ -504,7 +483,7 @@ public class ConeDetection extends OpenCvPipeline {
             if ((sumColors11.val[2] / (sumColors11.val[0] + sumColors11.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar2 + otherCenterOfBars;
                 numberOfBarsFilled++;
-                bar11 = 34;
+                addedBars = addedBars + 34;
                 Imgproc.rectangle(
                         input,
                         Bar_point11A,
@@ -515,7 +494,7 @@ public class ConeDetection extends OpenCvPipeline {
             }
             if ((sumColors12.val[2] / (sumColors12.val[0] + sumColors12.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar1 + otherCenterOfBars;
-                bar12 = 12;
+                addedBars = addedBars + 12;
                 numberOfBarsFilled++;
                 Imgproc.rectangle(
                         input,
@@ -523,155 +502,11 @@ public class ConeDetection extends OpenCvPipeline {
                         Bar_point12B,
                         BLUE,
                         2
-                );
-            }
-            if ((sumColors1.val[0] / (sumColors1.val[1] + sumColors1.val[2])) > redTolerance) {
-                redNumberOfBarsFilled++;
-                redBar1 = 254;
-                otherRedCenterOfBars = driveBar12 + otherRedCenterOfBars;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point1A,
-                        Bar_point1B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors2.val[0] / (sumColors2.val[1] + sumColors2.val[2])) > redTolerance) {
-                redNumberOfBarsFilled++;
-                redBar2 = 232;
-                otherRedCenterOfBars = driveBar11 + otherRedCenterOfBars;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point2A,
-                        Bar_point2B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors3.val[0] / (sumColors3.val[1] + sumColors3.val[2])) > redTolerance) {
-                redNumberOfBarsFilled++;
-                otherRedCenterOfBars = driveBar10 + otherRedCenterOfBars;
-                redBar3 = 210;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point3A,
-                        Bar_point3B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors4.val[0] / (sumColors4.val[1] + sumColors4.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar9 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar4 = 188;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point4A,
-                        Bar_point4B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors5.val[0] / (sumColors5.val[1] + sumColors5.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar8 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar5 = 166;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point5A,
-                        Bar_point5B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors6.val[0] / (sumColors6.val[1] + sumColors6.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar7 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar6 = 144;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point6A,
-                        Bar_point6B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors7.val[0] / (sumColors7.val[1] + sumColors7.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar6 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar7 = 122;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point7A,
-                        Bar_point7B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors8.val[0] / (sumColors8.val[1] + sumColors8.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar5 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar8 = 100;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point8A,
-                        Bar_point8B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors9.val[0] / (sumColors9.val[1] + sumColors9.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar4 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar9 = 78;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point9A,
-                        Bar_point9B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors10.val[0] / (sumColors10.val[1] + sumColors10.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar3 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar10 = 56;
-
-                Imgproc.rectangle(
-                        input,
-                        Bar_point10A,
-                        Bar_point10B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors11.val[0] / (sumColors11.val[1] + sumColors11.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar2 + otherRedCenterOfBars;
-                redNumberOfBarsFilled++;
-                redBar11 = 34;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point11A,
-                        Bar_point11B,
-                        RED,
-                        2
-                );
-            }
-            if ((sumColors12.val[0] / (sumColors12.val[1] + sumColors12.val[2])) > redTolerance) {
-                otherRedCenterOfBars = driveBar1 + otherRedCenterOfBars;
-                redBar12 = 12;
-                redNumberOfBarsFilled++;
-                Imgproc.rectangle(
-                        input,
-                        Bar_point12A,
-                        Bar_point12B,
-                        RED,
-                        2
-                );
-            }
+                );}
             if (numberOfBarsFilled > 0) {
-                centerOfBars = (bar12 + bar11 + bar10 + bar9 + bar8 + bar7 + bar6 + bar5 + bar4 + bar3 + bar2 + bar1) / numberOfBarsFilled;
+                centerOfBars = addedBars/numberOfBarsFilled;
+                addedBars = 0;
+
                 Point CenterofBarsPointA = new Point(
                         centerOfBars + 25,
                         SLEEVE_TOPLEFT_ANCHOR_POINT.y + 95);
@@ -684,11 +519,158 @@ public class ConeDetection extends OpenCvPipeline {
                         CenterofBarsPointB,
                         CYAN,
                         2
-                );}
-        if (redNumberOfBarsFilled > 0)
+                );
+                barAmounts.clear();
+            }
 
-    {
-        redCenterOfBars = (redBar12 + redBar11 + redBar10 + redBar9 + redBar8 + redBar7 + redBar6 + redBar5 + redBar4 + redBar3 + redBar2 + redBar1) / redNumberOfBarsFilled;
+        if ((sumColors1.val[0] / (sumColors1.val[1] + sumColors1.val[2])) > redTolerance) {
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 254;
+            otherRedCenterOfBars = driveBar12 + otherRedCenterOfBars;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point1A,
+                    Bar_point1B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors2.val[0] / (sumColors2.val[1] + sumColors2.val[2])) > redTolerance) {
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 232;
+
+            otherRedCenterOfBars = driveBar11 + otherRedCenterOfBars;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point2A,
+                    Bar_point2B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors3.val[0] / (sumColors3.val[1] + sumColors3.val[2])) > redTolerance) {
+            redNumberOfBarsFilled++;
+            otherRedCenterOfBars = driveBar10 + otherRedCenterOfBars;
+            addedBars = addedBars + 210;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point3A,
+                    Bar_point3B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors4.val[0] / (sumColors4.val[1] + sumColors4.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar9 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 188;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point4A,
+                    Bar_point4B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors5.val[0] / (sumColors5.val[1] + sumColors5.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar8 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 166;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point5A,
+                    Bar_point5B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors6.val[0] / (sumColors6.val[1] + sumColors6.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar7 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 144;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point6A,
+                    Bar_point6B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors7.val[0] / (sumColors7.val[1] + sumColors7.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar6 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 122;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point7A,
+                    Bar_point7B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors8.val[0] / (sumColors8.val[1] + sumColors8.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar5 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 100;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point8A,
+                    Bar_point8B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors9.val[0] / (sumColors9.val[1] + sumColors9.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar4 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 78;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point9A,
+                    Bar_point9B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors10.val[0] / (sumColors10.val[1] + sumColors10.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar3 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 56;
+
+            Imgproc.rectangle(
+                    input,
+                    Bar_point10A,
+                    Bar_point10B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors11.val[0] / (sumColors11.val[1] + sumColors11.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar2 + otherRedCenterOfBars;
+            redNumberOfBarsFilled++;
+            addedBars = addedBars + 34;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point11A,
+                    Bar_point11B,
+                    RED,
+                    2
+            );
+        }
+        if ((sumColors12.val[0] / (sumColors12.val[1] + sumColors12.val[2])) > redTolerance) {
+            otherRedCenterOfBars = driveBar1 + otherRedCenterOfBars;
+            addedBars = addedBars + 12;
+            redNumberOfBarsFilled++;
+            Imgproc.rectangle(
+                    input,
+                    Bar_point12A,
+                    Bar_point12B,
+                    RED,
+                    2
+            );
+        }
+        if (redNumberOfBarsFilled > 0){
+        redCenterOfBars = addedBars / redNumberOfBarsFilled;
         Point redCenterofBarsPointA = new Point(
                 redCenterOfBars + 25,
                 SLEEVE_TOPLEFT_ANCHOR_POINT.y + 95);
@@ -702,7 +684,7 @@ public class ConeDetection extends OpenCvPipeline {
                 GREEN,
                 2
         );
-    }
+        barAmounts.clear();}
         if(numberOfBarsFilled>0){
             otherCenterOfBars = otherCenterOfBars/numberOfBarsFilled;
         }
