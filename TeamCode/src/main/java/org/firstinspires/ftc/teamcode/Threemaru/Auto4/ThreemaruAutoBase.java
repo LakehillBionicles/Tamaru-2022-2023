@@ -89,8 +89,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
     }
     public void detectingCones(){
         //Resetting camera might fix null pointer errors
+        camera.openCameraDevice();
         camera.stopStreaming();
-        camera.closeCameraDevice();
         camera.closeCameraDeviceAsync(() -> {});
         ConeDetection = new ConeDetection();
         camera.setPipeline(ConeDetection);
