@@ -87,12 +87,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
         detectingCones();
         waitForStart();
     }
+    //Resetting camera might fix null pointer errors and allow camera to switch pipeline
     public void resetCamera(){
         camera.stopStreaming();
         camera.closeCameraDeviceAsync(() -> {});
     }
     public void detectingCones() {
-        //Resetting camera might fix null pointer errors
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         ConeDetection = new ConeDetection();
