@@ -91,28 +91,26 @@ public class ThreemaruAutoBase extends LinearOpMode {
         camera.stopStreaming();
         camera.closeCameraDeviceAsync(() -> {});
     }
-    @Deprecated
     public void detectingCones() {
         //Resetting camera might fix null pointer errors
-        ConeDetection = new ConeDetection();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        ConeDetection = new ConeDetection();
         camera.setPipeline(ConeDetection);
-        camera.openCameraDevice();
-        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-        /*
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
             @Override
-            public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                camera.resumeViewport();
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
             }
+
             @Override
-            public void onError(int errorCode) {
-                                         }
-        })
-    ;   */
-    }
+            public void onError(int errorCode)
+            {
+
+            }
+        });}
     public void rotate90Left(){
         encoderDrive(0.5,-8,-8);
     }

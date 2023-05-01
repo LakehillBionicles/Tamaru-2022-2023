@@ -25,8 +25,8 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
         waitForStart();
         if (opModeIsActive()) {
             resetCamera();
+            detectingCones();
             while (opModeIsActive()) {
-                detectingCones();
                 telemetry.addData("Color: ", ConeDetection.getBluePosition());
                 telemetry.update();
                 telemetry.addData("Color: ", ConeDetection.getRedPosition());
