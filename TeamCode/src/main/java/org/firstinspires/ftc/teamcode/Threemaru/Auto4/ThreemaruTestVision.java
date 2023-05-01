@@ -8,9 +8,9 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 
 @Config
 @Autonomous(name = "TestVision")
-public class ThreemaruTestVision extends ThreemaruAutoBase{
+public class ThreemaruTestVision extends ThreemaruAutoBase {
     @Override
-    public void runOpMode()throws InterruptedException {
+    public void runOpMode() throws InterruptedException {
         super.runOpMode();
         robot.init(hardwareMap);
         resetArm();
@@ -23,12 +23,15 @@ public class ThreemaruTestVision extends ThreemaruAutoBase{
         telemetryForVision();
         detectingCones();
         waitForStart();
-        while(opModeIsActive()){
-            detectingCones();
-            telemetry.addData("Color: ", ConeDetection.getBluePosition());
-            telemetry.update();
-            telemetry.addData("Color: ", ConeDetection.getRedPosition());
-            telemetry.update();
+        if (opModeIsActive()) {
+            resetCamera();
+            while (opModeIsActive()) {
+                detectingCones();
+                telemetry.addData("Color: ", ConeDetection.getBluePosition());
+                telemetry.update();
+                telemetry.addData("Color: ", ConeDetection.getRedPosition());
+                telemetry.update();
+            }
         }
     }
 }
