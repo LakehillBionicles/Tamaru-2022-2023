@@ -18,10 +18,6 @@ public class ConeDetection extends OpenCvPipeline {
         CYAN    = Parking Middle
         MAGENTA = Parking Right
          */
-    public enum TelemetryBars{
-        ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
-
-    }
     public enum ParkingPosition {
         NOTSEEN, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
     }
@@ -158,7 +154,6 @@ public class ConeDetection extends OpenCvPipeline {
     // Running variable storing the parking position
     private static volatile ConeDetection.ParkingPosition position = ParkingPosition.NOTSEEN;
     private static volatile ConeDetection.RedParkingPosition redPosition = RedParkingPosition.NOTSEEN;
-    private final TelemetryBars barsPosition = TelemetryBars.ZERO;
     @Override
     public Mat processFrame(Mat input) {
         // Get the submat frame, and then sum all the values
@@ -168,13 +163,8 @@ public class ConeDetection extends OpenCvPipeline {
         //or you can decrease averageRedAndGreenValueForCone
         //To increase tolerance(harder to detect cone but less likely to think a wall is a cone) decrease averageBlueValueForCone
         //or you can increase averageRedAndGreenValueForCone
-        double averageBlueValueForCone = 250;
-        double averageRedAndGreenValueForCone = 300;
-        double redTolerance = averageBlueValueForCone/averageRedAndGreenValueForCone;
-
-        double averageRedValueForCone = 250;
-        double averageBlueAndGreenValueForCone = 300;
-        double blueTolerance = averageRedValueForCone/averageBlueAndGreenValueForCone;
+        double redTolerance = 0.7;
+        double blueTolerance = 0.7;
 
         int bar1= 0;
         int bar2= 0;
@@ -381,6 +371,7 @@ public class ConeDetection extends OpenCvPipeline {
                     WHITE,
                     2
             );
+            /*
             if ((sumColors1.val[2] / (sumColors1.val[0] + sumColors1.val[1])) > blueTolerance) {
                 numberOfBarsFilled++;
                 bar1 = 254;
@@ -429,6 +420,7 @@ public class ConeDetection extends OpenCvPipeline {
                         2
                 );
             }
+            */
             if ((sumColors5.val[2] / (sumColors5.val[0] + sumColors5.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar8 + otherCenterOfBars;
                 numberOfBarsFilled++;
@@ -465,6 +457,7 @@ public class ConeDetection extends OpenCvPipeline {
                         2
                 );
             }
+            /*
             if ((sumColors8.val[2] / (sumColors8.val[0] + sumColors8.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar5 + otherCenterOfBars;
                 numberOfBarsFilled++;
@@ -527,8 +520,7 @@ public class ConeDetection extends OpenCvPipeline {
                 );
             }
 
-
-
+             */
             if ((sumColors1.val[0] / (sumColors1.val[1] + sumColors1.val[2])) > redTolerance) {
                 redNumberOfBarsFilled++;
                 redBar1 = 254;
@@ -674,7 +666,6 @@ public class ConeDetection extends OpenCvPipeline {
                         2
                 );
             }
-
             if (numberOfBarsFilled > 0) {
                 centerOfBars = (bar12 + bar11 + bar10 + bar9 + bar8 + bar7 + bar6 + bar5 + bar4 + bar3 + bar2 + bar1) / numberOfBarsFilled;
                 Point CenterofBarsPointA = new Point(
@@ -689,8 +680,7 @@ public class ConeDetection extends OpenCvPipeline {
                         CenterofBarsPointB,
                         CYAN,
                         2
-                );
-            }
+                );}
         if (redNumberOfBarsFilled > 0)
 
     {
