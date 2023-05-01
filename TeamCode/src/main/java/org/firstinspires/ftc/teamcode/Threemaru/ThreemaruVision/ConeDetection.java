@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.vuforia.Rectangle;
 
@@ -218,6 +217,7 @@ public class ConeDetection extends OpenCvPipeline {
         Mat areaMat12 = input.submat(new Rect(Bar_point12A, Bar_point12B));
         Scalar sumColors12 = Core.sumElems(areaMat12);
         //Use for finding Tolerance
+        /*
         telemetry.addData("Box1RGBvalues",sumColors1);
         telemetry.addData("Box2RGBvalues",sumColors2);
         telemetry.addData("Box3RGBvalues",sumColors3);
@@ -254,7 +254,7 @@ public class ConeDetection extends OpenCvPipeline {
         telemetry.addData("Box10BlueTolerance",(sumColors10.val[2] / (sumColors10.val[0] + sumColors10.val[1])));
         telemetry.addData("Box11BlueTolerance",(sumColors11.val[2] / (sumColors11.val[0] + sumColors11.val[1])));
         telemetry.addData("Box12BlueTolerance",(sumColors12.val[2] / (sumColors12.val[0] + sumColors12.val[1])));
-        telemetry.update();
+        */
             for(int i = 0; i<12; i++){
                 Point newBar_point1A = new Point(
                         SLEEVE_TOPLEFT_ANCHOR_POINT.x-(22*i),

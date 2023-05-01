@@ -79,7 +79,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-
+        /*
         resetArm();
         resetDrive();
         scanSignalSleeve();
@@ -87,10 +87,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
         resetCamera();
         detectingCones();
         waitForStart();
+
+         */
     }
     //Resetting camera might fix null pointer errors and allow camera to switch pipeline
     public void resetCamera(){
-        camera.stopStreaming();
+        camera.pauseViewport();
         camera.closeCameraDeviceAsync(() -> {});
     }
     public void detectingCones() {
@@ -104,6 +106,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
             public void onOpened()
             {
                 camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+                camera.resumeViewport();
             }
 
             @Override

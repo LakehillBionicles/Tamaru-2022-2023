@@ -21,12 +21,15 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
         telemetry.addData("AfterSignalSleeve", "yes?");
         telemetry.update();
         telemetryForVision();
+        resetCamera();
         detectingCones();
         waitForStart();
         if (opModeIsActive()) {
             resetCamera();
             detectingCones();
             while (opModeIsActive()) {
+                resetCamera();
+                detectingCones();
                 telemetry.addData("Color: ", ConeDetection.getBluePosition());
                 telemetry.update();
                 telemetry.addData("Color: ", ConeDetection.getRedPosition());
