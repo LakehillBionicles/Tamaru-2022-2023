@@ -38,7 +38,7 @@ public class ArmTuning extends OpMode {
         controller.setPID(p, i, d);
 
         double state = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition()/2.0)/ ThreemaruHardware.COUNTS_PER_INCH;
-        double pid = controller.calculate(state, reference) * kg;
+        double pid = controller.calculate(state, reference) + kg;
         double velocity = pid * maxVelocity;
 
         robot.armPort.setVelocity(velocity);
