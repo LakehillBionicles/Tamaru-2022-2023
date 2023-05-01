@@ -91,13 +91,14 @@ public class ThreemaruAutoBase extends LinearOpMode {
         //Resetting camera might fix null pointer errors
         camera.stopStreaming();
         camera.closeCameraDevice();
+        camera.closeCameraDeviceAsync(() -> {});
         ConeDetection = new ConeDetection();
-        camera.openCameraDevice();
         camera.setPipeline(ConeDetection);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                camera.resumeViewport();
             }
             @Override
             public void onError(int errorCode) {
