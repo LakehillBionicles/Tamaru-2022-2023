@@ -34,6 +34,18 @@ public class ConeDetection extends OpenCvPipeline {
     // Width and height for the bounding box
     public static int REGION_WIDTH = 22;
     public static int REGION_HEIGHT = 200;
+    int driveBar1= 1;
+    int driveBar2= 2;
+    int driveBar3= 3;
+    int driveBar4 = 4;
+    int driveBar5= 5;
+    int driveBar6= 6;
+    int driveBar7= 7;
+    int driveBar8= 8;
+    int driveBar9= 9;
+    int driveBar10= 10;
+    int driveBar11= 11;
+    int driveBar12= 12;
 
     // Color definitions
     private final Scalar
@@ -160,39 +172,27 @@ public class ConeDetection extends OpenCvPipeline {
     private static volatile ConeDetection.RedParkingPosition redPosition = RedParkingPosition.NOTSEEN;
 
     ArrayList<Integer> barAmounts= new ArrayList<Integer>();
+    //These are the tolerances for the detection of red and blue cones
+    //To decrease tolerance(harder to detect cone but less likely to think a wall is a cone) increase averageBlueValueForCone
+    //or you can decrease averageRedAndGreenValueForCone
+    //To increase tolerance(harder to detect cone but less likely to think a wall is a cone) decrease averageBlueValueForCone
+    //or you can increase averageRedAndGreenValueForCone
+    double redTolerance = 0.7;
+    double blueTolerance = 0.7;
+    int addedBars = 0;
+    //Base bar is blue I'm just to lazy to name it blueBar
+    //These are not used for telemetry
+    //Base driveBar is blue I'm just to lazy to name it driveBlueBar
+    int otherCenterOfBars = 0;
+    int otherRedCenterOfBars = 0;
+    int redNumberOfBarsFilled = 0;
+    int numberOfBarsFilled = 0;
+    int centerOfBars = 0;
+    int redCenterOfBars = 0;
     @Override
     public Mat processFrame(Mat input) {
         // Get the submat frame, and then sum all the values
         //Used for telemetry will remove
-        //These are the tolerances for the detection of red and blue cones
-        //To decrease tolerance(harder to detect cone but less likely to think a wall is a cone) increase averageBlueValueForCone
-        //or you can decrease averageRedAndGreenValueForCone
-        //To increase tolerance(harder to detect cone but less likely to think a wall is a cone) decrease averageBlueValueForCone
-        //or you can increase averageRedAndGreenValueForCone
-        double redTolerance = 0.7;
-        double blueTolerance = 0.7;
-        int addedBars = 0;
-        //Base bar is blue I'm just to lazy to name it blueBar
-        //These are not used for telemetry
-        int driveBar1= 1;
-        int driveBar2= 2;
-        int driveBar3= 3;
-        int driveBar4 = 4;
-        int driveBar5= 5;
-        int driveBar6= 6;
-        int driveBar7= 7;
-        int driveBar8= 8;
-        int driveBar9= 9;
-        int driveBar10= 10;
-        int driveBar11= 11;
-        int driveBar12= 12;
-        //Base driveBar is blue I'm just to lazy to name it driveBlueBar
-        int otherCenterOfBars = 0;
-        int otherRedCenterOfBars = 0;
-        int redNumberOfBarsFilled = 0;
-        int numberOfBarsFilled = 0;
-        int centerOfBars = 0;
-        int redCenterOfBars = 0;
         Mat areaMat1 = input.submat(new Rect(Bar_point1A, Bar_point1B));
         Scalar sumColors1 = Core.sumElems(areaMat1);
         Mat areaMat2 = input.submat(new Rect(Bar_point2A, Bar_point2B));
@@ -356,7 +356,6 @@ public class ConeDetection extends OpenCvPipeline {
                     2
             );
             */
-        /*
             if ((sumColors1.val[2] / (sumColors1.val[0] + sumColors1.val[1])) > blueTolerance) {
                 numberOfBarsFilled++;
                 addedBars = addedBars + 254;
@@ -405,8 +404,6 @@ public class ConeDetection extends OpenCvPipeline {
                         2
                 );
             }
-
-         */
             if ((sumColors5.val[2] / (sumColors5.val[0] + sumColors5.val[1])) > blueTolerance) {
                 otherCenterOfBars = driveBar8 + otherCenterOfBars;
                 numberOfBarsFilled++;
