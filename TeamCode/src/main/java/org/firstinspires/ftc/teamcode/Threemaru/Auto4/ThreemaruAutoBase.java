@@ -97,8 +97,10 @@ public class ThreemaruAutoBase extends LinearOpMode {
     }
     //Resetting camera might fix null pointer errors and allow camera to switch pipeline
     public void resetCamera(){
-        camera.pauseViewport();
-        camera.closeCameraDeviceAsync(() -> {});
+        camera.setPipeline(null);
+        camera.stopStreaming();
+        camera.stopRecordingPipeline();
+        camera.closeCameraDevice();
     }
     public void detectingCones() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

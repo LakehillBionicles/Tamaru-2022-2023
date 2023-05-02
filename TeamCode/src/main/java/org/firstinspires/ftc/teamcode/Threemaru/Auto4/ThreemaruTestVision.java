@@ -34,21 +34,8 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
         //detectingCones();
         telemetry.addData("AfterDetectingCone", "yes?");
         telemetry.update();
-        switchPipeline();
-        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-        /*camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                @Override
-                public void onOpened() {
-                    camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                }
-
-                @Override
-                public void onError(int errorCode) {
-                    telemetry.addData("errorInsidenullLoop", ":(");
-                }
-        });
-
-         */
+        resetCamera();
+        detectingCones();
         while(!opModeIsActive()){
             telemetry.addData("Before colors", "yes?");
             telemetry.addData("sideOfSleeve", sideOfSleeve);
