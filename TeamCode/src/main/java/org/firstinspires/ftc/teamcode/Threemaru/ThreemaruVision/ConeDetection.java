@@ -169,7 +169,7 @@ public class ConeDetection extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.x-242 + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
     // Running variable storing the parking position
-    private static volatile ConeDetection.ParkingPosition bluePosition = ParkingPosition.NOTSEEN;
+    private static volatile ConeDetection.ParkingPosition bluePosition = ParkingPosition.ONE;
     private static volatile ConeDetection.RedParkingPosition redPosition = RedParkingPosition.NOTSEEN;
 
     ArrayList<Integer> barAmounts= new ArrayList<Integer>();
@@ -178,8 +178,8 @@ public class ConeDetection extends OpenCvPipeline {
     //or you can decrease averageRedAndGreenValueForCone
     //To increase tolerance(harder to detect cone but less likely to think a wall is a cone) decrease averageBlueValueForCone
     //or you can increase averageRedAndGreenValueForCone
-    double redTolerance = 0.7;
-    double blueTolerance = 0.7;
+    double redTolerance = 0;
+    double blueTolerance = 0;
     int addedBars = 0;
     //Base bar is blue I'm just to lazy to name it blueBar
     //These are not used for telemetry

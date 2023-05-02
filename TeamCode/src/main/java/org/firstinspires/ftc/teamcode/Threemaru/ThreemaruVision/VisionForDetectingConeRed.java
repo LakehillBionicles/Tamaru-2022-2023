@@ -32,7 +32,6 @@ public class VisionForDetectingConeRed extends LinearOpMode {
             public void onError(int errorCode) {
             }
         });
-
         while (!isStarted()) {
             telemetry.addData("Color: ", ConeDetectionRed.getPosition());
             telemetry.update();

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
+import android.annotation.SuppressLint;
+
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -31,8 +33,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     public static double py = 0.0275, iy = 0.00055, dy = 0;
     public static double maxVelocity = 4000;
-    private String webcamName = "Webcam 1";
-
+    String webcamName = "Webcam 1";
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     private ConeDetection ConeDetection;
@@ -69,12 +70,16 @@ public class ThreemaruAutoBase extends LinearOpMode {
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
     int sideOfSleeve;
+
     
 
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
         driveController = new PIDController(py, iy, dy);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -139,8 +144,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         encoderDrive(0.5,8,8);
     }
     public void scanSignalSleeve(){
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
         camera.setPipeline(aprilTagDetectionPipeline);

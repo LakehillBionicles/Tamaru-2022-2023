@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetectionRed;
 import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 
@@ -31,13 +34,34 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
         //detectingCones();
         telemetry.addData("AfterDetectingCone", "yes?");
         telemetry.update();
-        waitForStart();
+        switchPipeline();
+        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        /*camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                @Override
+                public void onOpened() {
+                    camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                }
+
+                @Override
+                public void onError(int errorCode) {
+                    telemetry.addData("errorInsidenullLoop", ":(");
+                }
+        });
+
+         */
+        while(!opModeIsActive()){
+            telemetry.addData("Before colors", "yes?");
+            telemetry.addData("sideOfSleeve", sideOfSleeve);
+            telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
+            telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+            telemetry.update();
+        }
+        //waitForStart();
         if (opModeIsActive()) {
             //resetCamera();
             telemetry.addData("AfterresetCameraOpModeIf", "yes?");
             telemetry.update();
             //detectingCones();
-            switchPipeline();
             telemetry.addData("AfterdetectingConesOpModeIf", "yes?");
             telemetry.update();
             while (opModeIsActive()) {
@@ -49,24 +73,11 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
                 //detectingCones();
                  */
                 telemetry.addData("Before colors", "yes?");
-                if(ConeDetection.getBluePosition()!=null&& ConeDetection.getRedPosition()!=null) {
-                    camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                        @Override
-                        public void onOpened() {
-                            camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-                        }
-
-                        @Override
-                        public void onError(int errorCode) {
-                        }
-                    });
-                    telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-                    telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
-                    telemetry.update();
-                }else{
-                    telemetry.addData("ConeDetection.getRedPosition():", "is null");
+                telemetry.addData("sideOfSleeve", sideOfSleeve);
+                telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+                telemetry.update();
                 }
             }
         }
     }
-}
