@@ -120,11 +120,14 @@ public class ThreemaruAutoBase extends LinearOpMode {
             @Override
             public void onError(int errorCode)
             {
-            telemetry.addData("error", errorCode);
+            telemetry.addData("error", "somethingsWrong");
             telemetry.update();
             }
         });
 
+    }
+    public void switchPipeline(){
+        camera.setPipeline(ConeDetection);
     }
     public void rotate90Left(){
         encoderDrive(0.5,-8,-8);

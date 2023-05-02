@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 
 @Config
@@ -23,31 +25,47 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
         telemetryForVision();
         telemetry.addData("AfterTelemetry", "yes?");
         telemetry.update();
-        resetCamera();
+        //resetCamera();
         telemetry.addData("AfterResetCamera", "yes?");
         telemetry.update();
-        detectingCones();
+        //detectingCones();
         telemetry.addData("AfterDetectingCone", "yes?");
         telemetry.update();
         waitForStart();
         if (opModeIsActive()) {
-            resetCamera();
+            //resetCamera();
             telemetry.addData("AfterresetCameraOpModeIf", "yes?");
             telemetry.update();
-            detectingCones();
+            //detectingCones();
+            switchPipeline();
             telemetry.addData("AfterdetectingConesOpModeIf", "yes?");
             telemetry.update();
             while (opModeIsActive()) {
-                telemetry.addData("AfterWhile", "yes?");
+                /*telemetry.addData("AfterWhile", "yes?");
                 telemetry.update();
-                resetCamera();
-                telemetry.addData("AfterresetCameraOpModeIf", "yes?");
+                //resetCamera();
+                telemetry.addData("AfterresetCameraOpModeWhile", "yes?");
                 telemetry.update();
-                detectingCones();
-                telemetry.addData("Color: ", ConeDetection.getBluePosition());
-                telemetry.update();
-                telemetry.addData("Color: ", ConeDetection.getRedPosition());
-                telemetry.update();
+                //detectingCones();
+                 */
+                telemetry.addData("Before colors", "yes?");
+                if(ConeDetection.getBluePosition()!=null&& ConeDetection.getRedPosition()!=null) {
+                    camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                        @Override
+                        public void onOpened() {
+                            camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                        }
+
+                        @Override
+                        public void onError(int errorCode) {
+                        }
+                    });
+                    telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
+                    telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+                    telemetry.update();
+                }else{
+                    telemetry.addData("ConeDetection.getRedPosition():", "is null");
+                }
             }
         }
     }
