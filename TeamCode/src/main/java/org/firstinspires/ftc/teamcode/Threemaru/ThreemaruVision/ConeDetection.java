@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.vuforia.Rectangle;
 
 import org.opencv.core.Core;
@@ -216,46 +218,7 @@ public class ConeDetection extends OpenCvPipeline {
         Scalar sumColors11 = Core.sumElems(areaMat11);
         Mat areaMat12 = input.submat(new Rect(Bar_point12A, Bar_point12B));
         Scalar sumColors12 = Core.sumElems(areaMat12);
-        //Use for finding Tolerance
-        /*
-        telemetry.addData("Box1RGBvalues",sumColors1);
-        telemetry.addData("Box2RGBvalues",sumColors2);
-        telemetry.addData("Box3RGBvalues",sumColors3);
-        telemetry.addData("Box4RGBvalues",sumColors4);
-        telemetry.addData("Box5RGBvalues",sumColors5);
-        telemetry.addData("Box6RGBvalues",sumColors6);
-        telemetry.addData("Box7RGBvalues",sumColors7);
-        telemetry.addData("Box8RGBvalues",sumColors8);
-        telemetry.addData("Box9RGBvalues",sumColors9);
-        telemetry.addData("Box10RGBvalues",sumColors10);
-        telemetry.addData("Box11RGBvalues",sumColors11);
-        telemetry.addData("Box12RGBvalues",sumColors12);
-        telemetry.addData("Box1RedTolerance",(sumColors1.val[0] / (sumColors1.val[2] + sumColors1.val[1])));
-        telemetry.addData("Box2RedTolerance",(sumColors2.val[0] / (sumColors2.val[2] + sumColors2.val[1])));
-        telemetry.addData("Box3RedTolerance",(sumColors3.val[0] / (sumColors3.val[2] + sumColors3.val[1])));
-        telemetry.addData("Box4RedTolerance",(sumColors4.val[0] / (sumColors4.val[2] + sumColors4.val[1])));
-        telemetry.addData("Box5RedTolerance",(sumColors5.val[0] / (sumColors5.val[2] + sumColors5.val[1])));
-        telemetry.addData("Box6RedTolerance",(sumColors6.val[0] / (sumColors6.val[2] + sumColors6.val[1])));
-        telemetry.addData("Box7RedTolerance",(sumColors7.val[0] / (sumColors7.val[2] + sumColors7.val[1])));
-        telemetry.addData("Box8RedTolerance",(sumColors8.val[0] / (sumColors8.val[2] + sumColors8.val[1])));
-        telemetry.addData("Box9RedTolerance",(sumColors9.val[0] / (sumColors9.val[2] + sumColors9.val[1])));
-        telemetry.addData("Box10RedTolerance",(sumColors10.val[0] / (sumColors10.val[2] + sumColors10.val[1])));
-        telemetry.addData("Box11RedTolerance",(sumColors11.val[0] / (sumColors11.val[2] + sumColors11.val[1])));
-        telemetry.addData("Box12RedTolerance",(sumColors12.val[0] / (sumColors12.val[2] + sumColors12.val[1])));
-        telemetry.addData("Box1BlueTolerance",(sumColors1.val[2] / (sumColors1.val[0] + sumColors1.val[1])));
-        telemetry.addData("Box2BlueTolerance",(sumColors2.val[2] / (sumColors2.val[0] + sumColors2.val[1])));
-        telemetry.addData("Box3BlueTolerance",(sumColors3.val[2] / (sumColors3.val[0] + sumColors3.val[1])));
-        telemetry.addData("Box4BlueTolerance",(sumColors4.val[2] / (sumColors4.val[0] + sumColors4.val[1])));
-        telemetry.addData("Box5BlueTolerance",(sumColors5.val[2] / (sumColors5.val[0] + sumColors5.val[1])));
-        telemetry.addData("Box6BlueTolerance",(sumColors6.val[2] / (sumColors6.val[0] + sumColors6.val[1])));
-        telemetry.addData("Box7BlueTolerance",(sumColors7.val[2] / (sumColors7.val[0] + sumColors7.val[1])));
-        telemetry.addData("Box8BlueTolerance",(sumColors8.val[2] / (sumColors8.val[0] + sumColors8.val[1])));
-        telemetry.addData("Box9BlueTolerance",(sumColors9.val[2] / (sumColors9.val[0] + sumColors9.val[1])));
-        telemetry.addData("Box10BlueTolerance",(sumColors10.val[2] / (sumColors10.val[0] + sumColors10.val[1])));
-        telemetry.addData("Box11BlueTolerance",(sumColors11.val[2] / (sumColors11.val[0] + sumColors11.val[1])));
-        telemetry.addData("Box12BlueTolerance",(sumColors12.val[2] / (sumColors12.val[0] + sumColors12.val[1])));
-        */
-            for(int i = 0; i<12; i++){
+        for(int i = 0; i<12; i++){
                 Point newBar_point1A = new Point(
                         SLEEVE_TOPLEFT_ANCHOR_POINT.x-(22*i),
                         SLEEVE_TOPLEFT_ANCHOR_POINT.y);
@@ -517,7 +480,6 @@ public class ConeDetection extends OpenCvPipeline {
                         CYAN,
                         2
                 );
-                barAmounts.clear();
             }
 
         if ((sumColors1.val[0] / (sumColors1.val[1] + sumColors1.val[2])) > redTolerance) {
@@ -669,10 +631,10 @@ public class ConeDetection extends OpenCvPipeline {
         if (redNumberOfBarsFilled > 0){
         redCenterOfBars = addedBars / redNumberOfBarsFilled;
         Point redCenterofBarsPointA = new Point(
-                redCenterOfBars + 25,
+                redCenterOfBars + 25+100,
                 SLEEVE_TOPLEFT_ANCHOR_POINT.y + 95);
         Point redCenterofBarsPointB = new Point(
-                redCenterOfBars + 15,
+                redCenterOfBars + 15+100,
                 SLEEVE_TOPLEFT_ANCHOR_POINT.y + 105);
         Imgproc.rectangle(
                 input,
@@ -680,8 +642,7 @@ public class ConeDetection extends OpenCvPipeline {
                 redCenterofBarsPointB,
                 GREEN,
                 2
-        );
-        barAmounts.clear();}
+        );}
         if(numberOfBarsFilled>0){
             otherCenterOfBars = otherCenterOfBars/numberOfBarsFilled;
         }
