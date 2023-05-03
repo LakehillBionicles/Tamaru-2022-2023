@@ -63,6 +63,8 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
                 telemetry.addData("sideOfSleeve", sideOfSleeve);
                 telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
                 telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+                telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
                 telemetry.update();
                 }
             }
