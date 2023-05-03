@@ -27,7 +27,7 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
         if (opModeIsActive()) {
             PIDDrive(73, 5);
             distDriveStar(-1, 2);
-            PIDDrive(-12, 5);
+            /*PIDDrive(-12, 5);
             encoderDrive(.5, -9, 9);
             PIDDrive(10, 5);
             distDrivePort(1, 10);
@@ -37,7 +37,7 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
                 PIDDrive(-6, 5);
             } else {
                 PIDDrive(-30, 5);
-            }
+            }*/
         }
     }
 }
