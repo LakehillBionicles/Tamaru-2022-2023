@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //@Disabled
+@Disabled
 @Config
 @TeleOp
 public class ServoLimits extends OpMode {

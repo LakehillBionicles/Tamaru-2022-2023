@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 
+@Disabled
 @Config
 @TeleOp
 public class TurretTuning extends OpMode {

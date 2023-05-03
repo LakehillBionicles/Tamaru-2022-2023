@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 
-//@Disabled
+@Disabled
 @Config
 @TeleOp
 public class YTuning extends OpMode{

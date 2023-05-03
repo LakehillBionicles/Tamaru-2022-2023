@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Config
 @Autonomous(name = "TestAuto")
 public class ThreemaruTestAuto extends ThreemaruAutoBase {
-
     @Override
     public void runOpMode() {
         super.runOpMode();
@@ -21,24 +20,24 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
         scanSignalSleeve(); telemetryForVision();
         robot.servoHand1.setPosition(.25); robot.servoHand2.setPosition(.4); robot.servoExtend.setPosition(.5);
         robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
-        while(opModeIsActive()){
+        if (opModeIsActive()) {
             PIDDrive(73, 5);
             distDriveStar(-1, 2);
             PIDDrive(-12, 5);
             encoderDrive(.5, -9, 9);
             PIDDrive(10, 5);
             distDrivePort(1, 10);
-            if(sideOfSleeve == 1) {
+            if (sideOfSleeve == 1) {
                 PIDDrive(12, 5);
-            } else if(sideOfSleeve == 2) {
+            } else if (sideOfSleeve == 2) {
                 PIDDrive(-6, 5);
             } else {
                 PIDDrive(-30, 5);
             }
-            stop();
         }
     }
 }

@@ -19,7 +19,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-
 public class ThreemaruAutoBase extends LinearOpMode {
     public ThreemaruHardware robot = new ThreemaruHardware();
 
@@ -27,10 +26,11 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
     public final int turretPort = -1000, turretStar = 1000, turretFront = 0;
 
-    private PIDController driveController, turretController;
+    private PIDController driveController, turretController, armController;
 
-    public static double pyDrive = 0.0275, iyDrive = 0.00055, dyDrive = 0;
-    public static double pyTurret = 0.005, iyTurret = 0, dyTurret = 0.00005;
+    public static double pDrive = 0.0275, iDrive = 0.00055, dDrive = 0;
+    public static double pTurret = 0.005, iTurret = 0, dTurret = 0.00005;
+    public static double pArm = 0.001, iArm = 0, dArm = 0.0001, gArm = 0.001;
     public static double maxVelocity = 4000;
     private String webcamName = "Webcam 1";
 
@@ -75,20 +75,21 @@ public class ThreemaruAutoBase extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        driveController = new PIDController(pyDrive, iyDrive, dyDrive);
-        turretController = new PIDController(pyTurret, iyTurret, dyTurret);
+        driveController = new PIDController(pDrive, iDrive, dDrive);
+        turretController = new PIDController(pTurret, iTurret, dTurret);
+        armController = new PIDController(pArm, iArm, dArm);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
 
-        resetArm();
-        resetDrive();
-        scanSignalSleeve();
-        telemetryForVision();
-        resetCamera();
-        detectingCones();
-        waitForStart();
+        //resetArm();
+        //resetDrive();
+        //scanSignalSleeve();
+        //telemetryForVision();
+        //resetCamera();
+        //detectingCones();
+        //waitForStart();
     }
     //Resetting camera might fix null pointer errors and allow camera to switch pipeline
     public void resetCamera(){
@@ -209,6 +210,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
             telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
             telemetry.update();
     }
+    public void ControlAll(double driveTarget, double armTarget, double turretTarget, double extensionTarget, double timeout){
+        PIDDrive(driveTarget, timeout);
+        PIDArm(armTarget, timeout);
+        PIDTurret(turretTarget, timeout);
+        extensionToPosition(extensionTarget);
+    }
     public void encoderDrive(double speed, double leftInches, double rightInches) {
         int leftTarget = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition())/2 + (int) (leftInches * robot.COUNTS_PER_INCH);
         int rightTarget = (robot.fsd.getCurrentPosition() + robot.bsd.getCurrentPosition())/2 + (int) (rightInches * robot.COUNTS_PER_INCH);
@@ -233,7 +240,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
         sleep(250);
     }
     public void PIDDrive(double target, double timeout) {
-        driveController.setPID(pyDrive, iyDrive, dyDrive);
+        driveController.setPID(pDrive, iDrive, dDrive);
 
         driveController.setSetPoint(target);
 
@@ -253,34 +260,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
             robot.fsd.setVelocity(velocityY);
             robot.bsd.setVelocity(velocityY);
         }
-    }
-    public String senseColors(ColorSensor colorSensor) {
-        String color = "blank";
-        double redMax = colorSensor.red();
-        int blueMax = colorSensor.blue();
-        int greenMax = colorSensor.green();
-
-        while (opModeIsActive() && color.equals("blank")) {
-            if ((redMax > blueMax) && (redMax > greenMax)) {
-                telemetry.addData("i see red", " ");
-                telemetry.update();
-                color = "red";
-            } else if ((blueMax > redMax) && (blueMax > greenMax)) {
-                telemetry.addData("i see blue", " ");
-                telemetry.update();
-                color = "blue";
-            } else if ((greenMax > redMax) && (greenMax > blueMax)) {
-                telemetry.addData("i see green", " ");
-                telemetry.update();
-                color = "green";
-            } else {
-                telemetry.addData("i see nothing", " ");
-                telemetry.update();
-                color = "no go";
-            }
-
-        }
-        return color;
     }
     public void resetArm(){
         robot.armPort.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -309,6 +288,26 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         robot.armPort.setPower(1);
         robot.armStar.setPower(1);
+    }
+    public void PIDArm(double target, double timeout) {
+        armController.setPID(pArm, iArm, dArm);
+
+        armController.setSetPoint(target);
+
+        armController.setTolerance(.1);
+
+        double state = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
+
+        resetRuntime();
+        while (((!driveController.atSetPoint()) && (getRuntime() < timeout))) {
+
+            state = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
+            double pid = armController.calculate(state, target) + gArm;
+            double velocity = pid * maxVelocity;
+
+            robot.armPort.setVelocity(velocity);
+            robot.armStar.setVelocity(velocity);
+        }
     }
     public void distDrivePort(int direction, double timeout){
         resetRuntime();
@@ -367,7 +366,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.servoTurret.setPosition(turretPosition);
     }
     public void PIDTurret(double target, double timeout) {
-        turretController.setPID(pyTurret, iyTurret, dyTurret);
+        turretController.setPID(pTurret, iTurret, dTurret);
 
         turretController.setSetPoint(target);
 
