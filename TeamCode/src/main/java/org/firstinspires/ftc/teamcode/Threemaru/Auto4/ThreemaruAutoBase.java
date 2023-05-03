@@ -79,7 +79,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         driveController = new PIDController(py, iy, dy);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -131,10 +130,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
             telemetry.update();
             }
         });
-
-    }
-    public void switchPipeline(){
-        camera.setPipeline(ConeDetection);
     }
     public void rotate90Left(){
         encoderDrive(0.5,-8,-8);
@@ -146,6 +141,9 @@ public class ThreemaruAutoBase extends LinearOpMode {
         encoderDrive(0.5,8,8);
     }
     public void scanSignalSleeve(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
+
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
         camera.setPipeline(aprilTagDetectionPipeline);
