@@ -16,7 +16,6 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
@@ -26,10 +25,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
+    public final int turretPort = -1000, turretStar = 1000, turretFront = 0;
 
-    private PIDController driveController;
+    private PIDController driveController, turretController;
 
-    public static double py = 0.0275, iy = 0.00055, dy = 0;
+    public static double pyDrive = 0.0275, iyDrive = 0.00055, dyDrive = 0;
+    public static double pyTurret = 0.005, iyTurret = 0, dyTurret = 0.00005;
     public static double maxVelocity = 4000;
     private String webcamName = "Webcam 1";
 
@@ -74,7 +75,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        driveController = new PIDController(py, iy, dy);
+        driveController = new PIDController(pyDrive, iyDrive, dyDrive);
+        turretController = new PIDController(pyTurret, iyTurret, dyTurret);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -203,7 +205,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
             sleep(20);
         }
     }
-
     public void telemetryForVision(){
             telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
             telemetry.update();
@@ -231,9 +232,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         sleep(250);
     }
-
     public void PIDDrive(double target, double timeout) {
-        driveController.setPID(py, iy, dy);
+        driveController.setPID(pyDrive, iyDrive, dyDrive);
 
         driveController.setSetPoint(target);
 
@@ -282,7 +282,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         }
         return color;
     }
-
     public void resetArm(){
         robot.armPort.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -290,7 +289,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     public void resetDrive(){
         robot.fpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bpd.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -302,7 +300,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.fsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     public void armToPosition(int position){
         robot.armPort.setTargetPosition(position);
         robot.armStar.setTargetPosition(position);
@@ -313,7 +310,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.armPort.setPower(1);
         robot.armStar.setPower(1);
     }
-
     public void distDrivePort(int direction, double timeout){
         resetRuntime();
         while((robot.distSensorPort.getDistance(DistanceUnit.CM)>10)&&getRuntime()<timeout){
@@ -334,7 +330,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
     }
-
     public void strafeDist(DistanceSensor distSensor, double targetDist, int direction){
         resetRuntime();
         while((distSensor.getDistance(DistanceUnit.CM)>targetDist||distSensor.getDistance(DistanceUnit.CM)>targetDist)&&getRuntime()<2){
@@ -352,7 +347,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
     }
-
     public void distDriveStar(int direction, double timeout){
         resetRuntime();
         while(robot.distSensorStar.getDistance(DistanceUnit.CM)>10 && getRuntime()<timeout){
@@ -369,11 +363,28 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
     }
-
     public void turretToPosition(double turretPosition) {
         robot.servoTurret.setPosition(turretPosition);
     }
+    public void PIDTurret(double target, double timeout) {
+        turretController.setPID(pyTurret, iyTurret, dyTurret);
 
+        turretController.setSetPoint(target);
+
+        turretController.setTolerance(.1);
+
+        double turretPos = robot.motorTurret.getCurrentPosition();
+
+        resetRuntime();
+        while (((!driveController.atSetPoint()) && (getRuntime() < timeout))) {
+            turretPos = robot.motorTurret.getCurrentPosition();
+
+            double pid = driveController.calculate(turretPos, turretController.getSetPoint());
+            double velocityY = pid * maxVelocity;
+
+            robot.motorTurret.setVelocity(velocityY);
+        }
+    }
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
     }

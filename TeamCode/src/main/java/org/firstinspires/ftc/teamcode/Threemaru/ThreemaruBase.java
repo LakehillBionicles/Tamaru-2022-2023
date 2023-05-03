@@ -48,7 +48,7 @@ public class ThreemaruBase extends CommandOpMode {
         ThreemaruArm = new ArmSubsystem(armPort, armStar);
         ThreemaruHand = new HandSubsystem(hand1, hand2);
         ThreemaruExtension = new ExtensionSubsystem(servoExtend);
-        ThreemaruTurret = new TurretSubsystem(servoTurret);
+        //ThreemaruTurret = new TurretSubsystem();
 
         fpd = hwMap.get(DcMotorEx.class, "fpd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");

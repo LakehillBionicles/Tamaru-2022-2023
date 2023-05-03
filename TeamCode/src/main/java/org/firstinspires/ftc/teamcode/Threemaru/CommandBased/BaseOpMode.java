@@ -43,7 +43,7 @@ public class BaseOpMode extends CommandOpMode {
         //initHardware();
 
         hand = new HandSubsystem(robot.servoHand1, robot.servoHand2);
-        turret = new TurretSubsystem(robot.servoTurret);
+        //turret = new TurretSubsystem(robot.servoTurret);
         extension = new ExtensionSubsystem(robot.servoExtend);
         arm = new ArmSubsystem(robot.armPort, robot.armStar);
         drive = new DriveSubsystem(robot.fpd, robot.bpd, robot.fsd, robot.bsd);
@@ -74,7 +74,7 @@ public class BaseOpMode extends CommandOpMode {
 
     public void resetTurretAndExtension() {
         extension.setExtensionRetracted();
-        turret.setTurretForward();
+        //turret.setTurretForward();
     }
 
     public double getDrivePowerDenom() {

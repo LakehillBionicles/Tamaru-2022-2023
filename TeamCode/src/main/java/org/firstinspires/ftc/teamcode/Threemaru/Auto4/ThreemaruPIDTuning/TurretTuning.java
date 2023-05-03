@@ -14,11 +14,11 @@ import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
 
 @Config
 @TeleOp
-public class ArmTuning extends OpMode {
+public class TurretTuning extends OpMode {
     ThreemaruHardware robot = new ThreemaruHardware();
     private PIDController controller;
 
-    public static double p = 0.001, i = 0, d = 0.0001, kg = 0.001;
+    public static double p = 0.005, i = 0, d = 0.00005;
     public static int reference = 0;
     public static double maxVelocity = 4000;
 
@@ -28,11 +28,9 @@ public class ArmTuning extends OpMode {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.armPort.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         robot.servoHand1.setPosition(CLOSED1.getPosition());
         robot.servoHand2.setPosition(CLOSED2.getPosition());
@@ -42,12 +40,11 @@ public class ArmTuning extends OpMode {
     public void loop(){
         controller.setPID(p, i, d);
 
-        double state = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
-        double pid = controller.calculate(state, reference) + kg;
+        double state = robot.motorTurret.getCurrentPosition();
+        double pid = controller.calculate(state, reference);
         double velocity = pid * maxVelocity;
 
-        robot.armPort.setVelocity(velocity);
-        robot.armStar.setVelocity(velocity);
+        robot.motorTurret.setVelocity(velocity);
 
         telemetry.addData("reference", reference);
         telemetry.addData("state", state);

@@ -23,6 +23,8 @@ public class ThreemaruHardware extends LinearOpMode{
 
     public DcMotorEx armPort = null, armStar = null;
 
+    public DcMotorEx motorTurret = null;
+
     public Servo servoHand1 = null, servoHand2 = null;
     public Servo servoTurret = null;
     public Servo servoExtend = null;
@@ -37,8 +39,7 @@ public class ThreemaruHardware extends LinearOpMode{
 
     HardwareMap hwMap = null;
 
-    public void ThreemaruHardware(){
-    }
+    public void ThreemaruHardware(){}
 
     @Override
     public void runOpMode() {
@@ -55,6 +56,8 @@ public class ThreemaruHardware extends LinearOpMode{
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");
 
+        motorTurret = hwMap.get(DcMotorEx.class, "motorTurret");
+
         servoHand1 = hwMap.get(Servo.class, "servoHand1");
         servoHand2 = hwMap.get(Servo.class, "servoHand2");
         servoTurret = hwMap.get(Servo.class, "servoTurret");
@@ -68,16 +71,10 @@ public class ThreemaruHardware extends LinearOpMode{
         bpd.setDirection(DcMotorSimple.Direction.FORWARD);
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armPort.setDirection(DcMotorSimple.Direction.FORWARD);//formerly BOW
-        armStar.setDirection(DcMotorSimple.Direction.FORWARD);//formerly POW
+        armPort.setDirection(DcMotorSimple.Direction.REVERSE);
+        armStar.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        fpd.setPower(0);
-        fsd.setPower(0);
-        bpd.setPower(0);
-        bsd.setPower(0);
-
-        armPort.setPower(0);
-        armStar.setPower(0);
+        motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 
         fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -87,6 +84,8 @@ public class ThreemaruHardware extends LinearOpMode{
         armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         fpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -94,5 +93,7 @@ public class ThreemaruHardware extends LinearOpMode{
 
         armPort.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armStar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorTurret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }
