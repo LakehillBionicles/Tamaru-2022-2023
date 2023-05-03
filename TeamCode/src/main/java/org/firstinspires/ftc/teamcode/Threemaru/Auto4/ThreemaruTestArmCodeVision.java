@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 
 
 @Config
-@Autonomous(name = "TestVision")
+@Autonomous(name = "TestArmCodeVision")
 public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
     @Override
     public void runOpMode() {
@@ -15,8 +15,6 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
         robot.init(hardwareMap);
         resetArm();
         resetDrive();
-        scanSignalSleeve();
-        telemetryForVision();
         resetCamera();
         detectingCones();
         while(!opModeIsActive()){
@@ -35,7 +33,6 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                 //detectingCones();
                  */
                 telemetry.addData("Before colors", "yes?");
-                telemetry.addData("sideOfSleeve", sideOfSleeve);
                 telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
                 telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
                 telemetry.update();
