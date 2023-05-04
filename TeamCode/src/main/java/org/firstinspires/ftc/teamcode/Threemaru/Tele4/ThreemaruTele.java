@@ -10,9 +10,11 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
 @TeleOp
 //@Disabled
@@ -28,6 +30,11 @@ public class ThreemaruTele extends LinearOpMode {
     public static double p = 0.001, i = 0, d = 0.0001, kg = 0.001;
     public static double reference = 0;
     public static double maxVelocity = 4000;
+
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
     public void runOpMode() {
         robot.init(hardwareMap);
         armController = new PIDController(p, i, d);
@@ -41,6 +48,11 @@ public class ThreemaruTele extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
+
             robot.fpd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x + gamepad2.right_stick_x);
             robot.bpd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x + gamepad2.right_stick_x);
             robot.fsd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x - gamepad2.right_stick_x);
@@ -54,6 +66,12 @@ public class ThreemaruTele extends LinearOpMode {
             robot.servoHand1.setPosition(getHandPos1().getPosition());
             robot.servoHand2.setPosition(getHandPos2().getPosition());
             robot.servoExtend.setPosition(getExtendPosition());
+
+            telemetry.addData("extendPos", getExtendPosition());
+            telemetry.addData("distStar", robot.distSensorStar.getDistance(DistanceUnit.CM));
+            telemetry.addData("distPort", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            telemetry.addData("armPos", (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2);
+            telemetry.update();
         }
     }
 
@@ -156,6 +174,27 @@ public class ThreemaruTele extends LinearOpMode {
             extendPosition = RETRACTED.getPosition();
         }
 
+        /*if (gamepad1.y) {
+            extendPosition = .45;
+        } else if (gamepad1.b) {
+            extendPosition = .4;
+        } else if (gamepad1.a) {
+            extendPosition = .35;
+        } else if(gamepad1.x){
+            extendPosition = .3;
+        } else if(gamepad1.dpad_up){
+            extendPosition = .25;
+        } else if(gamepad1.dpad_right){
+            extendPosition = .2;
+        } else if(gamepad1.dpad_down){
+            extendPosition = .15;
+        } else if(gamepad1.dpad_left){
+            extendPosition = .1;
+        } else if(gamepad1.left_bumper){
+            extendPosition = .05;
+        } else if(gamepad1.right_bumper){
+            extendPosition = 0;
+        }*/
         return extendPosition;
     }
 

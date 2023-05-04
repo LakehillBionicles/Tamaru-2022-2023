@@ -2,15 +2,20 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -26,13 +31,17 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
     public final int turretPort = -1000, turretStar = 1000, turretFront = 0;
 
-    private PIDController driveController, turretController, armController;
+    private PIDController driveController, thetaController, turretController, armController;
 
     public static double pDrive = 0.0275, iDrive = 0.00055, dDrive = 0;
+    public static double pTheta = 0.0075, iTheta = 0, dTheta = 0.0012;
     public static double pTurret = 0.005, iTurret = 0, dTurret = 0.00005;
     public static double pArm = 0.001, iArm = 0, dArm = 0.0001, gArm = 0.001;
     public static double maxVelocity = 4000;
     private String webcamName = "Webcam 1";
+
+    public BNO055IMU imu;
+    public Orientation robotTheta;
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -76,12 +85,16 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public void runOpMode(){
         robot.init(hardwareMap);
         driveController = new PIDController(pDrive, iDrive, dDrive);
+        thetaController = new PIDController(pTheta, iTheta, dTheta);
         turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
 
         //resetArm();
         //resetDrive();
@@ -115,15 +128,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
             }
         });}
-    public void rotate90Left(){
-        encoderDrive(0.5,-8,-8);
-    }
-    public void rotate180(){
-        encoderDrive(0.5,-16,-16);
-    }
-    public void rotate90Right(){
-        encoderDrive(0.5,8,8);
-    }
     public void scanSignalSleeve(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -210,11 +214,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
             telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
             telemetry.update();
     }
-    public void ControlAll(double driveTarget, double armTarget, double turretTarget, double extensionTarget, double timeout){
-        PIDDrive(driveTarget, timeout);
-        PIDArm(armTarget, timeout);
-        PIDTurret(turretTarget, timeout);
-        extensionToPosition(extensionTarget);
+    public void ControlAll(double yTarget, double thetaTarget, double armTarget, double turretTarget, double extensionTarget, double timeout){
+
     }
     public void encoderDrive(double speed, double leftInches, double rightInches) {
         int leftTarget = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition())/2 + (int) (leftInches * robot.COUNTS_PER_INCH);
@@ -239,26 +240,31 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         sleep(250);
     }
-    public void PIDDrive(double target, double timeout) {
-        driveController.setPID(pDrive, iDrive, dDrive);
-
-        driveController.setSetPoint(target);
-
-        driveController.setTolerance(.1);
-
+    public void PIDDrive(double yTarget, double thetaTarget, double timeout) {
         double robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+        Orientation robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        driveController.setPID(pDrive, iDrive, dDrive);
+        driveController.setSetPoint(yTarget + robotY);
+        driveController.setTolerance(.1);
+        thetaController.setPID(pTheta, iTheta, dTheta);
+        thetaController.setSetPoint(thetaTarget + robotTheta.firstAngle);
+        thetaController.setTolerance(.1);
 
         resetRuntime();
-        while (((!driveController.atSetPoint()) && (getRuntime() < timeout))) {
+        while (((!driveController.atSetPoint() || !thetaController.atSetPoint()) && (getRuntime() < timeout))) {
             robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+            robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
 
-            double pid = driveController.calculate(robotY, driveController.getSetPoint());
-            double velocityY = pid * maxVelocity;
+            double pidY = driveController.calculate(robotY, driveController.getSetPoint());
+            double pidTheta = thetaController.calculate(robotTheta.firstAngle, thetaController.getSetPoint());
 
-            robot.fpd.setVelocity(velocityY);
-            robot.bpd.setVelocity(velocityY);
-            robot.fsd.setVelocity(velocityY);
-            robot.bsd.setVelocity(velocityY);
+            double velocityY = pidY * maxVelocity;
+            double velocityTheta = pidTheta * maxVelocity;
+
+            robot.fpd.setVelocity(velocityY - velocityTheta);
+            robot.bpd.setVelocity(velocityY - velocityTheta);
+            robot.fsd.setVelocity(velocityY + velocityTheta);
+            robot.bsd.setVelocity(velocityY + velocityTheta);
         }
     }
     public void resetArm(){
@@ -299,7 +305,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
         double state = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
 
         resetRuntime();
-        while (((!driveController.atSetPoint()) && (getRuntime() < timeout))) {
+        while (((!armController.atSetPoint()) && (getRuntime() < timeout))) {
 
             state = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
             double pid = armController.calculate(state, target) + gArm;
@@ -348,7 +354,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     }
     public void distDriveStar(int direction, double timeout){
         resetRuntime();
-        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>10 && getRuntime()<timeout){
+        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>50 && getRuntime()<timeout){
             robot.fpd.setPower(direction*.2);
             robot.bpd.setPower(direction*.2);
             robot.fsd.setPower(direction*.2);
@@ -375,10 +381,10 @@ public class ThreemaruAutoBase extends LinearOpMode {
         double turretPos = robot.motorTurret.getCurrentPosition();
 
         resetRuntime();
-        while (((!driveController.atSetPoint()) && (getRuntime() < timeout))) {
+        while (((!turretController.atSetPoint()) && (getRuntime() < timeout))) {
             turretPos = robot.motorTurret.getCurrentPosition();
 
-            double pid = driveController.calculate(turretPos, turretController.getSetPoint());
+            double pid = turretController.calculate(turretPos, turretController.getSetPoint());
             double velocityY = pid * maxVelocity;
 
             robot.motorTurret.setVelocity(velocityY);

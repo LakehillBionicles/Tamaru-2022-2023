@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.*;
 
-import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
-import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
 @Disabled
 @Config
