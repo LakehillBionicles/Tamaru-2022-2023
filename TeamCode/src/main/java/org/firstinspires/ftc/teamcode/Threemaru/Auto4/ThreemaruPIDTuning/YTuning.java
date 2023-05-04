@@ -9,11 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
-import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
 @Disabled
 @Config

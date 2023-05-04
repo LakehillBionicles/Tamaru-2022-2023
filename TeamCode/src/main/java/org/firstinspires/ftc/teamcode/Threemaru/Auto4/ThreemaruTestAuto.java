@@ -17,7 +17,7 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         resetArm(); resetDrive();
-        scanSignalSleeve(); telemetryForVision();
+        //scanSignalSleeve(); telemetryForVision();
         robot.servoHand1.setPosition(.25); robot.servoHand2.setPosition(.4); robot.servoExtend.setPosition(.5);
         robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -25,10 +25,11 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
         waitForStart();
 
         if (opModeIsActive()) {
-            PIDDrive(73, 5);
-            distDriveStar(-1, 2);
-            /*PIDDrive(-12, 5);
-            encoderDrive(.5, -9, 9);
+            robot.servoHand1.setPosition(.25); robot.servoHand2.setPosition(.4); robot.servoExtend.setPosition(.5);
+            PIDDrive(75, 0, 5);
+            distDriveStar(-1, 3);
+            //PIDDrive(-12,0, 5);
+            /*PIDDrive(0, 90, 2);
             PIDDrive(10, 5);
             distDrivePort(1, 10);
             if (sideOfSleeve == 1) {

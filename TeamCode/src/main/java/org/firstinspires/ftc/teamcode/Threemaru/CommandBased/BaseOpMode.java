@@ -1,21 +1,16 @@
 package org.firstinspires.ftc.teamcode.Threemaru.CommandBased;
 
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ExtensionSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
-import org.firstinspires.ftc.teamcode.Threemaru.Tele4.ThreemaruHardware;
+import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
 public class BaseOpMode extends CommandOpMode {
     ThreemaruHardware robot = new ThreemaruHardware();
