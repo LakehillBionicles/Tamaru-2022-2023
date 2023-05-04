@@ -13,6 +13,7 @@ public class ThreemaruParking extends ThreemaruAutoBase{
         robot.init(hardwareMap);
         resetArm(); resetDrive();
         scanSignalSleeve(); telemetryForVision();
+        telemetry.addData("sideOfSleeve",sideOfSleeve);
         waitForStart();
         if(opModeIsActive()){
             encoderDrive(0.5, 28, 28);
