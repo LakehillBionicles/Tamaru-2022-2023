@@ -37,8 +37,8 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
         detectingCones();
         while(!opModeIsActive()){
             telemetry.addData("sideOfSleeve", sideOfSleeve);
-            telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-            telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+            telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
+            telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
             telemetry.update();
         }
         if (opModeIsActive()) {
@@ -51,11 +51,11 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                 //detectingCones();
                  */
                 if(ArmPositions.get(ConeDetection.getRedPosition())!= null) {
-                        turretToPosition(ArmPositions.get(ConeDetection.getRedPosition()));
+                        turretToPosition(ArmPositions.get(ConeDetection.getBlueDifferentPosition()));
                 }
                 telemetry.addData("Before colors", "yes?");
-                telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+                telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
                 telemetry.update();
             }
         }
