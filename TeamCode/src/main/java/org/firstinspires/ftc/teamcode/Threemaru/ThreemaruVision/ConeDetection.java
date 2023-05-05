@@ -292,8 +292,9 @@ public class ConeDetection extends OpenCvPipeline {
                 if(amountOfBlue>previousBlue){
                     previousBlue = amountOfBlue;
                 }else{
-                    heightOfNewAnchor = anchorHeight-i;
-                    i = 500;
+                    heightOfNewAnchor = anchorHeight - i;
+                    i= 500;
+
                 }
             }
         }

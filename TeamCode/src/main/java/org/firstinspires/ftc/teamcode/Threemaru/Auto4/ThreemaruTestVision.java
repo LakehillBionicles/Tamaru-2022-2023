@@ -17,7 +17,6 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
     @Override
     public void runOpMode() {
         super.runOpMode();
-        robot.init(hardwareMap);
         resetArm();
         resetDrive();
         telemetry.addData("beforeSignalSleeve", "yes");
@@ -61,8 +60,6 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
                  */
                 telemetry.addData("Before colors", "yes?");
                 telemetry.addData("sideOfSleeve", sideOfSleeve);
-                telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
                 telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
                 telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
                 telemetry.update();
