@@ -340,11 +340,9 @@ public class AutoBase extends LinearOpMode {
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
     }
-
     public void turretToPosition(double turretPosition) {
         robot.servoTurret.setPosition(turretPosition);
     }
-
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
     }

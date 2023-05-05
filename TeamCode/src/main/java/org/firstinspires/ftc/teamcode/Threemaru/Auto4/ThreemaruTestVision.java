@@ -16,6 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class ThreemaruTestVision extends ThreemaruAutoBase {
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap);
         super.runOpMode();
         resetArm();
         resetDrive();
