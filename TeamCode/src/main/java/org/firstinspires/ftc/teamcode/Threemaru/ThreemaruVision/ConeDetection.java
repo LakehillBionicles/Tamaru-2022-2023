@@ -10,7 +10,6 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class ConeDetection extends OpenCvPipeline {
 
-
     /*
         YELLOW  = Parking Left
         CYAN    = Parking Middle
@@ -192,6 +191,10 @@ public class ConeDetection extends OpenCvPipeline {
     static int differentRedCenterOfBars = 0;
     int differentRedNumberOfBars = 0;
 
+    static double blueDistance = 0;
+    static double redDistance = 0;
+
+
     @Override
     public Mat processFrame(Mat input) {
         double redTolerance = 0.7;
@@ -212,7 +215,7 @@ public class ConeDetection extends OpenCvPipeline {
         anchorHeight = input.height();
         // Get the submat frame, and then sum all the values
         //Used for telemetry will remove
-
+        Scalar redColors = null;
         for(int i=1;i<(input.width()-anchorWidth);i++){
             Point redBarPoint1 = new Point(i,anchorHeight);
             Point redBarPoint2 = new Point(i+anchorWidth, 1);
@@ -238,12 +241,13 @@ public class ConeDetection extends OpenCvPipeline {
                 RED,
                 2
         );
+        Scalar blueColors = null;
         for(int i=1;i<(input.width()-anchorWidth);i++){
             Point blueBarPoint1 = new Point(i,anchorHeight);
             Point blueBarPoint2 = new Point(i+anchorWidth, 1);
             Mat blueMatArea1 = input.submat(new Rect(blueBarPoint1, blueBarPoint2));
-            Scalar colors= Core.sumElems(blueMatArea1);
-            if(colors.val[2]>0.7){
+            blueColors= Core.sumElems(blueMatArea1);
+            if(blueColors.val[2]>0.7){
                 differentAddedBars = differentAddedBars+i;
                 differentNumberOfBars++;
             }
@@ -263,6 +267,18 @@ public class ConeDetection extends OpenCvPipeline {
                 BLUE,
                 2
         );
+        if(differentAddedBars>0) {
+            for (int i = 0; i < (anchorHeight-4); i++) {
+                Point Bar_pointBlue1A = new Point(
+                        differentRedCenterOfBars, anchorHeight-i);
+                Point Bar_pointBlue1B = new Point(
+                        differentRedCenterOfBars+boxWidth, 1);
+                Mat blueCentralMatArea1 = input.submat(new Rect(Bar_pointBlue1A, Bar_pointBlue1B));
+                Scalar amountOfColors = Core.sumElems(blueCentralMatArea1);
+                double amountOfBlue = amountOfColors.val[2];
+
+            }
+        }
         /*
         Mat areaMat1 = input.submat(new Rect(Bar_point1A, Bar_point1B));
         Scalar sumColors1 = Core.sumElems(areaMat1);
@@ -755,6 +771,12 @@ public class ConeDetection extends OpenCvPipeline {
     }
     public static int getBlueDifferentPosition(){
         return differentCenterOfBars;
+    }
+    public static double getBlueDistance(){
+        return blueDistance;
+    }
+    public static double getRedDistance(){
+        return redDistance;
     }
 }
 
