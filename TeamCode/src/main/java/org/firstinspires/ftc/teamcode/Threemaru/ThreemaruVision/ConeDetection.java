@@ -43,7 +43,6 @@ public class ConeDetection extends OpenCvPipeline {
     WHITE = new Scalar(255, 255, 255);
 
     // Anchor point definitions
-    /*
         Point sleeve_pointA = new Point(
                 SLEEVE_TOPLEFT_ANCHOR_POINT.x,
                 SLEEVE_TOPLEFT_ANCHOR_POINT.y);
@@ -80,8 +79,7 @@ public class ConeDetection extends OpenCvPipeline {
         Point sleeve_point5B = new Point(
                 SLEEVE_TOPLEFT_ANCHOR_POINT.x-250 + REGION_WIDTH,
                 SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-
-*/ Point Bar_point1A = new Point(
+                 Point Bar_point1A = new Point(
             SLEEVE_TOPLEFT_ANCHOR_POINT.x,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y);
     Point Bar_point1B = new Point(
@@ -165,6 +163,7 @@ public class ConeDetection extends OpenCvPipeline {
     //Base bar is blue I'm just to lazy to name it blueBar
     //These are not used for telemetry
     //Base driveBar is blue I'm just to lazy to name it driveBlueBar
+    /*
     int driveBar1 = 1;
     int driveBar2 = 2;
     int driveBar3 = 3;
@@ -177,6 +176,8 @@ public class ConeDetection extends OpenCvPipeline {
     int driveBar10 = 10;
     int driveBar11 = 11;
     int driveBar12 = 12;
+
+     */
     int anchorHeight = 300;
     int anchorWidth = 1;
 
@@ -267,18 +268,47 @@ public class ConeDetection extends OpenCvPipeline {
                 BLUE,
                 2
         );
+        int Bar_PointBlue1AX = 0;
+        int Bar_PointBlue1AY = 0;
+        int Bar_PointBlue1BX = 0;
+        int Bar_PointBlue1BY = 0;
+        double previousBlue = 0;
+        double amountOfBlue = 2;
+        double heightOfNewAnchor = anchorHeight;
         if(differentAddedBars>0) {
-            for (int i = 0; i < (anchorHeight-4); i++) {
+            for (int i = 0; i < (anchorHeight/2); i++) {
+                heightOfNewAnchor = anchorHeight-i;
                 Point Bar_pointBlue1A = new Point(
                         differentRedCenterOfBars, anchorHeight-i);
                 Point Bar_pointBlue1B = new Point(
                         differentRedCenterOfBars+boxWidth, 1);
                 Mat blueCentralMatArea1 = input.submat(new Rect(Bar_pointBlue1A, Bar_pointBlue1B));
                 Scalar amountOfColors = Core.sumElems(blueCentralMatArea1);
-                double amountOfBlue = amountOfColors.val[2];
-
+                amountOfBlue = amountOfColors.val[2];
+                Bar_PointBlue1AX = differentRedCenterOfBars;
+                Bar_PointBlue1AY = anchorHeight-i;
+                Bar_PointBlue1BX = differentRedCenterOfBars+boxWidth;
+                Bar_PointBlue1BY = 1;
+                if(amountOfBlue>previousBlue){
+                    previousBlue = amountOfBlue;
+                }else{
+                    heightOfNewAnchor = anchorHeight-i;
+                    i = 500;
+                }
             }
         }
+        Point NewRectanglePointBlue1A = new Point(
+                Bar_PointBlue1AX, Bar_PointBlue1AY);
+        Point NewRectanglePointBlue1B = new Point(
+                Bar_PointBlue1BX, Bar_PointBlue1BY);
+
+        Imgproc.rectangle(
+                input,
+                NewRectanglePointBlue1A,
+                NewRectanglePointBlue1B,
+                GREEN,
+                2
+        );
         /*
         Mat areaMat1 = input.submat(new Rect(Bar_point1A, Bar_point1B));
         Scalar sumColors1 = Core.sumElems(areaMat1);
