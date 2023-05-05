@@ -178,7 +178,10 @@ public class ConeDetection extends OpenCvPipeline {
     int driveBar10 = 10;
     int driveBar11 = 11;
     int driveBar12 = 12;
+    int anchorHeight = 300;
+    int anchorWidth = 1;
 
+    int boxWidth = 20;
     int otherCenterOfBars = 0;
     int otherRedCenterOfBars = 0;
 
@@ -193,8 +196,37 @@ public class ConeDetection extends OpenCvPipeline {
         int numberOfBarsFilled = 0;
         int centerOfBars = 0;
         int redCenterOfBars = 0;
+        int differentAddedBars = 0;
+        int differentCenterOfBars = 0;
+        int differentNumberOfBars = 0;
+        anchorHeight = input.height();
         // Get the submat frame, and then sum all the values
         //Used for telemetry will remove
+
+        for(int i=1;i<input.width();i++){
+            Point BarPoint1 = new Point(i,anchorHeight);
+            Point BarPoint2 = new Point(i+anchorWidth, 1);
+            Scalar colors= Core.sumElems(input.submat(new Rect(BarPoint1, BarPoint2)));
+            if(colors.val[0]>0.7){
+               differentAddedBars = differentAddedBars+i;
+               differentNumberOfBars++;
+            }
+
+        }
+        if(differentNumberOfBars>0){
+            differentCenterOfBars = differentAddedBars/differentNumberOfBars;
+        }
+        Point newerBar_point1A = new Point(
+                differentCenterOfBars, anchorHeight);
+        Point newerBar_point1B = new Point(
+                differentCenterOfBars+boxWidth, 1);
+        Imgproc.rectangle(
+                input,
+                newerBar_point1A,
+                newerBar_point1B,
+                GREEN,
+                2
+        );
         Mat areaMat1 = input.submat(new Rect(Bar_point1A, Bar_point1B));
         Scalar sumColors1 = Core.sumElems(areaMat1);
         Mat areaMat2 = input.submat(new Rect(Bar_point2A, Bar_point2B));
