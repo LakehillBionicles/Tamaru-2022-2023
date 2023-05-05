@@ -50,7 +50,7 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                 telemetry.update();
                 //detectingCones();
                  */
-                if(ArmPositions.get(ConeDetection.getRedPosition())!= null) {
+                if(ArmPositions.get(ConeDetection.getBlueDifferentPosition())!= null) {
                         turretToPosition(ArmPositions.get(ConeDetection.getBlueDifferentPosition()));
                 }
                 telemetry.addData("Before colors", "yes?");
