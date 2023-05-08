@@ -242,11 +242,13 @@ public class ThreemaruAutoBase extends LinearOpMode {
         double robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
         Orientation robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         driveController.setPID(pY, iY, dY);
-        driveController.setSetPoint(yTarget + robotY);
-        driveController.setTolerance(.1);
+        //driveController.setSetPoint(yTarget + robotY);
+        driveController.setSetPoint(yTarget);
+        //driveController.setTolerance(.1);
         thetaController.setPID(pTheta, iTheta, dTheta);
-        thetaController.setSetPoint(thetaTarget + robotTheta.firstAngle);
-        thetaController.setTolerance(.1);
+        //thetaController.setSetPoint(thetaTarget + robotTheta.firstAngle);
+        thetaController.setSetPoint(thetaTarget);
+        //thetaController.setTolerance(.1);
 
         resetRuntime();
         while (((!driveController.atSetPoint() || !thetaController.atSetPoint()) && (getRuntime() < timeout))) {
@@ -263,6 +265,12 @@ public class ThreemaruAutoBase extends LinearOpMode {
             robot.bpd.setVelocity(velocityY - velocityTheta);
             robot.fsd.setVelocity(velocityY + velocityTheta);
             robot.bsd.setVelocity(velocityY + velocityTheta);
+
+            telemetry.addData("robotTheta", robotTheta.firstAngle);
+            telemetry.addData("targetTheta", thetaTarget);
+            telemetry.addData("robotY", robotY);
+            telemetry.addData("targetY", yTarget);
+            telemetry.update();
         }
     }
     public void resetArm(){
