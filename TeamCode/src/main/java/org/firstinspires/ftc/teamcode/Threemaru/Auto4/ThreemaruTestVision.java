@@ -16,8 +16,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class ThreemaruTestVision extends ThreemaruAutoBase {
     @Override
     public void runOpMode() {
-        super.runOpMode();
         robot.init(hardwareMap);
+        super.runOpMode();
         resetArm();
         resetDrive();
         telemetry.addData("beforeSignalSleeve", "yes");
@@ -39,8 +39,8 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
         while(!opModeIsActive()){
             telemetry.addData("Before colors", "yes?");
             telemetry.addData("sideOfSleeve", sideOfSleeve);
-            telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-            telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+            telemetry.addData("blueColor: ", ConeDetection.getRedDifferentPosition());
+            telemetry.addData("RedColor: ", ConeDetection.getBlueDifferentPosition());
             telemetry.update();
         }
         //waitForStart();
@@ -61,10 +61,8 @@ public class ThreemaruTestVision extends ThreemaruAutoBase {
                  */
                 telemetry.addData("Before colors", "yes?");
                 telemetry.addData("sideOfSleeve", sideOfSleeve);
-                telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
-                telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+                telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
                 telemetry.update();
                 }
             }

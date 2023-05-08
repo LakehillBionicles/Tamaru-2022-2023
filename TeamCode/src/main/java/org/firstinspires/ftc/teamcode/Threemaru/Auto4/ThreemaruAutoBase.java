@@ -104,7 +104,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         //detectingCones();
         //waitForStart();
     }
-    //Resetting camera might fix null pointer errors and allow camera to switch pipeline
     public void resetCamera(){
         camera.stopStreaming();
         camera.closeCameraDeviceAsync(() -> {});
@@ -148,7 +147,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
             }
         });
-        int sideOfSleeve;
         boolean stayInLoop = true;
         while (!opModeIsActive()&& stayInLoop){
             telemetry.addData("isItInOpMode","yes");
