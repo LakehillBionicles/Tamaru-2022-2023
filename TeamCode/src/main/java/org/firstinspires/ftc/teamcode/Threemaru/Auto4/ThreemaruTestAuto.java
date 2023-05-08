@@ -25,9 +25,8 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
         waitForStart();
 
         if (opModeIsActive()) {
-            robot.servoHand1.setPosition(.25); robot.servoHand2.setPosition(.4); robot.servoExtend.setPosition(.5);
-            PIDDrive(75, 0, 5);
-            distDriveStar(-1, 3);
+            PIDDrive(75, 0, 5000);
+            //distDriveStar(-1, 3);
             //PIDDrive(-12,0, 5);
             /*PIDDrive(0, 90, 2);
             PIDDrive(10, 5);

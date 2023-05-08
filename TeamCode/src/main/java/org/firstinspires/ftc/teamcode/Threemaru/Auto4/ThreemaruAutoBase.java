@@ -33,7 +33,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     private PIDController driveController, thetaController, turretController, armController;
 
-    public static double pDrive = 0.0275, iDrive = 0.00055, dDrive = 0;
+    public static double pY = 0.0275, iY = 0.00055, dY = 0;
     public static double pTheta = 0.0075, iTheta = 0, dTheta = 0.0012;
     public static double pTurret = 0.005, iTurret = 0, dTurret = 0.00005;
     public static double pArm = 0.001, iArm = 0, dArm = 0.0001, gArm = 0.001;
@@ -84,7 +84,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
-        driveController = new PIDController(pDrive, iDrive, dDrive);
+        driveController = new PIDController(pY, iY, dY);
         thetaController = new PIDController(pTheta, iTheta, dTheta);
         turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
@@ -241,7 +241,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public void PIDDrive(double yTarget, double thetaTarget, double timeout) {
         double robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
         Orientation robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        driveController.setPID(pDrive, iDrive, dDrive);
+        driveController.setPID(pY, iY, dY);
         driveController.setSetPoint(yTarget + robotY);
         driveController.setTolerance(.1);
         thetaController.setPID(pTheta, iTheta, dTheta);
