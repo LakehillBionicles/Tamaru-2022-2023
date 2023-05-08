@@ -368,9 +368,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
     }
-    public void turretToPosition(double turretPosition) {
-        robot.servoTurret.setPosition(turretPosition);
-    }
     public void PIDTurret(double target, double timeout) {
         turretController.setPID(pTurret, iTurret, dTurret);
 

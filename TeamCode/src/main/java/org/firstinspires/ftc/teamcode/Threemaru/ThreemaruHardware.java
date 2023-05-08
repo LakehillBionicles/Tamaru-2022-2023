@@ -23,7 +23,7 @@ public class ThreemaruHardware extends LinearOpMode{
     public DcMotorEx motorTurret = null;
 
     public Servo servoHand1 = null, servoHand2 = null;
-    public Servo servoTurret = null;
+    //public Servo servoTurret = null;
     public Servo servoExtend = null;
 
     public DistanceSensor distSensorPort = null;
@@ -58,7 +58,7 @@ public class ThreemaruHardware extends LinearOpMode{
 
         servoHand1 = hwMap.get(Servo.class, "servoHand1");
         servoHand2 = hwMap.get(Servo.class, "servoHand2");
-        servoTurret = hwMap.get(Servo.class, "servoTurret");
+        //servoTurret = hwMap.get(Servo.class, "servoTurret");
         servoExtend = hwMap.get(Servo.class, "servoExtend");
 
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");

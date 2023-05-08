@@ -158,13 +158,16 @@ public class ThreemaruTele extends LinearOpMode {
     public double getExtendPosition() {
         /*if (turretPosition == PORT) {
             double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
-            extendPosition = Math.max(1.33 + -0.188 * distPort + 0.0104 * distPort * distPort, .5);
+            extendPosition = Math.max(1.92 + -0.126*distStar + 2.23E-03*distStar*distStar, .5);
         } else if (turretPosition == STAR) {
             double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-            extendPosition = Math.max(1.6 + -0.145 * distStar + 4.76E-04 * distStar * distStar, .5);
+            extendPosition = Math.max(1.92 + -0.126*distStar + 2.23E-03*distStar*distStar, .5);
         }*/
+        double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
+        double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
+        extendPosition = Math.max(1.92 + -0.126 * distPort + 2.23E-03 * distPort * distPort, 0);
 
-        if (gamepad2.dpad_down) {
+        /*if (gamepad2.dpad_down) {
             extendPosition = RETRACTED.getPosition();
         }
 
@@ -172,9 +175,9 @@ public class ThreemaruTele extends LinearOpMode {
             extendPosition = EXTENDED.getPosition();
         } else if (gamepad2.b) {
             extendPosition = RETRACTED.getPosition();
-        }
+        }*/
 
-        /*if (gamepad1.y) {
+        /* if (gamepad1.y) {
             extendPosition = .45;
         } else if (gamepad1.b) {
             extendPosition = .4;
@@ -194,7 +197,9 @@ public class ThreemaruTele extends LinearOpMode {
             extendPosition = .05;
         } else if(gamepad1.right_bumper){
             extendPosition = 0;
-        }*/
+        }
+        return extendPosition;
+    }*/
         return extendPosition;
     }
 
