@@ -25,7 +25,7 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
         waitForStart();
 
         if (opModeIsActive()) {
-            PIDDrive(75, 0, 5000);
+            PIDDrive(30, 0, 5000);
             //distDriveStar(-1, 3);
             //PIDDrive(-12,0, 5);
             /*PIDDrive(0, 90, 2);

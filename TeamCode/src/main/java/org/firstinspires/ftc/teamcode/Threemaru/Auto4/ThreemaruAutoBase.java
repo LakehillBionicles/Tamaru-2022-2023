@@ -252,7 +252,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
         resetRuntime();
         while (((!driveController.atSetPoint() || !thetaController.atSetPoint()) && (getRuntime() < timeout))) {
-            robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+            robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition()+robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
             robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
 
             double pidY = driveController.calculate(robotY, driveController.getSetPoint());
