@@ -194,10 +194,11 @@ public class ConeDetection extends OpenCvPipeline {
 
     static double blueDistance = 0;
     static double redDistance = 0;
-
+    static double widthOfInput;
 
     @Override
     public Mat processFrame(Mat input) {
+        widthOfInput = input.width();
         double redTolerance = 0.7;
         double blueTolerance = 0.7;
         int addedBars = 0;
@@ -268,6 +269,7 @@ public class ConeDetection extends OpenCvPipeline {
                 BLUE,
                 2
         );
+        /*
         int Bar_PointBlue1AX = 0;
         int Bar_PointBlue1AY = 0;
         int Bar_PointBlue1BX = 0;
@@ -310,6 +312,8 @@ public class ConeDetection extends OpenCvPipeline {
                 GREEN,
                 2
         );
+
+         */
         /*
         Mat areaMat1 = input.submat(new Rect(Bar_point1A, Bar_point1B));
         Scalar sumColors1 = Core.sumElems(areaMat1);
@@ -796,13 +800,10 @@ public class ConeDetection extends OpenCvPipeline {
     public int getBlueCentralPosition() {
         return otherCenterOfBars;
     }
-    public static int getRedDifferentPosition(){
+    public static int getRedDifferentPosition(){return differentRedCenterOfBars;}
+    public static int getBlueDifferentPosition(){return differentCenterOfBars;}
 
-        return differentRedCenterOfBars;
-    }
-    public static int getBlueDifferentPosition(){
-        return differentCenterOfBars;
-    }
+    public static double getImageWidth(){return widthOfInput;}
     public static double getBlueDistance(){
         return blueDistance;
     }
