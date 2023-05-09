@@ -18,12 +18,14 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
         robot.init(hardwareMap);
         resetArm();
         resetDrive();
-        resetCamera();
         detectingCones();
         while(!opModeIsActive()){
+            telemetry.addData("leftOrRight", Math.signum(ConeDetection.getRedDifferentPosition()-ConeDetection.getImageWidth()));
+            telemetry.addData("Before colors", "yes?");
             telemetry.addData("sideOfSleeve", sideOfSleeve);
-            telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-            telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+            telemetry.addData("widthOfImage", ConeDetection.getImageWidth());
+            telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
+            telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
             telemetry.update();
         }
         if (opModeIsActive()) {
@@ -35,10 +37,11 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                 telemetry.update();
                 //detectingCones();
                  */
-                robot.motorTurret.setVelocity(Math.signum(ConeDetection.getRedDifferentPosition()-ConeDetection.getImageWidth())/turretPower);
+                //robot.motorTurret.setVelocity(Math.signum(ConeDetection.getRedDifferentPosition()-ConeDetection.getImageWidth())/turretPower);
+                telemetry.addData("leftOrRight", Math.signum(ConeDetection.getRedDifferentPosition()-ConeDetection.getImageWidth())/turretPower);
                 telemetry.addData("Before colors", "yes?");
-                telemetry.addData("blueColor: ", ConeDetection.getBluePosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedPosition());
+                telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
                 telemetry.update();
             }
         }

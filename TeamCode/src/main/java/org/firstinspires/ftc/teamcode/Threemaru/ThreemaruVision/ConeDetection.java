@@ -178,7 +178,7 @@ public class ConeDetection extends OpenCvPipeline {
     int driveBar12 = 12;
 
      */
-    int anchorHeight = 300;
+    int anchorHeight = 200;
     int anchorWidth = 1;
 
     int boxWidth = 20;
@@ -195,6 +195,8 @@ public class ConeDetection extends OpenCvPipeline {
     static double blueDistance = 0;
     static double redDistance = 0;
     static double widthOfInput;
+
+    static double heightOfImage;
 
     @Override
     public Mat processFrame(Mat input) {
@@ -214,28 +216,31 @@ public class ConeDetection extends OpenCvPipeline {
         differentRedAddedBars = 0;
         differentRedCenterOfBars = 0;
         differentRedNumberOfBars = 0;
-        anchorHeight = input.height();
+        anchorHeight = input.height()-8;
+
         // Get the submat frame, and then sum all the values
         //Used for telemetry will remove
-        Scalar redColors = null;
-        for(int i=1;i<(input.width()-anchorWidth);i++){
+        Scalar redColors;
+        Mat redMatArea1;
+        for(int i=1;i<(290);i++){
             Point redBarPoint1 = new Point(i,anchorHeight);
             Point redBarPoint2 = new Point(i+anchorWidth, 1);
-            Mat redMatArea1 = input.submat(new Rect(redBarPoint1, redBarPoint2));
-            Scalar colors= Core.sumElems(redMatArea1);
-            if(colors.val[0]>0.7){
-               differentAddedBars = differentAddedBars+i;
-               differentNumberOfBars++;
+            redMatArea1 = input.submat(new Rect(redBarPoint1, redBarPoint2));
+            redColors= Core.sumElems(redMatArea1);
+            if(redColors.val[0]>0.7){
+               differentRedAddedBars = differentRedAddedBars+i;
+               differentRedNumberOfBars++;
             }
-            redMatArea1.release();
         }
         if(differentNumberOfBars>0){
-            differentCenterOfBars = differentAddedBars/differentNumberOfBars;
+            differentRedCenterOfBars = (differentRedAddedBars/differentRedNumberOfBars)+40;
         }
+        differentRedCenterOfBars= differentRedCenterOfBars + 30;
+
         Point newerBar_pointRed1A = new Point(
-                differentCenterOfBars, anchorHeight);
+                differentRedCenterOfBars, anchorHeight);
         Point newerBar_pointRed1B = new Point(
-                differentCenterOfBars+boxWidth, 1);
+                differentRedCenterOfBars+boxWidth, 1);
         Imgproc.rectangle(
                 input,
                 newerBar_pointRed1A,
@@ -244,7 +249,7 @@ public class ConeDetection extends OpenCvPipeline {
                 2
         );
         Scalar blueColors = null;
-        for(int i=1;i<(input.width()-anchorWidth);i++){
+        for(int i=1;i<(widthOfInput-anchorWidth);i++){
             Point blueBarPoint1 = new Point(i,anchorHeight);
             Point blueBarPoint2 = new Point(i+anchorWidth, 1);
             Mat blueMatArea1 = input.submat(new Rect(blueBarPoint1, blueBarPoint2));
@@ -253,15 +258,14 @@ public class ConeDetection extends OpenCvPipeline {
                 differentAddedBars = differentAddedBars+i;
                 differentNumberOfBars++;
             }
-            blueMatArea1.release();
         }
-        if(differentRedNumberOfBars>0){
-            differentRedCenterOfBars = differentRedAddedBars/differentRedNumberOfBars;
+        if(differentNumberOfBars>0){
+            differentCenterOfBars = differentAddedBars/differentNumberOfBars;
         }
         Point newerBar_pointBlue1A = new Point(
-                differentRedCenterOfBars, anchorHeight);
+                differentCenterOfBars, anchorHeight);
         Point newerBar_pointBlue1B = new Point(
-                differentRedCenterOfBars+boxWidth, 1);
+                differentCenterOfBars+boxWidth, 1);
         Imgproc.rectangle(
                 input,
                 newerBar_pointBlue1A,
