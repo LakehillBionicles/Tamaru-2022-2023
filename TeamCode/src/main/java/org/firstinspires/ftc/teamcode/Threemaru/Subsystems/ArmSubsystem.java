@@ -21,8 +21,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     public enum Height {
         GROUND(0),
-        TWO_CONES(300), THREE_CONES(400), FOUR_CONES(500), FIVE_CONES(600),
-        LOW_POLE(1400), MID_POLE(2000), HIGH_POLE(2900);
+        TWO_CONES(150), THREE_CONES(300), FOUR_CONES(425), FIVE_CONES(525),
+        LOW_POLE(1200), MID_POLE(2000), HIGH_POLE(2900);
 
         public final int height;
 

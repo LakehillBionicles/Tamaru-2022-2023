@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.*;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ExtensionSubsystem.ExtendPos.*;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.*;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ArmSubsystem.Height.*;
+
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -98,6 +103,33 @@ public class ThreemaruAutoBase extends LinearOpMode {
         //resetCamera();
         //detectingCones();
         //waitForStart();
+    }
+    public void initAuto(){
+        resetArm(); resetDrive();
+        robot.servoHand1.setPosition(CLOSED1.getPosition());
+        robot.servoHand2.setPosition(CLOSED2.getPosition());
+        robot.servoExtend.setPosition(RETRACTED.getPosition());
+        robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        initIMU();
+    }
+    public void initIMU(){
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        byte AXIS_MAP_CONFIG_BYTE = 0x6;
+        byte AXIS_MAP_SIGN_BYTE = 0x1;
+
+        imu.write8(BNO055IMU.Register.OPR_MODE,BNO055IMU.SensorMode.CONFIG.bVal & 0x0F);
+        sleep(100);
+        imu.write8(BNO055IMU.Register.AXIS_MAP_CONFIG,AXIS_MAP_CONFIG_BYTE & 0x0F);
+        imu.write8(BNO055IMU.Register.AXIS_MAP_SIGN,AXIS_MAP_SIGN_BYTE & 0x0F);
+        imu.write8(BNO055IMU.Register.OPR_MODE,BNO055IMU.SensorMode.IMU.bVal & 0x0F);
+        sleep(100);
     }
     public void resetCamera(){
         camera.stopStreaming();
@@ -207,8 +239,50 @@ public class ThreemaruAutoBase extends LinearOpMode {
             telemetry.addLine(String.format("\nDetected tag ID=%d", sideOfSleeve));
             telemetry.update();
     }
-    public void ControlAll(double yTarget, double thetaTarget, double armTarget, double turretTarget, double extensionTarget, double timeout){
+    public void ControlAll(double yTarget, double thetaTarget, double armTarget, double turretTarget, double timeout){
+        double robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+        driveController.setPID(pY, iY, dY);
+        driveController.setSetPoint(yTarget + robotY);
 
+        robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        thetaController.setPID(pTheta, iTheta, dTheta);
+        thetaController.setSetPoint(thetaTarget);
+
+        double robotArm = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
+        armController.setPID(pArm, iArm, dArm);
+        armController.setSetPoint(armTarget);
+
+        double robotTurret = robot.motorTurret.getCurrentPosition();
+        turretController.setPID(pTurret, iTurret, dTurret);
+        turretController.setSetPoint(turretTarget);
+
+        resetRuntime();
+        while (((!driveController.atSetPoint()||!thetaController.atSetPoint()||!armController.atSetPoint()||!turretController.atSetPoint()) && (getRuntime() < timeout))) {
+            robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition()+robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
+            robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+            robotArm = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
+            robotTurret = robot.motorTurret.getCurrentPosition();
+
+            double pidY = driveController.calculate(robotY, driveController.getSetPoint());
+            double pidTheta = thetaController.calculate(robotTheta.firstAngle, thetaController.getSetPoint());
+            double pidArm = armController.calculate(robotArm, armController.getSetPoint());
+            double pidTurret = turretController.calculate(robotTurret, turretController.getSetPoint());
+
+            double velocityY = pidY * maxVelocity;
+            double velocityTheta = pidTheta * maxVelocity;
+            double velocityArm = pidArm * maxVelocity;
+            double velocityTurret = pidTurret * maxVelocity;
+
+            robot.fpd.setVelocity(velocityY - velocityTheta);
+            robot.bpd.setVelocity(velocityY - velocityTheta);
+            robot.fsd.setVelocity(velocityY + velocityTheta);
+            robot.bsd.setVelocity(velocityY + velocityTheta);
+
+            robot.armPort.setVelocity(velocityArm);
+            robot.armStar.setVelocity(velocityArm);
+
+            robot.motorTurret.setVelocity(velocityTurret);
+        }
     }
     public void encoderDrive(double speed, double leftInches, double rightInches) {
         int leftTarget = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition())/2 + (int) (leftInches * robot.COUNTS_PER_INCH);
@@ -390,5 +464,10 @@ public class ThreemaruAutoBase extends LinearOpMode {
     }
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
+    }
+    public void extensionToPositionStar(){
+        double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
+        double extendPosition = Math.max(1.92 + -0.126 * distStar + 2.23E-03 * distStar * distStar, 0);
+        robot.servoExtend.setPosition(extendPosition);
     }
 }
