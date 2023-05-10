@@ -29,12 +29,12 @@ public class ThreemaruTestAuto extends ThreemaruAutoBase {
             distDriveStar(-1, 3);//back to high pole
             PIDTurret(STAR.getPosition(), 2);//turret star
             double dist = robot.distSensorStar.getDistance(DistanceUnit.CM);
-            double extendPosition = Math.max(1.92 + -0.126 * dist + 2.23E-03 * dist * dist, 0);
+            double extendPosition = Math.max(1.92 + -0.126*dist + 2.23E-03*dist*dist, 0);
             robot.servoExtend.setPosition(extendPosition);
             telemetry.addData("extendPos", extendPosition);
             telemetry.update();
             sleep(1000);
-            robot.servoHand1.setPosition(OPEN1.getPosition()); robot.servoHand2.setPosition(OPEN2.getPosition()); //open hand
+            robot.servoHand1.setPosition(OPEN1.getPosition()); robot.servoHand2.setPosition(OPEN2.getPosition());//open hand
             sleep(1000);
             PIDTurret(FORWARD.getPosition(),2);//turret forward
         }
