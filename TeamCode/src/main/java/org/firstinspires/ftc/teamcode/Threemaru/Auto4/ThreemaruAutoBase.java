@@ -89,12 +89,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
         turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
 
         //resetArm();
         //resetDrive();
@@ -240,7 +235,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     }
     public void PIDDrive(double yTarget, double thetaTarget, double timeout) {
         double robotY = ((robot.fpd.getCurrentPosition()+robot.bpd.getCurrentPosition() +robot.fsd.getCurrentPosition()+robot.bsd.getCurrentPosition())/4.0) / ThreemaruHardware.COUNTS_PER_INCH;
-        Orientation robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        robotTheta = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         driveController.setPID(pY, iY, dY);
         //driveController.setSetPoint(yTarget + robotY);
         driveController.setSetPoint(yTarget);
