@@ -2,8 +2,9 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-
+@Disabled
 @Config
 @Autonomous(name = "JustParking")
 public class ThreemaruParking extends ThreemaruAutoBase{

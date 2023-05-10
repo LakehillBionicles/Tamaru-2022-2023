@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor; //DcMotorEx?
@@ -20,7 +21,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
 import java.net.PortUnreachableException;
 
-//@Disabled
+@Disabled
 @Config
 @TeleOp
 public class DriveTuning extends OpMode{
