@@ -42,6 +42,10 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                 telemetry.addData("Before colors", "yes?");
                 telemetry.addData("blueColor: ", ConeDetection.getBlueDifferentPosition());
                 telemetry.addData("RedColor: ", ConeDetection.getRedDifferentPosition());
+                telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
+                telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
+                telemetry.addData("Amount of blue Bars: ", ConeDetection.getBlueDifferentBarAmount());
+                telemetry.addData("Value of Blue Bars: ", ConeDetection.getBlueDifferentBarvalues());
                 telemetry.update();
             }
         }
