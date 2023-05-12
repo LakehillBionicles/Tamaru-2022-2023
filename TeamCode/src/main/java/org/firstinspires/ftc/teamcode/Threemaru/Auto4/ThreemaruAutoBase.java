@@ -34,7 +34,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
-    public final int turretPort = -1000, turretStar = 1000, turretFront = 0;
 
     private PIDController driveController, thetaController, turretController, armController;
 
@@ -465,9 +464,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
     }
-    public void extensionToPositionStar(){
-        double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-        double extendPosition = Math.max(1.92 + -0.126 * distStar + 2.23E-03 * distStar * distStar, 0);
+    public void extensionToDist(double dist){
+        double extendPosition = Math.max(1.92 + -0.126 * dist + 2.23E-03 * dist * dist, 0);
         robot.servoExtend.setPosition(extendPosition);
     }
 }

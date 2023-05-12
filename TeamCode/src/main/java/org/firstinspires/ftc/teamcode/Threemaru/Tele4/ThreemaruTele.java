@@ -41,9 +41,11 @@ public class ThreemaruTele extends LinearOpMode {
 
         robot.armPort.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
@@ -67,7 +69,7 @@ public class ThreemaruTele extends LinearOpMode {
             robot.servoHand2.setPosition(getHandPos2().getPosition());
             robot.servoExtend.setPosition(getExtendPosition());
 
-            telemetry.addData("armPos", (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2);
+            telemetry.addData("turretPos", robot.motorTurret.getCurrentPosition());
             telemetry.update();
         }
     }

@@ -11,7 +11,7 @@ public class TurretSubsystem extends SubsystemBase {
     private final DcMotorEx turret;
 
     public enum TurretPos {
-        FORWARD(0), STAR(1000), PORT(-1000);
+        FORWARD(0), STAR(950), PORT(-950);
 
         public final double position;
 
