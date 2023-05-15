@@ -37,6 +37,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
     private PIDController driveController, thetaController, turretController, armController;
 
+    //public static double pY = 0.0275, iY = 0.00055, dY = 0;
     public static double pY = 0.0275, iY = 0.00055, dY = 0;
     public static double pTheta = 0.0075, iTheta = 0, dTheta = 0.0012;
     public static double pTurret = 0.005, iTurret = 0, dTurret = 0.00005;
