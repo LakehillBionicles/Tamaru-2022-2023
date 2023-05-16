@@ -28,6 +28,7 @@ public class ThreemaruHardware extends LinearOpMode{
 
     public DistanceSensor distSensorPort = null;
     public DistanceSensor distSensorStar = null;
+    public DistanceSensor distSensorHand = null;
 
     public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898*2;
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -63,6 +64,7 @@ public class ThreemaruHardware extends LinearOpMode{
 
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
+        distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
 
         fpd.setDirection(DcMotorSimple.Direction.REVERSE);
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);

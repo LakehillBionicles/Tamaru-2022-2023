@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 
 import java.util.HashMap;
@@ -14,15 +15,32 @@ import java.util.HashMap;
 @Config
 @Autonomous(name = "TestArmCodeVision")
 public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
-    double turretPower = 0.09;
+    double turretPower = 0.07;
 
     @Override
     public void runOpMode(){
         robot.init(hardwareMap);
         detectingCones();
         double widthOfImage = ConeDetection.getImageWidth();
+        double redConePosition;
+        double distanceBetweenRedCone;
         while(!opModeIsActive()){
-            telemetry.addData("leftOrRight", signum(ConeDetection.getRedConePosition()-((widthOfImage/2)-51), 10));
+            sleep(2000);
+            redConePosition = ConeDetection.getRedConePosition();
+            while((redConePosition-((widthOfImage/2)-51))<-10||(redConePosition-((widthOfImage/2)-51))>10){
+                redConePosition = ConeDetection.getRedConePosition();
+                distanceBetweenRedCone = redConePosition -((widthOfImage/2)-51);
+                robot.motorTurret.setPower((Math.signum(redConePosition-((widthOfImage/2)-51)))*turretPower);
+                telemetry.addData("leftOrRight", Math.signum(distanceBetweenRedCone));
+                telemetry.addData("How much left or right",distanceBetweenRedCone);
+                telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
+
+            }
+            robot.motorTurret.setPower(0);
+            while(robot.distSensorHand.getDistance(DistanceUnit.CM)>10) {
+                extensionToPosition(0.45);
+            }
+            telemetry.addData("leftOrRight", Math.signum(ConeDetection.getRedConePosition()-((widthOfImage/2)-51)));
             telemetry.addData("How much left or right",(ConeDetection.getRedConePosition()-((widthOfImage/2)-51)));
             telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
 
@@ -41,8 +59,6 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
             telemetry.addData("Amount of blue Bars: ", ConeDetection.getBlueDifferentBarAmount());
             telemetry.addData("Value of Blue Bars: ", ConeDetection.getBlueDifferentBarvalues());
             telemetry.addData("InputWidth: ", widthOfImage);
-            robot.motorTurret.setPower((Math.signum(ConeDetection.getRedConePosition()-((widthOfImage/2)-51)))*turretPower);
-
             /*if(ConeDetection.getBlueDifferentBarAmount()>0) {
             telemetry.addData("Tolerance of blue: ", (ConeDetection.getBlueDifferentBarvalues() / ConeDetection.getBlueDifferentBarAmount()));
             }
