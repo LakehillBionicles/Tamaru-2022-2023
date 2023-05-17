@@ -23,6 +23,9 @@ import java.util.HashMap;
 @Autonomous(name = "TestArmCodeVision")
 public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
     double turretPower = 0.07;
+    double widthOfImage = ConeDetection.getImageWidth();
+    double redConePosition;
+    double distanceBetweenRedCone;
 
     @Override
     public void runOpMode(){
@@ -31,26 +34,9 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
         armToPosition(fiveConeArmTarget);
         robot.servoExtend.setPosition(.5);
         robot.servoHand1.setPosition(OPEN1.getPosition()); robot.servoHand2.setPosition(OPEN2.getPosition());/* open hand */
-        double widthOfImage = ConeDetection.getImageWidth();
-        double redConePosition;
-        double distanceBetweenRedCone;
         while(!opModeIsActive()){
-            widthOfImage = ConeDetection.getImageWidth();
+            trackingInitialization();
             redConePosition = ConeDetection.getRedConePosition();
-            resetRuntime();
-            while(getRuntime()<4&& !opModeIsActive()){
-                redConePosition = ConeDetection.getRedConePosition();
-                distanceBetweenRedCone = redConePosition -((widthOfImage/2)-51);
-                telemetry.addData("leftOrRight", Math.signum(distanceBetweenRedCone));
-                telemetry.addData("How much left or right",distanceBetweenRedCone);
-                telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
-                telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
-                telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
-                telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
-                telemetry.addData("Runtime", getRuntime());
-                telemetry.update();
-            }
             widthOfImage = ConeDetection.getImageWidth();
             while(((redConePosition-((widthOfImage/2)-51))<-10||(redConePosition-((widthOfImage/2)-51))>10)&& !opModeIsActive()){
                 redConePosition = ConeDetection.getRedConePosition();
@@ -104,6 +90,46 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                  */
                 telemetry.update();
             }
+        }
+    }
+    public void coneTracker(){
+        double widthOfImage = ConeDetection.getImageWidth();
+        double redConePosition;
+        double distanceBetweenRedCone;
+        redConePosition = ConeDetection.getRedConePosition();
+        widthOfImage = ConeDetection.getImageWidth();
+        while(((redConePosition-((widthOfImage/2)-51))<-10||(redConePosition-((widthOfImage/2)-51))>10)&& !opModeIsActive()){
+            redConePosition = ConeDetection.getRedConePosition();
+            distanceBetweenRedCone = redConePosition -((widthOfImage/2)-51);
+            telemetry.addData("leftOrRight", Math.signum(distanceBetweenRedCone));
+            telemetry.addData("How much left or right",distanceBetweenRedCone);
+            telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
+            telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
+            telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
+            telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
+            telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
+
+            robot.motorTurret.setPower((Math.signum(redConePosition-((widthOfImage/2)-51)))*turretPower);
+            telemetry.update();
+        }
+    }
+    public void trackingInitialization(){
+        widthOfImage = ConeDetection.getImageWidth();
+        resetRuntime();
+        while(!opModeIsActive()&& getRuntime()>22){
+            widthOfImage = ConeDetection.getImageWidth();
+            redConePosition = ConeDetection.getRedConePosition();
+            distanceBetweenRedCone = redConePosition -((widthOfImage/2)-51);
+            telemetry.addData("leftOrRight", Math.signum(distanceBetweenRedCone));
+            telemetry.addData("How much left or right",distanceBetweenRedCone);
+            telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
+            telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
+            telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
+            telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
+            telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
+            telemetry.addData("Runtime", getRuntime());
+            telemetry.addData("Image Width:", ConeDetection.getImageWidth());
+            telemetry.update();
         }
     }
     public double  signum(double number, double tolerance){
