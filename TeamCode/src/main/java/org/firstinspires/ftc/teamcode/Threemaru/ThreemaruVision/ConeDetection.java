@@ -58,7 +58,7 @@ public class ConeDetection extends OpenCvPipeline {
 
     static double heightOfInput;
 
-    static double redTolerance = 0.9;
+    static double redTolerance = 1;
 
     static double blueTolerance = 0.7;
 

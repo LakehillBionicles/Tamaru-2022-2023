@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.CLOSED1;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.CLOSED2;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.OPEN1;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.OPEN2;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.PORT;
+import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.STAR;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -7,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 
 import java.util.HashMap;
@@ -21,49 +28,53 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
     public void runOpMode(){
         robot.init(hardwareMap);
         detectingCones();
+        armToPosition(fiveConeArmTarget);
+        robot.servoExtend.setPosition(.5);
+        robot.servoHand1.setPosition(OPEN1.getPosition()); robot.servoHand2.setPosition(OPEN2.getPosition());/* open hand */
         double widthOfImage = ConeDetection.getImageWidth();
         double redConePosition;
         double distanceBetweenRedCone;
         while(!opModeIsActive()){
-            sleep(2000);
+            widthOfImage = ConeDetection.getImageWidth();
             redConePosition = ConeDetection.getRedConePosition();
-            while((redConePosition-((widthOfImage/2)-51))<-10||(redConePosition-((widthOfImage/2)-51))>10){
+            resetRuntime();
+            while(getRuntime()<4&& !opModeIsActive()){
                 redConePosition = ConeDetection.getRedConePosition();
                 distanceBetweenRedCone = redConePosition -((widthOfImage/2)-51);
-                robot.motorTurret.setPower((Math.signum(redConePosition-((widthOfImage/2)-51)))*turretPower);
                 telemetry.addData("leftOrRight", Math.signum(distanceBetweenRedCone));
                 telemetry.addData("How much left or right",distanceBetweenRedCone);
                 telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
+                telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
+                telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
+                telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
+                telemetry.addData("Runtime", getRuntime());
+                telemetry.update();
+            }
+            widthOfImage = ConeDetection.getImageWidth();
+            while(((redConePosition-((widthOfImage/2)-51))<-10||(redConePosition-((widthOfImage/2)-51))>10)&& !opModeIsActive()){
+                redConePosition = ConeDetection.getRedConePosition();
+                distanceBetweenRedCone = redConePosition -((widthOfImage/2)-51);
+                telemetry.addData("leftOrRight", Math.signum(distanceBetweenRedCone));
+                telemetry.addData("How much left or right",distanceBetweenRedCone);
+                telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
+                telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
+                telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
+                telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
+                telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
 
+                robot.motorTurret.setPower((Math.signum(redConePosition-((widthOfImage/2)-51)))*turretPower);
+                telemetry.update();
             }
             robot.motorTurret.setPower(0);
-            while(robot.distSensorHand.getDistance(DistanceUnit.CM)>10) {
-                extensionToPosition(0.45);
-            }
-            telemetry.addData("leftOrRight", Math.signum(ConeDetection.getRedConePosition()-((widthOfImage/2)-51)));
-            telemetry.addData("How much left or right",(ConeDetection.getRedConePosition()-((widthOfImage/2)-51)));
-            telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
-
-            telemetry.addData("Before colors", "yes?");
-            telemetry.addData("sideOfSleeve", sideOfSleeve);
-            telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
-            telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
-            telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
-            telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
-            /*
-            if(ConeDetection.getRedDifferentBarAmount()>0) {
-                telemetry.addData("Tolerance of red: ", (ConeDetection.getRedDifferentBarvalues() / ConeDetection.getRedDifferentBarAmount()));
-            }
-
-             */
-            telemetry.addData("Amount of blue Bars: ", ConeDetection.getBlueDifferentBarAmount());
-            telemetry.addData("Value of Blue Bars: ", ConeDetection.getBlueDifferentBarvalues());
-            telemetry.addData("InputWidth: ", widthOfImage);
-            /*if(ConeDetection.getBlueDifferentBarAmount()>0) {
-            telemetry.addData("Tolerance of blue: ", (ConeDetection.getBlueDifferentBarvalues() / ConeDetection.getBlueDifferentBarAmount()));
-            }
-
-             */
+            extensionToPosition(0.01);
+            sleep(3000);
+            robot.servoHand1.setPosition(CLOSED1.getPosition()); robot.servoHand2.setPosition(CLOSED2.getPosition());/* open hand */
+            sleep(3000);
+            PIDArm(midPoleArmTarget,3);
+            PIDTurret(PORT.getPosition(),2);
+            sleep(1000);
+            extensionToPosition(0.3);
             telemetry.update();
         }
         if (opModeIsActive()) {
@@ -94,8 +105,6 @@ public class ThreemaruTestArmCodeVision extends ThreemaruAutoBase {
                 telemetry.update();
             }
         }
-        camera.stopStreaming();
-        camera.closeCameraDeviceAsync(() -> {});
     }
     public double  signum(double number, double tolerance){
         double a;
