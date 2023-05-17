@@ -30,18 +30,8 @@ public class CommandThreemaruTele extends BaseOpMode {
         armControlButton(DPAD_DOWN).whileHeld(new RunCommand(() -> arm.setArmPower(-1)));
         armControlButton(DPAD_UP).whenInactive(new RunCommand(() -> arm.setArmPower(0)));
         armControlButton(DPAD_DOWN).whenInactive(new RunCommand(() -> arm.setArmPower(0)));
-        drive.setDrivePower(-armControl.getLeftY()/getDrivePowerDenom(),
-                armControl.getLeftX()/getDrivePowerDenom(),
-                armControl.getRightX()/getDrivePowerDenom()); //drive power set by sticks
-        //armControlButton(DPAD_UP).whenPressed(turret::setTurretForward); //DPAD_UP sets turret forward
-        //armControlButton(DPAD_LEFT).whenPressed(turret::setTurretPort); //DPAD_LEFT sets turret port
-        //armControlButton(DPAD_RIGHT).whenPressed(turret::setTurretStar); //DPAD_RIGHT sets turret star
-        //armControlButton(DPAD_DOWN).whenPressed(new InstantCommand(this::resetTurretAndExtension));
-        //arm.setArmPower(-armControl.getLeftY()); //arm power is set to leftStickY
-        /////////////////////////////////BASE CONTROL///////////////////////////////////////////////////////////
-        /*baseControlButton(LEFT_BUMPER).whenPressed(hand::grab); //left bumper closed hand
-        drive.setDrivePower(-baseControl.getLeftY()/getDrivePowerDenom(),
-                baseControl.getLeftX()/getDrivePowerDenom(),
-                baseControl.getRightX()/getDrivePowerDenom()); //drive power set by sticks*/
+        register(drive, arm, hand, extension);
+        drive.setDefaultCommand(new RunCommand(() -> drive.setDrivePower(baseControl.getLeftY(), baseControl.getLeftX(), baseControl.getRightX())));
+        CommandScheduler.getInstance().run();
     }
 }
