@@ -31,7 +31,9 @@ public class CommandThreemaruTele extends BaseOpMode {
         armControlButton(DPAD_UP).whenInactive(new RunCommand(() -> arm.setArmPower(0)));
         armControlButton(DPAD_DOWN).whenInactive(new RunCommand(() -> arm.setArmPower(0)));
         register(drive, arm, hand, extension);
+        /////////////////////////////////BASE CONTROL///////////////////////////////////////////////////////////
         drive.setDefaultCommand(new RunCommand(() -> drive.setDrivePower(baseControl.getLeftY(), baseControl.getLeftX(), baseControl.getRightX())));
+
         CommandScheduler.getInstance().run();
     }
 }
