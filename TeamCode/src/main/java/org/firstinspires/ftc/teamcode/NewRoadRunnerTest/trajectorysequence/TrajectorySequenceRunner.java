@@ -21,9 +21,9 @@ import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.seque
 import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.sequencesegment.TurnSegment;
 import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.sequencesegment.WaitSegment;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.util.LogFiles;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.util.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;

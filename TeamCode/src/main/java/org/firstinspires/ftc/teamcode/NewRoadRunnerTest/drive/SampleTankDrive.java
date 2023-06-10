@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive;
 
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.kV;
 
 import androidx.annotation.NonNull;
 
@@ -41,11 +41,11 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.util.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +93,7 @@ public class SampleTankDrive extends TankDrive {
         // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+                org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
         // add/remove motors depending on your robot (e.g., 6WD)

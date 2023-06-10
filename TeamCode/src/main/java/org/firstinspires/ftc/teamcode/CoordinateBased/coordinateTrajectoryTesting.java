@@ -6,8 +6,8 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Tamaru3.Auto3.AutoBase;
 
 @Disabled
@@ -21,7 +21,7 @@ public class coordinateTrajectoryTesting extends AutoBase {
     public void runOpMode(){
         super.runOpMode();
         robot.init(hardwareMap);
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        //SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         resetArm();
         resetDrive();
@@ -29,14 +29,14 @@ public class coordinateTrajectoryTesting extends AutoBase {
 
         Pose2d startPose = new Pose2d(0, 0, 0);
 
-        TrajectorySequence testSequence = drive.trajectorySequenceBuilder(startPose)
-                .addDisplacementMarker(() -> {  }) //arm up to high pole and turret star
-                .build();
+        //TrajectorySequence testSequence = drive.trajectorySequenceBuilder(startPose)
+               // .addDisplacementMarker(() -> {  }) //arm up to high pole and turret star
+               // .build();
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.followTrajectorySequence(testSequence);
+       // drive.followTrajectorySequence(testSequence);
     }
 }

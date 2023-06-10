@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
 
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Tamaru3.Tamaru3Hardware;
 
 import org.firstinspires.ftc.teamcode.CoordinateBased.field.*;
@@ -22,7 +22,7 @@ public class AutoBaseCoordinate extends LinearOpMode {
     public Tamaru3Hardware robot = new Tamaru3Hardware();
     public field field;
     public field.Coordinates currentCoordinates;
-    public SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+    //public SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
     private PIDController armPID;
     public static double pArm = 0.01, iArm = 0.0001, dArm = 0.0002;
@@ -39,7 +39,7 @@ public class AutoBaseCoordinate extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+       // SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         armPID = new PIDController(pArm, iArm, dArm);
         resetArm();
         resetDrive();

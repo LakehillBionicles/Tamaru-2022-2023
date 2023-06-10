@@ -16,10 +16,10 @@ import com.qualcomm.robotcore.util.WebHandlerManager;
 
 import org.firstinspires.ftc.ftccommon.external.WebHandlerRegistrar;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleTankDrive;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.StandardTrackingWheelLocalizer;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.DriveConstants;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleMecanumDrive;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.SampleTankDrive;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruRoadRunner.drive.StandardTrackingWheelLocalizer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +48,7 @@ public final class LogFiles {
         public long nsInit = System.nanoTime();
         public long nsStart, nsStop;
 
-        public double ticksPerRev = DriveConstants.TICKS_PER_REV;
+        /*public double ticksPerRev = DriveConstants.TICKS_PER_REV;
         public double maxRpm = DriveConstants.MAX_RPM;
         public boolean runUsingEncoder = DriveConstants.RUN_USING_ENCODER;
         public double motorP = DriveConstants.MOTOR_VELO_PID.p;
@@ -91,7 +91,7 @@ public final class LogFiles {
         public double trackingForwardOffset = StandardTrackingWheelLocalizer.FORWARD_OFFSET;
 
         public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = DriveConstants.LOGO_FACING_DIR;
-        public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = DriveConstants.USB_FACING_DIR;
+        public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = DriveConstants.USB_FACING_DIR;*/
 
         public List<Long> nsTimes = new ArrayList<>();
 
