@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -26,6 +27,8 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.apache.commons.math3.util.FastMath;
+
 
 import java.util.ArrayList;
 
@@ -93,7 +96,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
         thetaController = new PIDController(pTheta, iTheta, dTheta);
         turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
-
 
 
         //resetArm();
@@ -287,8 +289,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
     public void encoderDrive(double speed, double leftInches, double rightInches) {
         int leftTarget = (robot.fpd.getCurrentPosition() + robot.bpd.getCurrentPosition())/2 + (int) (leftInches * robot.COUNTS_PER_INCH);
         int rightTarget = (robot.fsd.getCurrentPosition() + robot.bsd.getCurrentPosition())/2 + (int) (rightInches * robot.COUNTS_PER_INCH);
-
         robot.fpd.setTargetPosition(leftTarget);
+
         robot.bpd.setTargetPosition(leftTarget);
         robot.fsd.setTargetPosition(rightTarget);
         robot.bsd.setTargetPosition(rightTarget);

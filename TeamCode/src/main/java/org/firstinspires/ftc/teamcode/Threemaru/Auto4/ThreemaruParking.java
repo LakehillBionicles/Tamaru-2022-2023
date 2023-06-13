@@ -12,6 +12,7 @@ public class ThreemaruParking extends ThreemaruAutoBase{
     public void runOpMode() {
         super.runOpMode();
         robot.init(hardwareMap);
+
         resetArm(); resetDrive();
         scanSignalSleeve(); telemetryForVision();
         telemetry.addData("sideOfSleeve",sideOfSleeve);
