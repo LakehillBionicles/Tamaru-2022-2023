@@ -37,7 +37,7 @@ import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.StandardTrackingWh
  */
 @Config
 @Autonomous(group="drive")
-@Disabled
+//@Disabled
 
 public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
     public static double ANGLE = 180; // deg
