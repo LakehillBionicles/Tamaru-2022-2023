@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class ThreemaruHardware extends LinearOpMode{
+public class ThreemaruHardware extends LinearOpMode {
     public DcMotorEx fpd = null;
     public DcMotorEx fsd = null;
     public DcMotorEx bpd = null;
@@ -31,19 +31,20 @@ public class ThreemaruHardware extends LinearOpMode{
     public DistanceSensor distSensorStar = null;
     public DistanceSensor distSensorHand = null;
 
-    public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898*2;
+    public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898 * 2;
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     public ElapsedTime runtime = new ElapsedTime();
 
     HardwareMap hwMap = null;
 
-    public ThreemaruHardware(){
+    public ThreemaruHardware() {
 
     }
 
     @Override
-    public void runOpMode() {}
+    public void runOpMode() {
+    }
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
