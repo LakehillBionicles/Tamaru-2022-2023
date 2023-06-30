@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetectionRed;

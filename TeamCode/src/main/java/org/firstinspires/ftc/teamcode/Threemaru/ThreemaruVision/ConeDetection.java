@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision;
 
+
+import com.acmerobotics.roadrunner.util.MathUtil;
+
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
+import org.apache.commons.math3.util.MathUtils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -7,6 +14,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.apache.commons.math3.util.FastMath;
 
 public class ConeDetection extends OpenCvPipeline {
 
@@ -70,7 +78,7 @@ public class ConeDetection extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
         widthOfInput = input.width();
-        heightOfInput= input.height();
+        heightOfInput = input.height();
 
         otherCenterOfBars = 0;
         otherRedCenterOfBars = 0;
@@ -83,31 +91,31 @@ public class ConeDetection extends OpenCvPipeline {
         // Get the submat frame, and then sum all the values
         //Used for telemetry will remove
         Scalar colors;
-        for(int i=1;i<widthOfInput-anchorWidth;i++){
-            Point blueBarPoint1 = new Point(i,60);
-            Point blueBarPoint2 = new Point(i+anchorWidth, heightOfInput);
+        for (int i = 1; i < widthOfInput - anchorWidth; i++) {
+            Point blueBarPoint1 = new Point(i, 60);
+            Point blueBarPoint2 = new Point(i + anchorWidth, heightOfInput);
             Mat MatArea1 = input.submat(new Rect(blueBarPoint1, blueBarPoint2));
             colors = Core.sumElems(MatArea1);
-            if((colors.val[2] / (colors.val[1] + colors.val[0]))>blueTolerance){
-                differentAddedBars = differentAddedBars+i;
+            if ((colors.val[2] / (colors.val[1] + colors.val[0])) > blueTolerance) {
+                differentAddedBars = differentAddedBars + i;
                 differentNumberOfBars++;
             }
-            if((colors.val[0] / (colors.val[1] + colors.val[2]))>redTolerance){
-                differentRedAddedBars = differentRedAddedBars+i;
+            if ((colors.val[0] / (colors.val[1] + colors.val[2])) > redTolerance) {
+                differentRedAddedBars = differentRedAddedBars + i;
                 differentRedNumberOfBars++;
             }
             MatArea1.release();
         }
-        if(differentNumberOfBars>0){
-            differentCenterOfBars = differentAddedBars/differentNumberOfBars;
+        if (differentNumberOfBars > 0) {
+            differentCenterOfBars = differentAddedBars / differentNumberOfBars;
         }
-        if(differentRedNumberOfBars>0){
-            differentRedCenterOfBars = (differentRedAddedBars/differentRedNumberOfBars);
+        if (differentRedNumberOfBars > 0) {
+            differentRedCenterOfBars = (differentRedAddedBars / differentRedNumberOfBars);
         }
         Point newerBlueBar_pointBlue1A = new Point(
                 differentCenterOfBars, 60);
         Point newerBlueBar_pointBlue1B = new Point(
-                differentCenterOfBars+boxWidth, heightOfInput);
+                differentCenterOfBars + boxWidth, heightOfInput);
         Imgproc.rectangle(
                 input,
                 newerBlueBar_pointBlue1A,
@@ -118,29 +126,29 @@ public class ConeDetection extends OpenCvPipeline {
         Point newerRedBar_pointRed1A = new Point(
                 differentRedCenterOfBars, 60);
         Point newerRedBar_pointRed1B = new Point(
-                differentRedCenterOfBars+boxWidth, heightOfInput);
+                differentRedCenterOfBars + boxWidth, heightOfInput);
         Imgproc.rectangle(
                 input,
                 newerRedBar_pointRed1A,
                 newerRedBar_pointRed1B,
                 RED,
                 2
-        ) ;
+        );
         Point middlePoint1A = new Point(
-                ((widthOfInput/2)-51)-4, 60);
+                ((widthOfInput / 2) - 51) - 4, 60);
         Point middlePoint1B = new Point(
-        (widthOfInput/2)-51+4, heightOfInput);
+                (widthOfInput / 2) - 51 + 4, heightOfInput);
         Imgproc.rectangle(
                 input,
                 middlePoint1A,
                 middlePoint1B,
                 GREEN,
                 2
-        ) ;
-        if(differentCenterOfBars != 0){
+        );
+        if (differentCenterOfBars != 0) {
             doubleBluePosition = differentCenterOfBars;
         }
-        if(differentRedCenterOfBars != 0){
+        if (differentRedCenterOfBars != 0) {
             doubleRedPosition = differentRedCenterOfBars;
         }
         return input;
