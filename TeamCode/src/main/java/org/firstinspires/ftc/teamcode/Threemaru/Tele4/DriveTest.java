@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
-@Disabled
+//@Disabled
 @TeleOp
 public class DriveTest extends LinearOpMode {
     ThreemaruHardware robot = new ThreemaruHardware();
@@ -27,10 +27,14 @@ public class DriveTest extends LinearOpMode {
         robot.bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (opModeIsActive()) {
-            robot.fpd.setPower(-gamepad1.left_stick_y/2 + gamepad1.right_stick_x/2);
-            robot.bpd.setPower(-gamepad1.left_stick_y/2 + gamepad1.right_stick_x/2);
-            robot.fsd.setPower(-gamepad1.left_stick_y/2 - gamepad1.right_stick_x/2);
-            robot.bsd.setPower(-gamepad1.left_stick_y/2 - gamepad1.right_stick_x/2);
+            double fpd = robot.fpd.getCurrentPosition();
+            double bpd = robot.bpd.getCurrentPosition();
+            double fsd = robot.fsd.getCurrentPosition();
+
+            telemetry.addData("SOW", fsd);//FORWARD
+            telemetry.addData("POW", bpd);//REVERSE
+            telemetry.addData("BOW", fpd);//FORWARD
+            telemetry.update();
         }
     }
 }

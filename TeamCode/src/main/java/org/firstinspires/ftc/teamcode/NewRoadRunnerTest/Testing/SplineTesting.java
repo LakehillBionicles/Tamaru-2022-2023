@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.SampleMecanumDrive;
 @Disabled
 @Autonomous
-public class SplineTurnTest extends LinearOpMode {
+public class SplineTesting extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -20,7 +20,7 @@ public class SplineTurnTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         Trajectory traj = drive.trajectoryBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(23.5, 0, 90), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(60, 6, Math.toRadians(90)), Math.toRadians(0))
                 .build();
 
         drive.followTrajectory(traj);
@@ -29,7 +29,7 @@ public class SplineTurnTest extends LinearOpMode {
 
         drive.followTrajectory(
                 drive.trajectoryBuilder(traj.end(), true)
-                        .splineToLinearHeading(new Pose2d(0, 0), Math.toRadians(180))
+                        .splineToLinearHeading(new Pose2d(0, 0, 0), Math.toRadians(180))
                         .build()
         );
     }
