@@ -460,7 +460,6 @@ public class ThreemaruAutoBase extends LinearOpMode {
 
             double pid = turretController.calculate(turretPos, turretController.getSetPoint());
             double velocityY = pid * maxVelocity;
-
             robot.motorTurret.setVelocity(velocityY);
         }
     }
