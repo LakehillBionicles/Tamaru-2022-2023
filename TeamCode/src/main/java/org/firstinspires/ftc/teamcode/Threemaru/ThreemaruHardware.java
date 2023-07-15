@@ -53,7 +53,7 @@ public class ThreemaruHardware extends LinearOpMode {
         fsd = hwMap.get(DcMotorEx.class, "fsd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
-        Bow2 = hwMap.get(DcMotorEx.class, "Bow2");
+        Bow2 = hwMap.get(DcMotorEx.class, "POW");
 
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");

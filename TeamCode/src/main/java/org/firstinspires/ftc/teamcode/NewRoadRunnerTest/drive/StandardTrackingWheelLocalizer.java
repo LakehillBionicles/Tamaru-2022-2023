@@ -35,7 +35,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
     public static double LATERAL_DISTANCE = 11.811; //2.25 // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = 6; // in; offset of the lateral wheel
+    public static double FORWARD_OFFSET = -6; // in; offset of the lateral wheel
 
     public static double X_MULTIPLIER = 1.009;
     public static double Y_MULTIPLIER = 1.035;
@@ -59,7 +59,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "bpd"));
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
-        leftEncoder.setDirection(Encoder.Direction.FORWARD);
+
     }
 
     public static double encoderTicksToInches(double ticks) {
@@ -69,7 +69,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
-        int leftPos = leftEncoder.getCurrentPosition();
+        int leftPos = -leftEncoder.getCurrentPosition();
         int rightPos = -rightEncoder.getCurrentPosition();
         int frontPos = frontEncoder.getCurrentPosition();
 
@@ -88,8 +88,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     @NonNull
     @Override
     public List<Double> getWheelVelocities() {
-        int leftVel = (int) leftEncoder.getCorrectedVelocity();
-        int rightVel = (int) rightEncoder.getCorrectedVelocity();
+        int leftVel = (int) -leftEncoder.getCorrectedVelocity();
+        int rightVel = (int) -rightEncoder.getCorrectedVelocity();
         int frontVel = (int) frontEncoder.getCorrectedVelocity();
 
         lastEncVels.clear();
