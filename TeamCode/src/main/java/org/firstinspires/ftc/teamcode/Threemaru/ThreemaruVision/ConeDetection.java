@@ -76,7 +76,7 @@ public class ConeDetection extends OpenCvPipeline {
 
     static double blueTolerance = 0.7;
 
-    static double yellowTolerance= 2;//Yellow tolerance needs to be roughly twice as high as red and blue tolerance
+    static double yellowTolerance= 3;//Yellow tolerance needs to be roughly twice as high as red and blue tolerance
 
     static double doubleBluePosition;
 
