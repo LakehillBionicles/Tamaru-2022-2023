@@ -24,8 +24,7 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
     public void runOpMode(){
         robot.init(hardwareMap);
         detectingCones();
-        armToPosition(lowPoleArmTarget);
-        robot.servoHand1.setPosition(OPEN1.getPosition()); robot.servoHand2.setPosition(OPEN2.getPosition());/* open hand */
+       // robot.servoHand1.setPosition(OPEN1.getPosition()); robot.servoHand2.setPosition(OPEN2.getPosition());/* open hand */
         while(!opModeIsActive()){
             trackingInitialization();
             yellowPolePosition = ConeDetection.getYellowConePosition();
