@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.NewRoadRunnerTest.Testing;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -13,16 +14,8 @@ public class LibTest1 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        /*Trajectory traj1 = drive.trajectoryBuilder(new Pose2d())
-                .splineToSplineHeading(new Pose2d(40, 6, Math.toRadians(90)), Math.toRadians(0))
-                .build();*/
-
         TrajectorySequence traj1 = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(48)
-                .turn(Math.toRadians(90))
-                .forward(23.5)
-                .turn(Math.toRadians(90))
-                .forward(48)
+                .splineToConstantHeading(new Vector2d(60, 2), Math.toRadians(0))
                 .build();
 
         /*TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj1.end())
@@ -36,6 +29,5 @@ public class LibTest1 extends LinearOpMode {
 
         drive.followTrajectorySequence(traj1);
         //drive.followTrajectorySequence(traj2);
-
     }
 }

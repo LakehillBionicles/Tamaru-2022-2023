@@ -106,6 +106,8 @@ public class ThreemaruAutoBase extends LinearOpMode {
         //detectingCones();
         //waitForStart();
     }
+
+
     public void initAuto(){
         resetArm(); resetDrive();
         robot.servoHand1.setPosition(CLOSED1.getPosition());
@@ -113,7 +115,11 @@ public class ThreemaruAutoBase extends LinearOpMode {
         robot.servoExtend.setPosition(RETRACTED.getPosition());
         robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        initIMU();
+        scanSignalSleeve();
+        telemetryForVision();
+        resetCamera();
+        detectingCones();
+        //initIMU();
     }
     public void initIMU(){
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

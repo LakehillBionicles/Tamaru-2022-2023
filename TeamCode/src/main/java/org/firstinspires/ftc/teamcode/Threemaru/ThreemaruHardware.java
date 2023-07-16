@@ -13,11 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class ThreemaruHardware extends LinearOpMode {
-    public DcMotorEx fpd = null;
-    public DcMotorEx fsd = null;
-    public DcMotorEx bpd = null;
-    public DcMotorEx bsd = null;
-    public DcMotorEx Bow2 = null;
+    public DcMotorEx fpd = null, fsd = null, bpd = null, bsd = null, POW = null;
 
     public DcMotorEx armPort = null, armStar = null;
 
@@ -27,9 +23,7 @@ public class ThreemaruHardware extends LinearOpMode {
     //public Servo servoTurret = null;
     public Servo servoExtend = null;
 
-    public DistanceSensor distSensorPort = null;
-    public DistanceSensor distSensorStar = null;
-    public DistanceSensor distSensorHand = null;
+    public DistanceSensor distSensorPort = null, distSensorStar = null, distSensorHand = null;
 
     public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898 * 2;
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -53,7 +47,7 @@ public class ThreemaruHardware extends LinearOpMode {
         fsd = hwMap.get(DcMotorEx.class, "fsd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
-        Bow2 = hwMap.get(DcMotorEx.class, "POW");
+        POW = hwMap.get(DcMotorEx.class, "POW");
 
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");
@@ -62,21 +56,20 @@ public class ThreemaruHardware extends LinearOpMode {
 
         servoHand1 = hwMap.get(Servo.class, "servoHand1");
         servoHand2 = hwMap.get(Servo.class, "servoHand2");
-        //servoTurret = hwMap.get(Servo.class, "servoTurret");
         servoExtend = hwMap.get(Servo.class, "servoExtend");
 
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
 
-        fpd.setDirection(DcMotorSimple.Direction.REVERSE);
+        fpd.setDirection(DcMotorSimple.Direction.FORWARD);
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        bpd.setDirection(DcMotorSimple.Direction.FORWARD);
-        bsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        Bow2.setDirection(DcMotorSimple.Direction.FORWARD);
+        bpd.setDirection(DcMotorSimple.Direction.REVERSE);
+        bsd.setDirection(DcMotorSimple.Direction.FORWARD);
+        POW.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armPort.setDirection(DcMotorSimple.Direction.REVERSE);
-        armStar.setDirection(DcMotorSimple.Direction.FORWARD);
+        armPort.setDirection(DcMotorSimple.Direction.FORWARD);
+        armStar.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -84,7 +77,7 @@ public class ThreemaruHardware extends LinearOpMode {
         fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Bow2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        POW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -95,7 +88,7 @@ public class ThreemaruHardware extends LinearOpMode {
         fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Bow2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        POW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         armPort.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armStar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
