@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision;
 
 
-import com.acmerobotics.roadrunner.util.MathUtil;
-
-import org.apache.commons.math3.transform.DftNormalization;
-import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
-import org.apache.commons.math3.util.MathUtils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -14,7 +8,6 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.apache.commons.math3.util.FastMath;
 
 public class ConeDetection extends OpenCvPipeline {
 
@@ -55,11 +48,11 @@ public class ConeDetection extends OpenCvPipeline {
     int otherCenterOfBars = 0;
     int otherRedCenterOfBars = 0;
 
-    static int differentAddedBars = 0;
-    static int differentCenterOfBars = 0;
-    static int differentNumberOfBars = 0;
+    static int differentBlueAddedBars = 0;
+    static int positionOfBlueObject = 0;
+    static int numberOfBlueBars = 0;
     static int differentRedAddedBars = 0;
-    static int differentRedCenterOfBars = 0;
+    static int positionOfRedObject = 0;
     static int differentRedNumberOfBars = 0;
 
     static int differentYellowAddedBars = 0;
@@ -92,11 +85,11 @@ public class ConeDetection extends OpenCvPipeline {
 
         otherCenterOfBars = 0;
         otherRedCenterOfBars = 0;
-        differentAddedBars = 0;
-        differentCenterOfBars = 0;
-        differentNumberOfBars = 0;
+        differentBlueAddedBars = 0;
+        positionOfBlueObject = 0;
+        numberOfBlueBars = 0;
         differentRedAddedBars = 0;
-        differentRedCenterOfBars = 0;
+        positionOfRedObject = 0;
         differentRedNumberOfBars = 0;
         differentYellowAddedBars = 0;
         differentYellowCenterOfBars = 0;
@@ -110,8 +103,8 @@ public class ConeDetection extends OpenCvPipeline {
             Mat MatArea1 = input.submat(new Rect(blueBarPoint1, blueBarPoint2));
             colors = Core.sumElems(MatArea1);
             if ((colors.val[2] / (colors.val[1] + colors.val[0])) > blueTolerance) {
-                differentAddedBars = differentAddedBars + i;
-                differentNumberOfBars++;
+                differentBlueAddedBars = differentBlueAddedBars + i;
+                numberOfBlueBars++;
             }
             if ((colors.val[0] / (colors.val[1] + colors.val[2])) > redTolerance) {
                 differentRedAddedBars = differentRedAddedBars + i;
@@ -123,30 +116,30 @@ public class ConeDetection extends OpenCvPipeline {
             }
             MatArea1.release();
         }
-        if (differentNumberOfBars > 0) {
-            differentCenterOfBars = differentAddedBars / differentNumberOfBars;
+        if (numberOfBlueBars > 0) {
+            positionOfBlueObject = differentBlueAddedBars / numberOfBlueBars;
         }
         if (differentRedNumberOfBars > 0) {
-            differentRedCenterOfBars = (differentRedAddedBars / differentRedNumberOfBars);
+            positionOfRedObject = (differentRedAddedBars / differentRedNumberOfBars);
         }
         if (differentYellowNumberOfBars > 0) {
             differentYellowCenterOfBars = differentYellowAddedBars / differentYellowNumberOfBars;
         }
-        Point newerBlueBar_pointBlue1A = new Point(
-                differentCenterOfBars, 60);
-        Point newerBlueBar_pointBlue1B = new Point(
-                differentCenterOfBars + boxWidth, heightOfInput);
+        Point blueBar_pointBlue1A = new Point(
+                positionOfBlueObject, 60);
+        Point blueBar_pointBlue1B = new Point(
+                positionOfBlueObject + boxWidth, heightOfInput);
         Imgproc.rectangle(
                 input,
-                newerBlueBar_pointBlue1A,
-                newerBlueBar_pointBlue1B,
+                blueBar_pointBlue1A,
+                blueBar_pointBlue1B,
                 BLUE,
                 2
         );
         Point newerRedBar_pointRed1A = new Point(
-                differentRedCenterOfBars, 60);
+                positionOfRedObject, 60);
         Point newerRedBar_pointRed1B = new Point(
-                differentRedCenterOfBars + boxWidth, heightOfInput);
+                positionOfRedObject + boxWidth, heightOfInput);
         Imgproc.rectangle(
                 input,
                 newerRedBar_pointRed1A,
@@ -176,11 +169,11 @@ public class ConeDetection extends OpenCvPipeline {
                 GREEN,
                 2
         );
-        if (differentCenterOfBars != 0) {
-            doubleBluePosition = differentCenterOfBars;
+        if (positionOfBlueObject != 0) {
+            doubleBluePosition = positionOfBlueObject;
         }
-        if (differentRedCenterOfBars != 0) {
-            doubleRedPosition = differentRedCenterOfBars;
+        if (positionOfRedObject != 0) {
+            doubleRedPosition = positionOfRedObject;
         }
         if (differentYellowCenterOfBars != 0) {
             doubleYellowPosition = differentYellowCenterOfBars;
@@ -189,29 +182,15 @@ public class ConeDetection extends OpenCvPipeline {
     }
 
     // Returns an enum being the current position where the robot will park
-    public static ParkingPosition getBluePosition() {
-        return bluePosition;
-    }
-
-    public static RedParkingPosition getRedPosition() {
-        return redPosition;
-    }
-
-    public int getRedCentralPosition() {
-        return otherRedCenterOfBars;
-    }
-    public int getBlueCentralPosition() {
-        return otherCenterOfBars;
-    }
-    public static int getRedDifferentPosition(){return differentRedCenterOfBars;}
-    public static int getBlueDifferentPosition(){return differentCenterOfBars;}
+    public static int getRedDifferentPosition(){return positionOfRedObject;}
+    public static int getBlueDifferentPosition(){return positionOfBlueObject;}
 
     public static int getYellowDifferentPosition(){return differentYellowCenterOfBars;}
     public static int getRedDifferentBarAmount(){return differentRedNumberOfBars;}
-    public static int getBlueDifferentBarAmount(){return differentNumberOfBars;}
+    public static int getBlueDifferentBarAmount(){return numberOfBlueBars;}
     public static int getYellowDifferentBarAmount(){return differentYellowNumberOfBars;}
     public static int getRedDifferentBarvalues(){return differentRedAddedBars;}
-    public static int getBlueDifferentBarvalues(){return differentAddedBars;}
+    public static int getBlueDifferentBarvalues(){return differentBlueAddedBars;}
     public static int getYellowDifferentBarvalues(){return differentYellowAddedBars;}
 
     public static double getRedConePosition(){return doubleRedPosition;}

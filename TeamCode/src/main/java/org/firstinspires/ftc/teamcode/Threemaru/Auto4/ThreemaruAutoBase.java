@@ -86,7 +86,7 @@ public class ThreemaruAutoBase extends LinearOpMode {
     final float DECIMATION_LOW = 2;
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
-    int sideOfSleeve;
+    public int sideOfSleeve;
     
 
     @Override
