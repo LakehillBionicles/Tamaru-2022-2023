@@ -131,9 +131,9 @@ public class ThreemaruTele extends LinearOpMode {
     public double getTurretPower(){
         double turretPower;
         if(gamepad2.dpad_right){
-            turretPower = 1;
+            turretPower = 0.1;
         } else if(gamepad2.dpad_left){
-            turretPower = -1;
+            turretPower = -0.1;
         } else {
             turretPower = 0;
         }

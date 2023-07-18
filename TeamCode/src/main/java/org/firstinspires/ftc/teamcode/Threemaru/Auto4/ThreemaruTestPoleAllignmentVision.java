@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 @Config
 @Autonomous(name = "TestLowPoleAllignment")
 public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
-    double turretPower = 0.07;
+    double turretPower = 0.098;
     double widthOfImage = ConeDetection.getImageWidth();
     double yellowPolePosition;
     double distanceBetweenYellowPole;

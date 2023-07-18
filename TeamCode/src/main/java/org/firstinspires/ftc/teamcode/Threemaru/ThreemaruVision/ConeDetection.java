@@ -69,7 +69,7 @@ public class ConeDetection extends OpenCvPipeline {
 
     static double blueTolerance = 0.7;
 
-    static double yellowTolerance= 3;//Yellow tolerance needs to be roughly twice as high as red and blue tolerance
+    static double yellowTolerance= 4;//Yellow tolerance needs to be roughly twice as high as red and blue tolerance
 
     static double doubleBluePosition;
 
@@ -159,9 +159,9 @@ public class ConeDetection extends OpenCvPipeline {
                 2
         );
         Point middlePoint1A = new Point(
-                ((widthOfInput / 2) - 51) - 4, 60);
+                ((widthOfInput / 2) + 51) - 4, 60);
         Point middlePoint1B = new Point(
-                (widthOfInput / 2) - 51 + 4, heightOfInput);
+                (widthOfInput / 2) + 51 + 4, heightOfInput);
         Imgproc.rectangle(
                 input,
                 middlePoint1A,
