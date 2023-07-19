@@ -45,7 +45,7 @@ public class ThreemaruTele extends LinearOpMode {
 
         robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
