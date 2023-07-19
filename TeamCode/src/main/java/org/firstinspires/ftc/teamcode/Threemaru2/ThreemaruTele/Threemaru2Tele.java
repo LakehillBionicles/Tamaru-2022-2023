@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Threemaru.Tele4;
+package org.firstinspires.ftc.teamcode.Threemaru2.ThreemaruTele;
 
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.*;
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.*;
@@ -15,11 +15,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
+import org.firstinspires.ftc.teamcode.Threemaru2.Threemaru2Hardware;
 
 @TeleOp
 //@Disabled
-public class ThreemaruTele extends LinearOpMode {
-    ThreemaruHardware robot = new ThreemaruHardware();
+public class Threemaru2Tele extends LinearOpMode {
+    Threemaru2Hardware robot = new Threemaru2Hardware();
     public double drivePower, strafePower, rotPower, armPower;
     public double extendPosition = RETRACTED.getPosition();
     public int drivePowerDenom = 1;
@@ -70,6 +71,9 @@ public class ThreemaruTele extends LinearOpMode {
             robot.servoExtend.setPosition(getExtendPosition());
 
             telemetry.addData("turret", robot.motorTurret.getCurrentPosition());
+            telemetry.addData("distPort", robot.distSensorPort.getDistance(DistanceUnit.CM));
+            telemetry.addData("distStar", robot.distSensorStar.getDistance(DistanceUnit.CM));
+            telemetry.addData("arm", (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2);
             telemetry.update();
         }
     }
@@ -155,50 +159,35 @@ public class ThreemaruTele extends LinearOpMode {
     }
 
     public double getExtendPosition() {
-        /*if (turretPosition == PORT) {
-            double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
-            extendPosition = Math.max(1.92 + -0.126*distStar + 2.23E-03*distStar*distStar, .5);
-        } else if (turretPosition == STAR) {
-            double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-            extendPosition = Math.max(1.92 + -0.126*distStar + 2.23E-03*distStar*distStar, .5);
-        }*/
         double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
         double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-        extendPosition = Math.max(1.92 + -0.126 * distPort + 2.23E-03 * distPort * distPort, 0);
+        //extendPosition = Math.max(1.92 + -0.126 * distPort + 2.23E-03 * distPort * distPort, 0);
 
-        /*if (gamepad2.dpad_down) {
+        if(getTurretPosition() == PORT){
+            extendPosition = Math.max(0.491 - (0.0241*distPort) + (3.25E-04*distPort*distPort), 0);
+        } else if(getTurretPosition() == STAR){
+            extendPosition = Math.max(0.557 - (0.0367*distStar) + (6.33E-04*distStar*distStar), 0);
+        } else {
             extendPosition = RETRACTED.getPosition();
         }
 
-        if (gamepad2.y) {
-            extendPosition = EXTENDED.getPosition();
-        } else if (gamepad2.b) {
-            extendPosition = RETRACTED.getPosition();
-        }*/
-
-        /* if (gamepad1.y) {
-            extendPosition = .45;
+        /*if (gamepad1.y) {
+            extendPosition = 0.2;
         } else if (gamepad1.b) {
-            extendPosition = .4;
-        } else if (gamepad1.a) {
-            extendPosition = .35;
-        } else if(gamepad1.x){
-            extendPosition = .3;
-        } else if(gamepad1.dpad_up){
-            extendPosition = .25;
-        } else if(gamepad1.dpad_right){
-            extendPosition = .2;
-        } else if(gamepad1.dpad_down){
             extendPosition = .15;
-        } else if(gamepad1.dpad_left){
+        } else if (gamepad1.a) {
+            extendPosition = .125;
+        } else if(gamepad1.x){
             extendPosition = .1;
-        } else if(gamepad1.left_bumper){
+        } else if(gamepad1.dpad_up){
             extendPosition = .05;
-        } else if(gamepad1.right_bumper){
+        } else if(gamepad1.dpad_right){
             extendPosition = 0;
-        }
-        return extendPosition;
-    }*/
+        } else if(gamepad1.dpad_down){
+            extendPosition = .1;
+        } else if(gamepad1.dpad_left){
+            extendPosition = 0;
+        }*/
         return extendPosition;
     }
 

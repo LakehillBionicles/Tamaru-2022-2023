@@ -1,25 +1,44 @@
 package org.firstinspires.ftc.teamcode.Threemaru2;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class Threemaru2Hardware extends LinearOpMode {
-    public DcMotorEx fpd = null, fsd = null, bpd = null, bsd = null;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-    public DcMotor POW = null, SOW = null, BOWF = null, BOWB = null;
+public class Threemaru2Hardware extends LinearOpMode {
+    public DcMotorEx fpd = null, fsd = null, bpd = null, bsd = null, POW = null;
+
+    public DcMotorEx armPort = null, armStar = null;
+
+    public DcMotorEx motorTurret = null;
+
+    public Servo servoHand1 = null, servoHand2 = null;
+    //public Servo servoTurret = null;
+    public Servo servoExtend = null;
+
+    public DistanceSensor distSensorPort = null, distSensorStar = null, distSensorHand = null;
+
+    public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898 * 2;
+    public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     public ElapsedTime runtime = new ElapsedTime();
 
     HardwareMap hwMap = null;
 
-    public Threemaru2Hardware() {}
+    public Threemaru2Hardware() {
+
+    }
 
     @Override
-    public void runOpMode() {}
+    public void runOpMode() {
+    }
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -28,40 +47,52 @@ public class Threemaru2Hardware extends LinearOpMode {
         fsd = hwMap.get(DcMotorEx.class, "fsd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
-
         POW = hwMap.get(DcMotorEx.class, "POW");
-        SOW = hwMap.get(DcMotorEx.class, "SOW");
-        BOWF = hwMap.get(DcMotorEx.class, "BOWF");
-        BOWB = hwMap.get(DcMotorEx.class, "BOWB");
 
-        fpd.setDirection(DcMotorSimple.Direction.REVERSE);
+        armPort = hwMap.get(DcMotorEx.class, "armPort");
+        armStar = hwMap.get(DcMotorEx.class, "armStar");
+
+        motorTurret = hwMap.get(DcMotorEx.class, "motorTurret");
+
+        servoHand1 = hwMap.get(Servo.class, "servoHand1");
+        servoHand2 = hwMap.get(Servo.class, "servoHand2");
+        servoExtend = hwMap.get(Servo.class, "servoExtend");
+
+        distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
+        distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
+        distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
+
+        fpd.setDirection(DcMotorSimple.Direction.FORWARD);
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        bpd.setDirection(DcMotorSimple.Direction.FORWARD);
+        bpd.setDirection(DcMotorSimple.Direction.REVERSE);
         bsd.setDirection(DcMotorSimple.Direction.FORWARD);
-
         POW.setDirection(DcMotorSimple.Direction.REVERSE);
-        SOW.setDirection(DcMotorSimple.Direction.REVERSE);
-        BOWF.setDirection(DcMotorSimple.Direction.REVERSE);
-        BOWB.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        armPort.setDirection(DcMotorSimple.Direction.FORWARD);
+        armStar.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 
         fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         POW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        SOW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BOWF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BOWB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         fpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         POW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        SOW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BOWF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BOWB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        armPort.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armStar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        motorTurret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }

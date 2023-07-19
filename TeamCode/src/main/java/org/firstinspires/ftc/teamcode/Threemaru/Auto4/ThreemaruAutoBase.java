@@ -2,18 +2,13 @@ package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.*;
 import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ExtensionSubsystem.ExtendPos.*;
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.*;
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.ArmSubsystem.Height.*;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.IMU;
 
-import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -27,7 +22,6 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.apache.commons.math3.util.FastMath;
 
 
 import java.util.ArrayList;
@@ -469,11 +463,39 @@ public class ThreemaruAutoBase extends LinearOpMode {
             robot.motorTurret.setVelocity(velocityY);
         }
     }
+    public void turretToPosition(int turretPosition){
+        robot.motorTurret.setTargetPosition(turretPosition);
+
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.motorTurret.setPower(.3);
+    }
+    public void turretTimeBasedReset(){
+        resetRuntime();
+        while(getRuntime()<1){
+            robot.motorTurret.setPower(.3);
+        }
+        robot.motorTurret.setPower(0);
+        robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
     }
-    public void extensionToDist(double dist){
-        double extendPosition = Math.max(1.92 + -0.126 * dist + 2.23E-03 * dist * dist, 0);
+    public void extensionToDistPort(double distPort){
+        double extendPosition = Math.max(0.491 - (0.0241*distPort) + (3.25E-04*distPort*distPort), 0);
         robot.servoExtend.setPosition(extendPosition);
+    }
+    public void extensionToDistStar(double distStar){
+        double extendPosition = Math.max(0.557 - (0.0367*distStar) + (6.33E-04*distStar*distStar), 0);
+        robot.servoExtend.setPosition(extendPosition);
+    }
+    public void openHand(){
+        robot.servoHand1.setPosition(OPEN1.getPosition());
+        robot.servoHand2.setPosition(OPEN2.getPosition());
+    }
+    public void closeHand(){
+        robot.servoHand1.setPosition(CLOSED1.getPosition());
+        robot.servoHand2.setPosition(CLOSED2.getPosition());
     }
 }
