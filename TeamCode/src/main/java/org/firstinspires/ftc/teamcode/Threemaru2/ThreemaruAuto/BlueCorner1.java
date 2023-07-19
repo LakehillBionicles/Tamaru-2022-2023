@@ -38,7 +38,6 @@ public class BlueCorner1 extends ThreemaruAutoBase {
         waitForStart();
 
         if (isStopRequested()) return;
-
         drive.followTrajectorySequence(traj1);
         drive.followTrajectorySequence(traj2);
         armToPosition(3000);

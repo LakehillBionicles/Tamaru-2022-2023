@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 @Config
 @Autonomous(name = "TestLowPoleAllignment")
 public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
-    double turretPower = 0.07;
+    double turretPower = 0.098;
     double widthOfImage = ConeDetection.getImageWidth();
     double yellowPolePosition;
     double distanceBetweenYellowPole;
@@ -29,7 +29,7 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
             trackingInitialization();
             yellowPolePosition = ConeDetection.getYellowConePosition();
             widthOfImage = ConeDetection.getImageWidth();
-            while(((yellowPolePosition-((widthOfImage/2)-51))<-10||(yellowPolePosition-((widthOfImage/2)-51))>10)&& !opModeIsActive()){
+            while(((yellowPolePosition-((widthOfImage/2)+51))<-10||(yellowPolePosition-((widthOfImage/2)+51))>10)&& !opModeIsActive()){
                 yellowPolePosition = ConeDetection.getYellowConePosition();
                 distanceBetweenYellowPole = yellowPolePosition -((widthOfImage/2)-51);
                 telemetry.addData("leftOrRight", Math.signum(distanceBetweenYellowPole));
@@ -41,7 +41,7 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
                 telemetry.addData("Amount of red Bars: ", ConeDetection.getYellowDifferentBarAmount());
                 telemetry.addData("Value of red Bars: ", ConeDetection.getYellowDifferentBarvalues());
 
-                robot.motorTurret.setPower((Math.signum(yellowPolePosition-((widthOfImage/2)-51)))*turretPower);
+                robot.motorTurret.setPower((Math.signum(yellowPolePosition-((widthOfImage/2)+51)))*turretPower);
                 telemetry.update();
             }
             /*
