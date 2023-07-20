@@ -98,7 +98,7 @@ public class ConeDetection extends OpenCvPipeline {
         //Used for telemetry will remove
         Scalar colors;
         for (int i = 1; i < widthOfInput - anchorWidth; i++) {
-            Point blueBarPoint1 = new Point(i, 60);
+            Point blueBarPoint1 = new Point(i, 150);
             Point blueBarPoint2 = new Point(i + anchorWidth, heightOfInput);
             Mat MatArea1 = input.submat(new Rect(blueBarPoint1, blueBarPoint2));
             colors = Core.sumElems(MatArea1);
@@ -126,7 +126,7 @@ public class ConeDetection extends OpenCvPipeline {
             differentYellowCenterOfBars = differentYellowAddedBars / differentYellowNumberOfBars;
         }
         Point blueBar_pointBlue1A = new Point(
-                positionOfBlueObject, 60);
+                positionOfBlueObject, 150);
         Point blueBar_pointBlue1B = new Point(
                 positionOfBlueObject + boxWidth, heightOfInput);
         Imgproc.rectangle(
@@ -137,7 +137,7 @@ public class ConeDetection extends OpenCvPipeline {
                 2
         );
         Point newerRedBar_pointRed1A = new Point(
-                positionOfRedObject, 60);
+                positionOfRedObject, 150);
         Point newerRedBar_pointRed1B = new Point(
                 positionOfRedObject + boxWidth, heightOfInput);
         Imgproc.rectangle(
@@ -148,7 +148,7 @@ public class ConeDetection extends OpenCvPipeline {
                 2
         );
         Point newerYellowBar_pointBlue1A = new Point(
-                differentYellowCenterOfBars, 60);
+                differentYellowCenterOfBars, 150);
         Point newerYellowBar_pointBlue1B = new Point(
                 differentYellowCenterOfBars + boxWidth, heightOfInput);
         Imgproc.rectangle(
@@ -159,7 +159,7 @@ public class ConeDetection extends OpenCvPipeline {
                 2
         );
         Point middlePoint1A = new Point(
-                ((widthOfInput / 2) + 51) - 4, 60);
+                ((widthOfInput / 2) + 51) - 4, 150);
         Point middlePoint1B = new Point(
                 (widthOfInput / 2) + 51 + 4, heightOfInput);
         Imgproc.rectangle(

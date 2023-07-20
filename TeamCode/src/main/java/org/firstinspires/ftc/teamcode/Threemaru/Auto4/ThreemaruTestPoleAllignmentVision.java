@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.ConeDetection;
 @Config
 @Autonomous(name = "TestLowPoleAllignment")
 public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
-    double turretPower = 0.098;
+    double turretPower = 0.11;
     double widthOfImage = ConeDetection.getImageWidth();
     double yellowPolePosition;
     double distanceBetweenYellowPole;
@@ -29,21 +29,28 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
             trackingInitialization();
             yellowPolePosition = ConeDetection.getYellowConePosition();
             widthOfImage = ConeDetection.getImageWidth();
-            while(((yellowPolePosition-((widthOfImage/2)+51))<-10||(yellowPolePosition-((widthOfImage/2)+51))>10)&& !opModeIsActive()){
-                yellowPolePosition = ConeDetection.getYellowConePosition();
-                distanceBetweenYellowPole = yellowPolePosition -((widthOfImage/2)-51);
-                telemetry.addData("leftOrRight", Math.signum(distanceBetweenYellowPole));
-                telemetry.addData("How much left or right", distanceBetweenYellowPole);
-                telemetry.addData("How much left or right Without Modifier",(ConeDetection.getYellowConePosition()-(widthOfImage/2)));
-                telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
-                telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
-                telemetry.addData("YellowColor: ", ConeDetection.getYellowConePosition());
-                telemetry.addData("Amount of red Bars: ", ConeDetection.getYellowDifferentBarAmount());
-                telemetry.addData("Value of red Bars: ", ConeDetection.getYellowDifferentBarvalues());
+            while(!opModeIsActive()&&!isStopRequested()){
+                if(((yellowPolePosition-((widthOfImage/2)+51))<-14||(yellowPolePosition-((widthOfImage/2)+51))>14)&&!isStopRequested()&&!opModeIsActive()) {
+                    yellowPolePosition = ConeDetection.getYellowConePosition();
+                    distanceBetweenYellowPole = yellowPolePosition - ((widthOfImage / 2) - 51);
+                    telemetry.addData("leftOrRight", Math.signum(distanceBetweenYellowPole));
+                    telemetry.addData("How much left or right", distanceBetweenYellowPole);
+                    telemetry.addData("How much left or right Without Modifier", (ConeDetection.getYellowConePosition() - (widthOfImage / 2)));
+                    telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
+                    telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
+                    telemetry.addData("YellowColor: ", ConeDetection.getYellowConePosition());
+                    telemetry.addData("Amount of red Bars: ", ConeDetection.getYellowDifferentBarAmount());
+                    telemetry.addData("Value of red Bars: ", ConeDetection.getYellowDifferentBarvalues());
 
-                robot.motorTurret.setPower((Math.signum(yellowPolePosition-((widthOfImage/2)+51)))*turretPower);
-                telemetry.update();
+                    robot.motorTurret.setPower((Math.signum(yellowPolePosition - ((widthOfImage / 2) + 51))) * turretPower);
+                    telemetry.update();
+                }
+                else{robot.motorTurret.setPower(0);
+                telemetry.addData("Polefound?", "yes");
+                telemetry.update();}
             }
+            telemetry.addData("Polefound?", "No");
+            telemetry.update();
             /*
             robot.motorTurret.setPower(0);
             extensionToPosition(0.01);
