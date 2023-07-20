@@ -45,19 +45,16 @@ public class ConeDetection extends OpenCvPipeline {
 
     int bottomHeight = 1;
     int boxWidth = 20;
-    int otherCenterOfBars = 0;
-    int otherRedCenterOfBars = 0;
-
-    static int differentBlueAddedBars = 0;
+    static int addedBlueBarPositions = 0;
     static int positionOfBlueObject = 0;
     static int numberOfBlueBars = 0;
-    static int differentRedAddedBars = 0;
+    static int addedRedBarPositions = 0;
     static int positionOfRedObject = 0;
-    static int differentRedNumberOfBars = 0;
+    static int numberOfRedBars = 0;
 
-    static int differentYellowAddedBars = 0;
-    static int differentYellowCenterOfBars = 0;
-    static int differentYellowNumberOfBars = 0;
+    static int addedYellowBarPositions = 0;
+    static int positionOfYellowObject = 0;
+    static int numberOfYellowBars = 0;
 
     static double blueDistance = 0;
     static double redDistance = 0;
@@ -70,30 +67,21 @@ public class ConeDetection extends OpenCvPipeline {
     static double blueTolerance = 0.7;
 
     static double yellowTolerance= 4;//Yellow tolerance needs to be roughly twice as high as red and blue tolerance
-
-    static double doubleBluePosition;
-
-    static double doubleRedPosition;
-
-    static double doubleYellowPosition;
+    public static Scalar telemetryRGBValues;
 
 
     @Override
     public Mat processFrame(Mat input) {
         widthOfInput = input.width();
         heightOfInput = input.height();
-
-        otherCenterOfBars = 0;
-        otherRedCenterOfBars = 0;
-        differentBlueAddedBars = 0;
-        positionOfBlueObject = 0;
+        addedBlueBarPositions = 0;
         numberOfBlueBars = 0;
-        differentRedAddedBars = 0;
+        addedRedBarPositions = 0;
         positionOfRedObject = 0;
-        differentRedNumberOfBars = 0;
-        differentYellowAddedBars = 0;
-        differentYellowCenterOfBars = 0;
-        differentYellowNumberOfBars = 0;
+        numberOfRedBars = 0;
+        addedYellowBarPositions = 0;
+        positionOfYellowObject = 0;
+        numberOfYellowBars = 0;
         // Get the submat frame, and then sum all the values
         //Used for telemetry will remove
         Scalar colors;
@@ -103,27 +91,27 @@ public class ConeDetection extends OpenCvPipeline {
             Mat MatArea1 = input.submat(new Rect(blueBarPoint1, blueBarPoint2));
             colors = Core.sumElems(MatArea1);
             if ((colors.val[2] / (colors.val[1] + colors.val[0])) > blueTolerance) {
-                differentBlueAddedBars = differentBlueAddedBars + i;
+                addedBlueBarPositions = addedBlueBarPositions + i;
                 numberOfBlueBars++;
             }
             if ((colors.val[0] / (colors.val[1] + colors.val[2])) > redTolerance) {
-                differentRedAddedBars = differentRedAddedBars + i;
-                differentRedNumberOfBars++;
+                addedRedBarPositions = addedRedBarPositions + i;
+                numberOfRedBars++;
             }
             if (((colors.val[0]+colors.val[1])/colors.val[2])>=yellowTolerance){
-                differentYellowAddedBars = differentYellowAddedBars + i;
-                differentYellowNumberOfBars++;
+                addedYellowBarPositions = addedYellowBarPositions + i;
+                numberOfYellowBars++;
             }
             MatArea1.release();
         }
         if (numberOfBlueBars > 0) {
-            positionOfBlueObject = differentBlueAddedBars / numberOfBlueBars;
+            positionOfBlueObject = addedBlueBarPositions / numberOfBlueBars;
         }
-        if (differentRedNumberOfBars > 0) {
-            positionOfRedObject = (differentRedAddedBars / differentRedNumberOfBars);
+        if (numberOfRedBars > 0) {
+            positionOfRedObject = addedRedBarPositions / numberOfRedBars;
         }
-        if (differentYellowNumberOfBars > 0) {
-            differentYellowCenterOfBars = differentYellowAddedBars / differentYellowNumberOfBars;
+        if (numberOfYellowBars > 0) {
+            positionOfYellowObject = addedYellowBarPositions / numberOfYellowBars;
         }
         Point blueBar_pointBlue1A = new Point(
                 positionOfBlueObject, 150);
@@ -136,25 +124,25 @@ public class ConeDetection extends OpenCvPipeline {
                 BLUE,
                 2
         );
-        Point newerRedBar_pointRed1A = new Point(
+        Point redBar_pointRed1A = new Point(
                 positionOfRedObject, 150);
-        Point newerRedBar_pointRed1B = new Point(
+        Point redBar_pointRed1B = new Point(
                 positionOfRedObject + boxWidth, heightOfInput);
         Imgproc.rectangle(
                 input,
-                newerRedBar_pointRed1A,
-                newerRedBar_pointRed1B,
+                redBar_pointRed1A,
+                redBar_pointRed1B,
                 RED,
                 2
         );
-        Point newerYellowBar_pointBlue1A = new Point(
-                differentYellowCenterOfBars, 150);
-        Point newerYellowBar_pointBlue1B = new Point(
-                differentYellowCenterOfBars + boxWidth, heightOfInput);
+        Point yellowBar_pointBlue1A = new Point(
+                positionOfYellowObject, 150);
+        Point yellowBar_pointBlue1B = new Point(
+                positionOfYellowObject + boxWidth, heightOfInput);
         Imgproc.rectangle(
                 input,
-                newerYellowBar_pointBlue1A,
-                newerYellowBar_pointBlue1B,
+                yellowBar_pointBlue1A,
+                yellowBar_pointBlue1B,
                 YELLOW,
                 2
         );
@@ -169,35 +157,21 @@ public class ConeDetection extends OpenCvPipeline {
                 GREEN,
                 2
         );
-        if (positionOfBlueObject != 0) {
-            doubleBluePosition = positionOfBlueObject;
-        }
-        if (positionOfRedObject != 0) {
-            doubleRedPosition = positionOfRedObject;
-        }
-        if (differentYellowCenterOfBars != 0) {
-            doubleYellowPosition = differentYellowCenterOfBars;
-        }
+        telemetryRGBValues= Core.sumElems(input.submat(new Rect(middlePoint1A, middlePoint1B)));
         return input;
     }
 
     // Returns an enum being the current position where the robot will park
-    public static int getRedDifferentPosition(){return positionOfRedObject;}
-    public static int getBlueDifferentPosition(){return positionOfBlueObject;}
-
-    public static int getYellowDifferentPosition(){return differentYellowCenterOfBars;}
-    public static int getRedDifferentBarAmount(){return differentRedNumberOfBars;}
-    public static int getBlueDifferentBarAmount(){return numberOfBlueBars;}
-    public static int getYellowDifferentBarAmount(){return differentYellowNumberOfBars;}
-    public static int getRedDifferentBarvalues(){return differentRedAddedBars;}
-    public static int getBlueDifferentBarvalues(){return differentBlueAddedBars;}
-    public static int getYellowDifferentBarvalues(){return differentYellowAddedBars;}
-
-    public static double getRedConePosition(){return doubleRedPosition;}
-    public static double getBlueConePosition(){return doubleBluePosition;}
-    public static double getYellowConePosition(){return doubleYellowPosition;}
+    public static int getNumberOfRedBars(){return numberOfRedBars;}
+    public static int getNumberOfBlueBars(){return numberOfBlueBars;}
+    public static int getNumberOfYellowBars(){return numberOfYellowBars;}
+    public static Scalar getColorValuesOfObject(){return telemetryRGBValues;}
+    public static double getRedConePosition(){return positionOfRedObject;}
+    public static double getBlueConePosition(){return positionOfBlueObject;}
+    public static double getYellowConePosition(){return positionOfYellowObject;}
 
     public static double getImageWidth(){return widthOfInput;}
+    //This Doesn't work yet
     public static double getBlueDistance(){
         return blueDistance;
     }

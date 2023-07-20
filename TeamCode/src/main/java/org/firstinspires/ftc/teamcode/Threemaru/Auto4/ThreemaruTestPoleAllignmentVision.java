@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode.Threemaru.Auto4;
 
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.CLOSED1;
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.CLOSED2;
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.OPEN1;
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.HandPos.OPEN2;
-import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem.TurretPos.PORT;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -39,8 +33,8 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
                     telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
                     telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
                     telemetry.addData("YellowColor: ", ConeDetection.getYellowConePosition());
-                    telemetry.addData("Amount of red Bars: ", ConeDetection.getYellowDifferentBarAmount());
-                    telemetry.addData("Value of red Bars: ", ConeDetection.getYellowDifferentBarvalues());
+                    telemetry.addData("Amount of red Bars: ", ConeDetection.getNumberOfYellowBars());
+                    telemetry.addData("Value of red Bars: ", ConeDetection.getYellowConePosition());
 
                     robot.motorTurret.setPower((Math.signum(yellowPolePosition - ((widthOfImage / 2) + 51))) * turretPower);
                     telemetry.update();
@@ -107,8 +101,8 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
             telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
             telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
             telemetry.addData("YellowColor: ", ConeDetection.getYellowConePosition());
-            telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
-            telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
+            telemetry.addData("Amount of red Bars: ", ConeDetection.getNumberOfRedBars());
+            telemetry.addData("Value of red Bars: ", ConeDetection.getRedConePosition());
 
             robot.motorTurret.setPower((Math.signum(yellowPolePosition-((widthOfImage/2)-51)))*turretPower);
             telemetry.update();
@@ -126,8 +120,8 @@ public class ThreemaruTestPoleAllignmentVision extends ThreemaruAutoBase {
             telemetry.addData("How much left or right Without Modifier",(ConeDetection.getRedConePosition()-(widthOfImage/2)));
             telemetry.addData("blueColor: ", ConeDetection.getBlueConePosition());
             telemetry.addData("RedColor: ", ConeDetection.getRedConePosition());
-            telemetry.addData("Amount of red Bars: ", ConeDetection.getRedDifferentBarAmount());
-            telemetry.addData("Value of red Bars: ", ConeDetection.getRedDifferentBarvalues());
+            telemetry.addData("Amount of red Bars: ", ConeDetection.getNumberOfRedBars());
+            telemetry.addData("Value of red Bars: ", ConeDetection.getRedConePosition());
             telemetry.addData("Runtime", getRuntime());
             telemetry.addData("Image Width:", ConeDetection.getImageWidth());
             telemetry.update();
