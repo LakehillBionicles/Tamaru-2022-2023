@@ -27,7 +27,7 @@ public class RedCorner1 extends Threemaru2AutoBase {
                 .turn(Math.toRadians(101))//101
                 .waitSeconds(2)//2
                 .splineToLinearHeading(new Pose2d(46, -21), Math.toRadians(-3))
-                .addSpatialMarker(new Vector2d(46, -21), () -> armToPosition(3000))
+                //.addSpatialMarker(new Vector2d(46, -21), () -> armToPosition(3000))
                 .waitSeconds(1)
                 .build();
 
@@ -41,11 +41,10 @@ public class RedCorner1 extends Threemaru2AutoBase {
         armToPosition(100);
         drive.followTrajectorySequence(traj1);
         distDriveStar(-1, 10);
-        turretTimeBasedReset();
-        double starDist = robot.distSensorStar.getDistance(DistanceUnit.CM);
-        extensionToDistStar(starDist);
-        openHand();
-        turretToPosition(1800);
-        //drive.followTrajectorySequence(traj2);
+        //turretTimeBasedReset();
+        //double starDist = robot.distSensorStar.getDistance(DistanceUnit.CM);
+        //extensionToDistStar(starDist);
+        //openHand();
+        //encoderTurret(1800, 5);
     }
 }

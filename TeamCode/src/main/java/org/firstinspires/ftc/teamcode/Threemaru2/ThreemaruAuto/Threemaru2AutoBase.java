@@ -88,7 +88,7 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.init(hardwareMap);
         driveController = new PIDController(pY, iY, dY);
         thetaController = new PIDController(pTheta, iTheta, dTheta);
-        turretController = new PIDController(pTurret, iTurret, dTurret);
+        //turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
 
 
@@ -469,6 +469,19 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.motorTurret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         robot.motorTurret.setPower(.3);
+    }
+    public void encoderTurret(int target, double timeout){
+        resetRuntime();
+        double state = robot.motorTurret.getCurrentPosition();
+        while((state < target)&&(getRuntime() < timeout)){
+            robot.motorTurret.setPower(.3);
+            state = robot.motorTurret.getCurrentPosition();
+        }
+        while((state > target)&&(getRuntime() < timeout)){
+            robot.motorTurret.setPower(-.3);
+            state = robot.motorTurret.getCurrentPosition();
+        }
+        robot.motorTurret.setPower(0);
     }
     public void turretTimeBasedReset(){
         resetRuntime();

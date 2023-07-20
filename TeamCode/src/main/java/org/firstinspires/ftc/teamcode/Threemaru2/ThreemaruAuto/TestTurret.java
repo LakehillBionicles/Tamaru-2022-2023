@@ -24,8 +24,8 @@ public class TestTurret extends Threemaru2AutoBase {
 
         if (isStopRequested()) return;
 
-        robot.motorTurret.setTargetPosition(1000);
-        robot.motorTurret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorTurret.setPower(.3);
+        encoderTurret(1000, 3);
+        telemetry.addData("encoder", robot.motorTurret.getCurrentPosition());
+        telemetry.update();
     }
 }
