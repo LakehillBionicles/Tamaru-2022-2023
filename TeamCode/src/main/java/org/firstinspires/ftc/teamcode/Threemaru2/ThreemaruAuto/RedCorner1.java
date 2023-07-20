@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Threemaru.Auto4.ThreemaruAutoBase;
 
 @Config
 @Autonomous (group = "Auto Testing")
-public class RedCorner1 extends ThreemaruAutoBase {
+public class RedCorner1 extends Threemaru2AutoBase {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
