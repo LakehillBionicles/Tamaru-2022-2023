@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.Threemaru.Auto4.ThreemaruAutoBase;
 
 @Config
 @Autonomous (group = "Auto Testing")
@@ -27,24 +26,21 @@ public class RedCorner1 extends Threemaru2AutoBase {
                 .turn(Math.toRadians(101))//101
                 .waitSeconds(2)//2
                 .splineToLinearHeading(new Pose2d(46, -21), Math.toRadians(-3))
-                //.addSpatialMarker(new Vector2d(46, -21), () -> armToPosition(3000))
+                .addSpatialMarker(new Vector2d(46, -21), () -> armToPosition(3000))
                 .waitSeconds(1)
                 .build();
 
-        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj1.end())
-                .forward(6)
-                .build();
-
         waitForStart();
-
         if (isStopRequested()) return;
+
         armToPosition(100);
         drive.followTrajectorySequence(traj1);
         distDriveStar(-1, 10);
-        //turretTimeBasedReset();
-        //double starDist = robot.distSensorStar.getDistance(DistanceUnit.CM);
-        //extensionToDistStar(starDist);
-        //openHand();
-        //encoderTurret(1800, 5);
+        turretTimeBasedReset();
+        double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
+        extensionToDistStar(distStar);
+        openHand();
+        encoderTurret(-1800, 5);
+        armToPosition(0);
     }
 }

@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
-import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
+//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 import org.firstinspires.ftc.teamcode.Threemaru2.Threemaru2Hardware;
 
 @TeleOp
@@ -56,10 +56,10 @@ public class Threemaru2Tele extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            robot.fpd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x + gamepad2.right_stick_x);
-            robot.bpd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x + gamepad2.right_stick_x);
-            robot.fsd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x - gamepad2.right_stick_x);
-            robot.bsd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x - gamepad2.right_stick_x);
+            robot.fpd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x + gamepad2.right_stick_x);
+            robot.bpd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x + gamepad2.right_stick_x);
+            robot.fsd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x - gamepad2.right_stick_x);
+            robot.bsd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x - gamepad2.right_stick_x);
 
             robot.armStar.setPower(getArmPower());
             robot.armPort.setPower(getArmPower());

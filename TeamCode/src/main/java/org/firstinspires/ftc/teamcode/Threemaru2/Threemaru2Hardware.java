@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Threemaru2;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -19,8 +18,7 @@ public class Threemaru2Hardware extends LinearOpMode {
 
     public DcMotorEx motorTurret = null;
 
-    public Servo servoHand1 = null, servoHand2 = null;
-    //public Servo servoTurret = null;
+    public Servo servoHand1 = null, servoHand2 = null;;
     public Servo servoExtend = null;
 
     public DistanceSensor distSensorPort = null, distSensorStar = null, distSensorHand = null;
@@ -32,9 +30,7 @@ public class Threemaru2Hardware extends LinearOpMode {
 
     HardwareMap hwMap = null;
 
-    public Threemaru2Hardware() {
-
-    }
+    public Threemaru2Hardware() {}
 
     @Override
     public void runOpMode() {
@@ -47,7 +43,7 @@ public class Threemaru2Hardware extends LinearOpMode {
         fsd = hwMap.get(DcMotorEx.class, "fsd");
         bpd = hwMap.get(DcMotorEx.class, "bpd");
         bsd = hwMap.get(DcMotorEx.class, "bsd");
-        POW = hwMap.get(DcMotorEx.class, "POW");
+        //POW = hwMap.get(DcMotorEx.class, "POW");
 
         armPort = hwMap.get(DcMotorEx.class, "armPort");
         armStar = hwMap.get(DcMotorEx.class, "armStar");
@@ -62,14 +58,14 @@ public class Threemaru2Hardware extends LinearOpMode {
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
 
-        fpd.setDirection(DcMotorSimple.Direction.FORWARD);
-        fsd.setDirection(DcMotorSimple.Direction.REVERSE);
-        bpd.setDirection(DcMotorSimple.Direction.REVERSE);
-        bsd.setDirection(DcMotorSimple.Direction.FORWARD);
-        POW.setDirection(DcMotorSimple.Direction.REVERSE);
+        fpd.setDirection(DcMotorSimple.Direction.REVERSE);//F
+        fsd.setDirection(DcMotorSimple.Direction.REVERSE);//R
+        bpd.setDirection(DcMotorSimple.Direction.FORWARD);//R
+        bsd.setDirection(DcMotorSimple.Direction.REVERSE);//F
+        //POW.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armPort.setDirection(DcMotorSimple.Direction.FORWARD);
-        armStar.setDirection(DcMotorSimple.Direction.REVERSE);
+        armPort.setDirection(DcMotorSimple.Direction.REVERSE);
+        armStar.setDirection(DcMotorSimple.Direction.FORWARD);
 
         motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -77,7 +73,7 @@ public class Threemaru2Hardware extends LinearOpMode {
         fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        POW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //POW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armStar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -88,7 +84,7 @@ public class Threemaru2Hardware extends LinearOpMode {
         fsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bpd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bsd.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        POW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //POW.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         armPort.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armStar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
