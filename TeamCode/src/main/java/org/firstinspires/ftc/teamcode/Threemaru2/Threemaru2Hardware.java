@@ -58,7 +58,7 @@ public class Threemaru2Hardware extends LinearOpMode {
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
 
-        fpd.setDirection(DcMotorSimple.Direction.REVERSE);//F
+        fpd.setDirection(DcMotorSimple.Direction.FORWARD);//F
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);//R
         bpd.setDirection(DcMotorSimple.Direction.FORWARD);//R
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);//F
