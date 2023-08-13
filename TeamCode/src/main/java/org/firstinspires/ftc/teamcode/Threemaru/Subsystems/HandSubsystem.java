@@ -11,8 +11,8 @@ public class HandSubsystem extends SubsystemBase {
     private final Servo hand2;
 
     public enum HandPos {
-        OPEN1(.25), CLOSED1(.6),
-        OPEN2(.4), CLOSED2(0);
+        OPEN1(.25), CLOSED1(0),
+        OPEN2(.4), CLOSED2(.8);
 
         public final double position;
 

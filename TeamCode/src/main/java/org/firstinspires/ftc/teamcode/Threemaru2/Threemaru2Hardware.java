@@ -58,7 +58,7 @@ public class Threemaru2Hardware extends LinearOpMode {
         distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
 
-        fpd.setDirection(DcMotorSimple.Direction.FORWARD);//F
+        fpd.setDirection(DcMotorSimple.Direction.REVERSE);//F
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);//R
         bpd.setDirection(DcMotorSimple.Direction.FORWARD);//R
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);//F
@@ -69,10 +69,10 @@ public class Threemaru2Hardware extends LinearOpMode {
 
         motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        fpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bpd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bsd.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bpd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bsd.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //POW.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         armPort.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

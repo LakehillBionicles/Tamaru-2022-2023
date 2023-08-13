@@ -14,7 +14,7 @@ public class MotorDirections extends LinearOpMode {
             waitForStart();
 
             while (opModeIsActive()) {
-                    robot.fpd.setPower(-0.5);
+                    robot.fpd.setPower(.5);
                     robot.bpd.setPower(.5);
                     robot.fsd.setPower(.5);
                     robot.bsd.setPower(.5);

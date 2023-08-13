@@ -19,7 +19,8 @@ public class RedCorner1Parking extends Threemaru2AutoBase{
         initAuto();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         TrajectorySequence one = drive.trajectorySequenceBuilder(new Pose2d())
-                .splineToLinearHeading(new Pose2d(6, 0), Math.toRadians(0))//6,0,0
+                //.splineToLinearHeading(new Pose2d(6, 0), Math.toRadians(0))//6,0,0
+                .forward(6)
                 .turn(Math.toRadians(91))
                 .waitSeconds(2)
                 .forward(23)
@@ -44,15 +45,10 @@ public class RedCorner1Parking extends Threemaru2AutoBase{
         armToPosition(100);
         if(sideOfSleeve == 1) {
             drive.followTrajectorySequence(one);
-        }
-        if(sideOfSleeve == 2) {
-            drive.followTrajectorySequence(two);
-        }
-        if(sideOfSleeve == 11) {
+        } else if(sideOfSleeve == 3) {
             drive.followTrajectorySequence(three);
-        }
-        else{
-            drive.followTrajectorySequence(one);
+        } else {
+            drive.followTrajectorySequence(two);
         }
         //drive.followTrajectorySequence(traj2);
     }
