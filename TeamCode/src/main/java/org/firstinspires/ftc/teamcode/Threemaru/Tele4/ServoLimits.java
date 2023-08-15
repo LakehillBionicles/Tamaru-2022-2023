@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 public class ServoLimits extends OpMode {
     ThreemaruHardware robot = new ThreemaruHardware();
 
-    public static double hand1Pos = 0;
-    public static double hand2Pos = 0;
+    public static double hand1Pos = 0.2;
+    public static double hand2Pos = 0.9;
     public static double extendPos = 0;
     public static double turretPos = 0;
     public static double armPos = 0;

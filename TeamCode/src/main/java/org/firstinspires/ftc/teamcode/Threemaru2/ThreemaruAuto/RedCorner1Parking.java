@@ -21,12 +21,12 @@ public class RedCorner1Parking extends Threemaru2AutoBase{
         TrajectorySequence one = drive.trajectorySequenceBuilder(new Pose2d())
                 //.splineToLinearHeading(new Pose2d(6, 0), Math.toRadians(0))//6,0,0
                 .forward(6)
-                .turn(Math.toRadians(91))
+                .turn(Math.toRadians(94))
                 .waitSeconds(2)
-                .forward(23)
-                .turn(Math.toRadians(-98))
-                .waitSeconds(2)
-                .splineToLinearHeading(new Pose2d(30, 21), Math.toRadians(0))
+                //.forward(23)
+                //.turn(Math.toRadians(-98))
+                //.waitSeconds(2)
+                //.splineToLinearHeading(new Pose2d(30, 21), Math.toRadians(0))
                 .build();
         TrajectorySequence two = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(34)

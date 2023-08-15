@@ -68,7 +68,7 @@ public class Threemaru2Tele extends LinearOpMode {
 
             robot.servoHand1.setPosition(getHandPos1().getPosition());
             robot.servoHand2.setPosition(getHandPos2().getPosition());
-            robot.servoExtend.setPosition(getExtendPosition());
+            //robot.servoExtend.setPosition(getExtendPosition());
 
             telemetry.addData("fsd", robot.fsd.getCurrentPosition());
             telemetry.addData("fpd", robot.fpd.getCurrentPosition());

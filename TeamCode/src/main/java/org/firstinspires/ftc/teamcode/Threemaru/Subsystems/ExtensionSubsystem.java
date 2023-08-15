@@ -10,7 +10,7 @@ public class ExtensionSubsystem extends SubsystemBase {
     private final Servo extension;
 
     public enum ExtendPos {
-        RETRACTED(.5), EXTENDED(0);
+        RETRACTED(.61), EXTENDED(0.29);
 
         public final double position;
 
