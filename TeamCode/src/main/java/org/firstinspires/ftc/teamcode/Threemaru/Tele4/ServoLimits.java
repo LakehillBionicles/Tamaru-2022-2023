@@ -65,8 +65,8 @@ public class ServoLimits extends OpMode {
         double velocityArm = pidArm * maxVelocity;
         ///double velocityTurret = pidTurret * maxVelocity;
 
-        robot.armPort.setVelocity(velocityArm);
-        robot.armStar.setVelocity(velocityArm);
+        //robot.armPort.setVelocity(velocityArm);
+        //robot.armStar.setVelocity(velocityArm);
         //robot.motorTurret.setVelocity(velocityTurret);
 
         //telemetry.addData("hand1Pos", hand1Pos);
