@@ -50,12 +50,14 @@ public class RedCorner1 extends Threemaru2AutoBase {
         drive.followTrajectorySequence(traj1);
         distDriveStar(-1, 10);
         turretTimeBasedReset();
-        //double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-        //extensionToDistStar(distStar);
-        extensionToPosition(EXTENDED.getPosition());
+        double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
+        extensionToDistStar(distStar);
+        //extensionToPosition(EXTENDED.getPosition());
         sleep(1000);
         openHand();
-        encoderTurret(-50, 5);
-        armToPosition(0);
+        //encoderTurret(0, 20);
+        turretTimeBased(-1, 1.1);
+        sleep(20000);
+        //armToPosition(0);
     }
 }

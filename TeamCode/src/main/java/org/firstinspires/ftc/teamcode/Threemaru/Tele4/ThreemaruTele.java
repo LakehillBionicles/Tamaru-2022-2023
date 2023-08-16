@@ -164,7 +164,7 @@ public class ThreemaruTele extends LinearOpMode {
         }*/
         double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
         double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
-        extendPosition = Math.max(1.92 + -0.126 * distPort + 2.23E-03 * distPort * distPort, 0);
+        extendPosition = Math.max(0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar, 0);
 
         /*if (gamepad2.dpad_down) {
             extendPosition = RETRACTED.getPosition();

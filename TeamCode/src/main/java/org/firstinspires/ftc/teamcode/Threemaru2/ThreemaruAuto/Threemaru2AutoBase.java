@@ -432,10 +432,10 @@ public class Threemaru2AutoBase extends LinearOpMode {
     public void distDriveStar(int direction, double timeout){
         resetRuntime();
         while(robot.distSensorStar.getDistance(DistanceUnit.CM)>50 && getRuntime()<timeout){
-            robot.fpd.setPower(direction*.2);
-            robot.bpd.setPower(direction*.2);
-            robot.fsd.setPower(direction*.2);
-            robot.bsd.setPower(direction*.2);
+            robot.fpd.setPower(direction*.3);
+            robot.bpd.setPower(direction*.3);
+            robot.fsd.setPower(direction*.3);
+            robot.bsd.setPower(direction*.3);
 
             telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
             telemetry.update();
@@ -473,15 +473,21 @@ public class Threemaru2AutoBase extends LinearOpMode {
     public void encoderTurret(int target, double timeout){
         resetRuntime();
         double state = robot.motorTurret.getCurrentPosition();
-        while((state < target)&&(getRuntime() < timeout)){
-            robot.motorTurret.setPower(.3);
+        while((state < (target-20))&&(getRuntime() < timeout)){
+            robot.motorTurret.setPower(.08);
             state = robot.motorTurret.getCurrentPosition();
+            telemetry.addData("turret pos", robot.motorTurret.getCurrentPosition());
+            telemetry.update();
         }
-        while((state > target)&&(getRuntime() < timeout)){
-            robot.motorTurret.setPower(-.3);
+        while((state > (target+20))&&(getRuntime() < timeout)){
+            robot.motorTurret.setPower(-.08);
             state = robot.motorTurret.getCurrentPosition();
+            telemetry.addData("turret pos", robot.motorTurret.getCurrentPosition());
+            telemetry.update();
         }
         robot.motorTurret.setPower(0);
+        telemetry.addData("turret pos", robot.motorTurret.getCurrentPosition());
+        telemetry.update();
     }
     public void turretTimeBasedReset(){
         resetRuntime();
@@ -489,18 +495,25 @@ public class Threemaru2AutoBase extends LinearOpMode {
             robot.motorTurret.setPower(.3);
         }
         robot.motorTurret.setPower(0);
-        robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void turretTimeBased(double direction, double timeout){
+        resetRuntime();
+        while(getRuntime()<timeout){
+            robot.motorTurret.setPower(direction * .1);
+        }
+        robot.motorTurret.setPower(0);
     }
     public void extensionToPosition(double extensionPosition) {
         robot.servoExtend.setPosition(extensionPosition);
     }
     public void extensionToDistPort(double distPort){
-        double extendPosition = Math.max(0.491 - (0.0241*distPort) + (3.25E-04*distPort*distPort), 0);
+        double extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
         robot.servoExtend.setPosition(extendPosition);
     }
     public void extensionToDistStar(double distStar){
-        double extendPosition = Math.max(0.557 - (0.0367*distStar) + (6.33E-04*distStar*distStar), 0);
+        double extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)+.025, .29);
         robot.servoExtend.setPosition(extendPosition);
     }
     public void openHand(){

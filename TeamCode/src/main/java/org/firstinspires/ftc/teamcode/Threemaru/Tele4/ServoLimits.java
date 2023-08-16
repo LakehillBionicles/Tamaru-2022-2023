@@ -21,8 +21,9 @@ public class ServoLimits extends OpMode {
     public static double hand1Pos = 0.2;
     public static double hand2Pos = 0.9;
     public static double extendPos = 0;
-    public static double turretPos = 0;
+    public static int turretPos = 0;
     public static double armPos = 0;
+    public static double turretPower = 0;
 
     public static double maxVelocity = 4000;
 
@@ -68,7 +69,9 @@ public class ServoLimits extends OpMode {
         //robot.armPort.setVelocity(velocityArm);
         //robot.armStar.setVelocity(velocityArm);
         //robot.motorTurret.setVelocity(velocityTurret);
-
+        //encoderTurret(turretPos);
+        turretTimeBased(-1, 3);
+        stop();
         //telemetry.addData("hand1Pos", hand1Pos);
         //telemetry.addData("hand2Pos", hand2Pos);
         telemetry.addData("extendPos", extendPos);
@@ -77,6 +80,37 @@ public class ServoLimits extends OpMode {
         telemetry.addData("distPort", robot.distSensorPort.getDistance(DistanceUnit.CM));
         //telemetry.addData("turretPos", turretPos);
         telemetry.update();
+    }
+
+    public void encoderTurret(int target){
+        resetRuntime();
+        double state = robot.motorTurret.getCurrentPosition();
+        while((state < (target-20))){
+            robot.motorTurret.setPower(turretPower);
+            state = robot.motorTurret.getCurrentPosition();
+        }
+        while((state > (target+20))){
+            robot.motorTurret.setPower(-turretPower);
+            state = robot.motorTurret.getCurrentPosition();
+        }
+        robot.motorTurret.setPower(0);
+    }
+    public void turretTimeBased(double direction, double timeout){
+        resetRuntime();
+        while(getRuntime()<timeout){
+            robot.motorTurret.setPower(direction * .05);
+        }
+        robot.motorTurret.setPower(0);
+    }
+    public void armToPosition(int position){
+        robot.armPort.setTargetPosition(position);
+        robot.armStar.setTargetPosition(position);
+
+        robot.armPort.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.armStar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.armPort.setPower(1);
+        robot.armStar.setPower(1);
     }
 
     public void PIDTurret(double target) {
