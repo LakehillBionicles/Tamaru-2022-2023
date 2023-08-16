@@ -35,7 +35,8 @@ public class ServoLimits extends OpMode {
     @Override
     public void init(){
         robot.init(hardwareMap);
-        turretController = new PIDController(pTurret, iTurret, dTurret);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -55,18 +56,18 @@ public class ServoLimits extends OpMode {
         //PIDTurret(turretPos);
 
         armController.setPID(pArm, iArm, dArm);
-        turretController.setPID(pTurret, iTurret, dTurret);
+        //turretController.setPID(pTurret, iTurret, dTurret);
 
         double robotArm = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
-        double robotTurret = robot.motorTurret.getCurrentPosition();
+        //double robotTurret = robot.motorTurret.getCurrentPosition();
         double pidArm = armController.calculate(robotArm, armPos) + gArm;
-        double pidTurret = turretController.calculate(robotTurret, turretPos);
+        //double pidTurret = turretController.calculate(robotTurret, turretPos);
         double velocityArm = pidArm * maxVelocity;
-        double velocityTurret = pidTurret * maxVelocity;
+        ///double velocityTurret = pidTurret * maxVelocity;
 
         robot.armPort.setVelocity(velocityArm);
         robot.armStar.setVelocity(velocityArm);
-        robot.motorTurret.setVelocity(velocityTurret);
+        //robot.motorTurret.setVelocity(velocityTurret);
 
         //telemetry.addData("hand1Pos", hand1Pos);
         //telemetry.addData("hand2Pos", hand2Pos);
