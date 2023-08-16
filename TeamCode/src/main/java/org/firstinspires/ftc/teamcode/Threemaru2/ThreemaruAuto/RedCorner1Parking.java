@@ -21,12 +21,7 @@ public class RedCorner1Parking extends Threemaru2AutoBase{
         TrajectorySequence one = drive.trajectorySequenceBuilder(new Pose2d())
                 //.splineToLinearHeading(new Pose2d(6, 0), Math.toRadians(0))//6,0,0
                 .forward(6)
-                .turn(Math.toRadians(94))
-                .waitSeconds(2)
                 //.forward(23)
-                //.turn(Math.toRadians(-98))
-                //.waitSeconds(2)
-                //.splineToLinearHeading(new Pose2d(30, 21), Math.toRadians(0))
                 .build();
         TrajectorySequence two = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(34)
@@ -39,13 +34,20 @@ public class RedCorner1Parking extends Threemaru2AutoBase{
                 .waitSeconds(2)//2
                 .splineToLinearHeading(new Pose2d(46, -21), Math.toRadians(-3))
                 .build();
+        TrajectorySequence onePointFive = drive.trajectorySequenceBuilder(one.end().plus(new Pose2d(0,0, Math.toRadians(99))))
+                .forward(22)
+                .turn(Math.toRadians(-98))
+                .splineToLinearHeading(new Pose2d(30, 21), Math.toRadians(0))
+                .build();
         waitForStart();
 
         if (isStopRequested()) return;
         armToPosition(100);
         if(sideOfSleeve == 1) {
             drive.followTrajectorySequence(one);
-        } else if(sideOfSleeve == 3) {
+            drive.turn(Math.toRadians(97));
+            drive.followTrajectorySequence(onePointFive);
+        } else if(sideOfSleeve == 11) {
             drive.followTrajectorySequence(three);
         } else {
             drive.followTrajectorySequence(two);

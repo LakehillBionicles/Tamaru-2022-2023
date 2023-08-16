@@ -52,7 +52,7 @@ public class ServoLimits extends OpMode {
         robot.servoHand1.setPosition(hand1Pos);
         robot.servoHand2.setPosition(hand2Pos);
         robot.servoExtend.setPosition(extendPos);
-        PIDTurret(turretPos);
+        //PIDTurret(turretPos);
 
         armController.setPID(pArm, iArm, dArm);
         turretController.setPID(pTurret, iTurret, dTurret);
@@ -71,6 +71,7 @@ public class ServoLimits extends OpMode {
         //telemetry.addData("hand1Pos", hand1Pos);
         //telemetry.addData("hand2Pos", hand2Pos);
         telemetry.addData("extendPos", extendPos);
+        telemetry.addData("Turret Position", robot.motorTurret.getCurrentPosition());
         telemetry.addData("distStar", robot.distSensorStar.getDistance(DistanceUnit.CM));
         telemetry.addData("distPort", robot.distSensorPort.getDistance(DistanceUnit.CM));
         //telemetry.addData("turretPos", turretPos);

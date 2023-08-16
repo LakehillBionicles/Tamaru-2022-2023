@@ -71,7 +71,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public List<Double> getWheelPositions() {
         int leftPos = -leftEncoder.getCurrentPosition();
         int rightPos = -rightEncoder.getCurrentPosition();
-        int frontPos = frontEncoder.getCurrentPosition();
+        int frontPos = -frontEncoder.getCurrentPosition();
 
         lastEncPositions.clear();
         lastEncPositions.add(leftPos);
@@ -90,7 +90,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     public List<Double> getWheelVelocities() {
         int leftVel = (int) -leftEncoder.getCorrectedVelocity();
         int rightVel = (int) -rightEncoder.getCorrectedVelocity();
-        int frontVel = (int) frontEncoder.getCorrectedVelocity();
+        int frontVel = (int) -frontEncoder.getCorrectedVelocity();
 
         lastEncVels.clear();
         lastEncVels.add(leftVel);
