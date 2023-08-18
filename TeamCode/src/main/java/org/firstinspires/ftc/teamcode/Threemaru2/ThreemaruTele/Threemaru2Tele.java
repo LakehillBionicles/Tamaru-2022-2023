@@ -69,7 +69,7 @@ public class Threemaru2Tele extends LinearOpMode {
             robot.servoHand1.setPosition(getHandPos1().getPosition());
             robot.servoHand2.setPosition(getHandPos2().getPosition());
             robot.servoExtend.setPosition(getExtendPosition());
-            telemetry.addData("dist Star", robot.fsd.getCurrentPosition());
+            telemetry.addData("dist Star", robot.distSensorStar.getDistance(DistanceUnit.CM));
             telemetry.addData("position", getExtendPosition());
             telemetry.update();
 
@@ -180,15 +180,15 @@ public class Threemaru2Tele extends LinearOpMode {
         double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
         double distStar = robot.distSensorStar.getDistance(DistanceUnit.CM);
         //extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
-        //extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)+.025, .29);
+        extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)-.025, .29);
 
-        if(getTurretPosition() == PORT){
+        /*if(getTurretPosition() == PORT){
             extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
         } else if(getTurretPosition() == STAR){
             extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)+.025, .29);
         } else {
             extendPosition = RETRACTED.getPosition();
-        }
+        }*/
 
         /*if (gamepad1.y) {
             extendPosition = 0.2;

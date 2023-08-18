@@ -64,8 +64,8 @@ public class Threemaru2Hardware extends LinearOpMode {
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);//F
         //POW.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armPort.setDirection(DcMotorSimple.Direction.REVERSE);
-        armStar.setDirection(DcMotorSimple.Direction.FORWARD);
+        armPort.setDirection(DcMotorSimple.Direction.FORWARD);
+        armStar.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 

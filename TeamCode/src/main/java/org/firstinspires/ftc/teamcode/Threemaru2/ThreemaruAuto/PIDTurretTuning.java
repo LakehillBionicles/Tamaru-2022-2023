@@ -30,7 +30,7 @@ public class PIDTurretTuning extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.motorTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         robot.servoHand1.setPosition(CLOSED1.getPosition());
         robot.servoHand2.setPosition(CLOSED2.getPosition());

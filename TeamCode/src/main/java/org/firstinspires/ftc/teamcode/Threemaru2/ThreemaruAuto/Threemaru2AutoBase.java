@@ -37,7 +37,7 @@ public class Threemaru2AutoBase extends LinearOpMode {
     //public static double pY = 0.0275, iY = 0.00055, dY = 0;
     public static double pY = 0.0275, iY = 0.00055, dY = 0;
     public static double pTheta = 0.0075, iTheta = 0, dTheta = 0.0012;
-    public static double pTurret = 0.005, iTurret = 0, dTurret = 0.00005;
+    public static double pTurret = 0.0005, iTurret = 0.00001, dTurret = 0.0001;
     public static double pArm = 0.001, iArm = 0, dArm = 0.0001, gArm = 0.001;
     public static double maxVelocity = 4000;
     private String webcamName = "Webcam 1";
@@ -88,7 +88,7 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.init(hardwareMap);
         driveController = new PIDController(pY, iY, dY);
         thetaController = new PIDController(pTheta, iTheta, dTheta);
-        //turretController = new PIDController(pTurret, iTurret, dTurret);
+        turretController = new PIDController(pTurret, iTurret, dTurret);
         armController = new PIDController(pArm, iArm, dArm);
 
 
@@ -444,13 +444,15 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.bpd.setPower(0);
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
+        telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
+        telemetry.update();
     }
     public void PIDTurret(double target, double timeout) {
         turretController.setPID(pTurret, iTurret, dTurret);
 
         turretController.setSetPoint(target);
 
-        turretController.setTolerance(.1);
+        turretController.setTolerance(1);
 
         double turretPos = robot.motorTurret.getCurrentPosition();
 
@@ -459,9 +461,11 @@ public class Threemaru2AutoBase extends LinearOpMode {
             turretPos = robot.motorTurret.getCurrentPosition();
 
             double pid = turretController.calculate(turretPos, turretController.getSetPoint());
-            double velocityY = pid * maxVelocity;
-            robot.motorTurret.setVelocity(velocityY);
+            robot.motorTurret.setPower(pid);
+            telemetry.addData("encoder", robot.motorTurret.getCurrentPosition());
+            telemetry.update();
         }
+        robot.motorTurret.setPower(0);
     }
     public void turretToPosition(int turretPosition){
         robot.motorTurret.setTargetPosition(turretPosition);
@@ -513,7 +517,7 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.servoExtend.setPosition(extendPosition);
     }
     public void extensionToDistStar(double distStar){
-        double extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)+.025, .29);
+        double extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)-0.075, .29);
         robot.servoExtend.setPosition(extendPosition);
     }
     public void openHand(){

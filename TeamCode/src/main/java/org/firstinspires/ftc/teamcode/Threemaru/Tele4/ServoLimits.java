@@ -20,7 +20,7 @@ public class ServoLimits extends OpMode {
 
     public static double hand1Pos = 0.2;
     public static double hand2Pos = 0.9;
-    public static double extendPos = 0;
+    public static double extendPos = 0.29;
     public static int turretPos = 0;
     public static double armPos = 0;
     public static double turretPower = 0;
@@ -65,13 +65,20 @@ public class ServoLimits extends OpMode {
         //double pidTurret = turretController.calculate(robotTurret, turretPos);
         double velocityArm = pidArm * maxVelocity;
         ///double velocityTurret = pidTurret * maxVelocity;
+        if(gamepad1.dpad_right){
+            robot.motorTurret.setPower(.1);
+        } else if(gamepad1.dpad_left){
+            robot.motorTurret.setPower(-.1);
+        } else {
+            robot.motorTurret.setPower(0);
+        }
 
         //robot.armPort.setVelocity(velocityArm);
         //robot.armStar.setVelocity(velocityArm);
         //robot.motorTurret.setVelocity(velocityTurret);
-        //encoderTurret(turretPos);
-        turretTimeBased(-1, 3);
-        stop();
+        //encoderTurret(500);
+        //turretTimeBased(-1, 3);
+        //stop();
         //telemetry.addData("hand1Pos", hand1Pos);
         //telemetry.addData("hand2Pos", hand2Pos);
         telemetry.addData("extendPos", extendPos);
@@ -86,11 +93,11 @@ public class ServoLimits extends OpMode {
         resetRuntime();
         double state = robot.motorTurret.getCurrentPosition();
         while((state < (target-20))){
-            robot.motorTurret.setPower(turretPower);
+            robot.motorTurret.setPower(.08);
             state = robot.motorTurret.getCurrentPosition();
         }
         while((state > (target+20))){
-            robot.motorTurret.setPower(-turretPower);
+            robot.motorTurret.setPower(-.08);
             state = robot.motorTurret.getCurrentPosition();
         }
         robot.motorTurret.setPower(0);
