@@ -56,10 +56,10 @@ public class Threemaru2Tele extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            robot.fpd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x + gamepad2.right_stick_x);
-            robot.bpd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x + gamepad2.right_stick_x);
-            robot.fsd.setPower(-gamepad2.left_stick_y - gamepad2.left_stick_x - gamepad2.right_stick_x);
-            robot.bsd.setPower(-gamepad2.left_stick_y + gamepad2.left_stick_x - gamepad2.right_stick_x);
+            robot.fpd.setPower((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x)/getDrivePowerDenom());
+            robot.bpd.setPower((-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x)/getDrivePowerDenom());
+            robot.fsd.setPower((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x)/getDrivePowerDenom());
+            robot.bsd.setPower((-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x)/getDrivePowerDenom());
 
             robot.armStar.setPower(getArmPower());
             robot.armPort.setPower(getArmPower());
@@ -69,6 +69,7 @@ public class Threemaru2Tele extends LinearOpMode {
             robot.servoHand1.setPosition(getHandPos1().getPosition());
             robot.servoHand2.setPosition(getHandPos2().getPosition());
             //robot.servoExtend.setPosition(getExtendPosition());
+            robot.servoExtend.setPosition(RETRACTED.getPosition());
             telemetry.addData("dist Star T", robot.distSensorStarT.getDistance(DistanceUnit.CM));
             telemetry.addData("dist Star B", robot.distSensorStarB.getDistance(DistanceUnit.CM));
             telemetry.addData("position", getExtendPosition());
@@ -108,7 +109,7 @@ public class Threemaru2Tele extends LinearOpMode {
     }
 
     public double getDrivePower() {
-        if ((gamepad1.dpad_up && (robot.distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
+        if ((gamepad2.dpad_up && (robot.distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = .175;
         } else if ((gamepad1.dpad_down && (robot.distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = -.175;
@@ -182,7 +183,7 @@ public class Threemaru2Tele extends LinearOpMode {
         double distStar = robot.distSensorStarB.getDistance(DistanceUnit.CM);
         //extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
         //extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)-.05, .29);
-        extendPosition = Math.max((0.668 + -0.0195 * distStar + 2.54E-04 * distStar * distStar), .29);
+        //extendPosition = Math.max((0.668 + -0.0195 * distStar + 2.54E-04 * distStar * distStar), .29);
 
         /*if(getTurretPosition() == PORT){
             extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
