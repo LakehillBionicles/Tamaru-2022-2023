@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -21,7 +22,9 @@ public class Threemaru2Hardware extends LinearOpMode {
     public Servo servoHand1 = null, servoHand2 = null;;
     public Servo servoExtend = null;
 
-    public DistanceSensor distSensorPort = null, distSensorStar = null, distSensorHand = null;
+    public DistanceSensor distSensorPort = null, distSensorStarB = null, distSensorStarT = null, distSensorHand = null;
+
+    public TouchSensor touchSensorPort = null, touchSensorStar = null;
 
     public static final double COUNTS_PER_MOTOR_REV = 560, DRIVE_GEAR_REDUCTION = 1.0, WHEEL_DIAMETER_INCHES = 1.8898 * 2;
     public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -55,8 +58,12 @@ public class Threemaru2Hardware extends LinearOpMode {
         servoExtend = hwMap.get(Servo.class, "servoExtend");
 
         distSensorPort = hwMap.get(DistanceSensor.class, "distSensorPort");
-        distSensorStar = hwMap.get(DistanceSensor.class, "distSensorStar");
+        distSensorStarB = hwMap.get(DistanceSensor.class, "distSensorStarB");
+        distSensorStarT = hwMap.get(DistanceSensor.class, "distSensorStarT");
         distSensorHand = hwMap.get(DistanceSensor.class, "distSensorHand");
+
+        touchSensorPort = hwMap.get(TouchSensor.class, "touchSensorPort");
+        touchSensorStar = hwMap.get(TouchSensor.class, "touchSensorStar");
 
         fpd.setDirection(DcMotorSimple.Direction.REVERSE);//F
         fsd.setDirection(DcMotorSimple.Direction.REVERSE);//R
@@ -64,8 +71,8 @@ public class Threemaru2Hardware extends LinearOpMode {
         bsd.setDirection(DcMotorSimple.Direction.REVERSE);//F
         //POW.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        armPort.setDirection(DcMotorSimple.Direction.FORWARD);
-        armStar.setDirection(DcMotorSimple.Direction.REVERSE);
+        armPort.setDirection(DcMotorSimple.Direction.REVERSE);//FORWARD
+        armStar.setDirection(DcMotorSimple.Direction.FORWARD);//REVERSE
 
         motorTurret.setDirection(DcMotorSimple.Direction.FORWARD);
 

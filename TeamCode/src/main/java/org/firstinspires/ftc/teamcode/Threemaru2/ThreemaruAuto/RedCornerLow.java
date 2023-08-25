@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.NewRoadRunnerTest.trajectorysequence.Traje
 
 @Config
 @Autonomous (group = "Auto Testing")
-public class RedCorner1 extends Threemaru2AutoBase {
+public class RedCornerLow extends Threemaru2AutoBase {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -33,43 +33,27 @@ public class RedCorner1 extends Threemaru2AutoBase {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         TrajectorySequence traj1 = drive.trajectorySequenceBuilder(new Pose2d())
-                //.forward(20)
-                .splineToConstantHeading(new Vector2d(6, 0), Math.toRadians(0))//6,0,0
-                .turn(Math.toRadians(-89))//-89
+                .splineToConstantHeading(new Vector2d(20, 0), Math.toRadians(0))//6,0,0
+                .build();
+
+        TrajectorySequence park1 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(14)
+                .turn(Math.toRadians(95))
+                .forward(23)
+                .turn(Math.toRadians(-98))
+                .splineToLinearHeading(new Pose2d(30, 23), Math.toRadians(0))
+                .build();
+
+        TrajectorySequence park2 = drive.trajectorySequenceBuilder(traj1.end())
+                .forward(18)
+                .build();
+
+        TrajectorySequence park3 = drive.trajectorySequenceBuilder(traj1.end())
+                .back(14)
+                .turn(Math.toRadians(-95))//-89
                 .forward(23)//23
-                .turn(Math.toRadians(101))//101
-                .splineToLinearHeading(new Pose2d(0, -21), Math.toRadians(0), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(10))
-                .build();
-
-        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj1.end())
-                .splineToLinearHeading(new Pose2d(46, -22), Math.toRadians(-3), SampleMecanumDrive.getVelocityConstraint(42.5, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(30))
-                .addSpatialMarker(new Vector2d(46, -22), this::closeHand)
-                .addSpatialMarker(new Vector2d(46, -22), () -> armToPosition(2900))
-                .waitSeconds(1)
-                .build();
-
-        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
-                .forward(8, SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(10))
-                //.turn(Math.toRadians(105))
-                //.forward(20)
-                /*.splineToConstantHeading((new Vector2d(56, 20)), Math.toRadians(-105)
-                 */
-                .build();
-
-        TrajectorySequence park2A = drive.trajectorySequenceBuilder(traj3.end())
-                .turn(Math.toRadians(105))
-                .build();
-
-        TrajectorySequence park2B = drive.trajectorySequenceBuilder(park2A.end())
-                .splineToLinearHeading(new Pose2d(46, 0), Math.toRadians(105))
-                .build();
-
-        TrajectorySequence park1 = drive.trajectorySequenceBuilder(traj3.end())
-                .turn(Math.toRadians(105))
-                .forward(40)
+                .turn(Math.toRadians(98))//101
+                .splineToLinearHeading(new Pose2d(30, -21), Math.toRadians(0))
                 .build();
 
         waitForStart();
@@ -78,34 +62,30 @@ public class RedCorner1 extends Threemaru2AutoBase {
         closeHand();
         armToPosition(100);
         drive.followTrajectorySequence(traj1);
-        correctHeading(4);
-        drive.followTrajectorySequence(traj2);
         distDriveStar(-1, 4);
         //turretTimeBasedReset();
         extensionToPosition(RETRACTED.getPosition());
+        armToPosition(1300);
+        sleep(1000);
         PIDTurret(2400, 2);
         double distStar = robot.distSensorStarB.getDistance(DistanceUnit.CM);
         extensionToDistStar(distStar);
-        telemetry.addData("distStar", distStar);
-        telemetry.update();
-        //extensionToPosition(EXTENDED.getPosition());
         sleep(1000);
         openHand();
         sleep(1000);
+        closeHand();
         PIDTurret(500, 2);
-        armToPosition(500);
         sleep(1000);
         extensionToPosition(RETRACTED.getPosition());
-        drive.followTrajectorySequence(traj3);
         if(sideOfSleeve == 1){
+            armToPosition(0);
             drive.followTrajectorySequence(park1);
+        } else if (sideOfSleeve == 11){
             armToPosition(0);
-        } else if (sideOfSleeve == 2){
-            drive.followTrajectorySequence(park2A);
-            drive.followTrajectorySequence(park2B);
-            armToPosition(0);
+            drive.followTrajectorySequence(park3);
         } else {
-            armToPosition(0);
+            armToPosition(300);
+            drive.followTrajectorySequence(park2);
         }
     }
 }

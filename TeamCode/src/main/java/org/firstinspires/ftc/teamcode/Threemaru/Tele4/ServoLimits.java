@@ -20,7 +20,7 @@ public class ServoLimits extends OpMode {
 
     public static double hand1Pos = 0.2;
     public static double hand2Pos = 0.9;
-    public static double extendPos = 0.29;
+    public static double extendPos = 0.61;
     public static int turretPos = 0;
     public static double armPos = 0;
     public static double turretPower = 0;

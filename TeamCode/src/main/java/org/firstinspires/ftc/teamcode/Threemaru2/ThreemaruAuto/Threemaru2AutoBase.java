@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruVision.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcode.Threemaru2.Threemaru2Hardware;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -27,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 public class Threemaru2AutoBase extends LinearOpMode {
-    public ThreemaruHardware robot = new ThreemaruHardware();
+    public Threemaru2Hardware robot = new Threemaru2Hardware();
 
     public final int downArmTarget = 0, lowPoleArmTarget = 1200, midPoleArmTarget = 2000, highPoleArmTarget = 2800;
     public final int fiveConeArmTarget = 450, fourConeArmTarget = 350, threeConeArmTarget = 250, twoConeArmTarget = 150;
@@ -431,21 +432,35 @@ public class Threemaru2AutoBase extends LinearOpMode {
     }
     public void distDriveStar(int direction, double timeout){
         resetRuntime();
-        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>50 && getRuntime()<timeout){
+        ArrayList<Double> distanceMeasurmentsB = new ArrayList<Double>();
+        distanceMeasurmentsB.add(0,0.0);
+        distanceMeasurmentsB.add(1,1.0);
+        distanceMeasurmentsB.add(2,2.0);
+        ArrayList<Double> distanceMeasurmentsT = new ArrayList<Double>();
+        distanceMeasurmentsT.add(0,0.0);
+        distanceMeasurmentsT.add(1,1.0);
+        distanceMeasurmentsT.add(2,2.0);
+        distanceMeasurmentsT.set(0, robot.distSensorStarT.getDistance(DistanceUnit.CM));
+        boolean goInLoop = true;
+        while(((robot.distSensorStarB.getDistance(DistanceUnit.CM)>25) || (distanceMeasurmentsB.get(1)>distanceMeasurmentsB.get(0))&&(distanceMeasurmentsB.get(2)>distanceMeasurmentsB.get(1))&&(distanceMeasurmentsB.get(2)>distanceMeasurmentsB.get(0))
+                || (robot.distSensorStarT.getDistance(DistanceUnit.CM)>25) || (distanceMeasurmentsT.get(1)>distanceMeasurmentsT.get(0))&&(distanceMeasurmentsB.get(2)>distanceMeasurmentsB.get(1))&&(distanceMeasurmentsB.get(2)>distanceMeasurmentsB.get(0)))
+                && (getRuntime()<timeout)||goInLoop){
+            goInLoop = false;
+            distanceMeasurmentsB.set(0, distanceMeasurmentsB.get(1));
+            distanceMeasurmentsB.set(1, distanceMeasurmentsB.get(2));
+            distanceMeasurmentsB.set(2, robot.distSensorStarB.getDistance(DistanceUnit.CM));
+            distanceMeasurmentsT.set(0, distanceMeasurmentsT.get(1));
+            distanceMeasurmentsB.set(1, distanceMeasurmentsB.get(2));
+            distanceMeasurmentsT.set(2, robot.distSensorStarT.getDistance(DistanceUnit.CM));
             robot.fpd.setPower(direction*.3);
             robot.bpd.setPower(direction*.3);
             robot.fsd.setPower(direction*.3);
             robot.bsd.setPower(direction*.3);
-
-            telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
-            telemetry.update();
         }
         robot.fpd.setPower(0);
         robot.bpd.setPower(0);
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
-        telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
-        telemetry.update();
     }
     public void PIDTurret(double target, double timeout) {
         turretController.setPID(pTurret, iTurret, dTurret);
@@ -462,8 +477,6 @@ public class Threemaru2AutoBase extends LinearOpMode {
 
             double pid = turretController.calculate(turretPos, turretController.getSetPoint());
             robot.motorTurret.setPower(pid);
-            telemetry.addData("encoder", robot.motorTurret.getCurrentPosition());
-            telemetry.update();
         }
         robot.motorTurret.setPower(0);
     }
@@ -517,7 +530,7 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.servoExtend.setPosition(extendPosition);
     }
     public void extensionToDistStar(double distStar){
-        double extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)-0.075, .29);
+        double extendPosition = Math.max((0.668 + -0.0195 * distStar + 2.54E-04 * distStar * distStar)+.0125, .29);
         robot.servoExtend.setPosition(extendPosition);
     }
     public void openHand(){
@@ -527,5 +540,28 @@ public class Threemaru2AutoBase extends LinearOpMode {
     public void closeHand(){
         robot.servoHand1.setPosition(CLOSED1.getPosition());
         robot.servoHand2.setPosition(CLOSED2.getPosition());
+    }
+    public void correctHeading(double timeout){
+        resetRuntime();
+        while((!robot.touchSensorPort.isPressed()||!robot.touchSensorStar.isPressed())&&getRuntime()<timeout) {
+            while (!robot.touchSensorPort.isPressed() && robot.touchSensorStar.isPressed()) {
+                robot.fpd.setPower(-.25);
+                robot.bpd.setPower(-.25);
+                robot.fsd.setPower(.25);
+                robot.bsd.setPower(.25);
+            }
+            while (!robot.touchSensorStar.isPressed() && robot.touchSensorPort.isPressed()) {
+                robot.fpd.setPower(.25);
+                robot.bpd.setPower(.25);
+                robot.fsd.setPower(-.25);
+                robot.bsd.setPower(-.25);
+            }
+            while (!robot.touchSensorPort.isPressed() && !robot.touchSensorStar.isPressed()) {
+                robot.fpd.setPower(-.5);
+                robot.bpd.setPower(-.5);
+                robot.fsd.setPower(-.5);
+                robot.bsd.setPower(-.5);
+            }
+        }
     }
 }

@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class HandSubsystem extends SubsystemBase {
-    private final Servo hand1;
-    private final Servo hand2;
+    private final Servo hand1;//port
+    private final Servo hand2;//star
 
     public enum HandPos {
-        OPEN1(.25), CLOSED1(0),
+        OPEN1(.4), CLOSED1(0),
         OPEN2(.4), CLOSED2(.8);
 
         public final double position;

@@ -31,20 +31,20 @@ public class TestTurret extends Threemaru2AutoBase {
 
         //PIDTurret(target, 1000);
         //distDriveStar(-1, 10);
-        while(robot.distSensorStar.getDistance(DistanceUnit.CM)>50){
+        while(robot.distSensorStarB.getDistance(DistanceUnit.CM)>50){
             robot.fpd.setPower(-.3);
             robot.bpd.setPower(-.3);
             robot.fsd.setPower(-.3);
             robot.bsd.setPower(-.3);
 
-            telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
+            telemetry.addData("distStar1", robot.distSensorStarB.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
         robot.fpd.setPower(0);
         robot.bpd.setPower(0);
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
-        telemetry.addData("distStar1", robot.distSensorStar.getDistance(DistanceUnit.CM));
+        telemetry.addData("distStar1", robot.distSensorStarB.getDistance(DistanceUnit.CM));
         telemetry.update();
 
         telemetry.addData("encoder", robot.motorTurret.getCurrentPosition());
