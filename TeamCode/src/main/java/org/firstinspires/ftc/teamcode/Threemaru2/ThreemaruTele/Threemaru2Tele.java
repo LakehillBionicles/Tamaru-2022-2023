@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem;
 import org.firstinspires.ftc.teamcode.Threemaru.Subsystems.TurretSubsystem;
-//import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 import org.firstinspires.ftc.teamcode.Threemaru2.Threemaru2Hardware;
 
 @TeleOp
@@ -24,11 +23,13 @@ public class Threemaru2Tele extends LinearOpMode {
     public double drivePower, strafePower, rotPower, armPower;
     public double extendPosition = RETRACTED.getPosition();
     public int drivePowerDenom = 1;
+    public int turretTarget = 0, turretPos;
     public HandSubsystem.HandPos handPos1 = OPEN1;
     public HandSubsystem.HandPos handPos2 = OPEN2;
     public TurretSubsystem.TurretPos turretPosition = FORWARD;
-    private PIDController armController;
+    private PIDController armController, turretController;
     public static double p = 0.001, i = 0, d = 0.0001, kg = 0.001;
+    public static double pTurret = 0.0005, iTurret = 0.00001, dTurret = 0.0001;
     public static double reference = 0;
     public static double maxVelocity = 4000;
 
@@ -39,6 +40,7 @@ public class Threemaru2Tele extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
         armController = new PIDController(p, i, d);
+        turretController = new PIDController(pTurret, iTurret, dTurret);
 
         robot.armPort.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -47,6 +49,8 @@ public class Threemaru2Tele extends LinearOpMode {
         robot.armPort.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.armStar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.motorTurret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        turretController.setPID(pTurret, iTurret, dTurret);
 
         waitForStart();
 
@@ -64,22 +68,18 @@ public class Threemaru2Tele extends LinearOpMode {
             robot.armStar.setPower(getArmPower());
             robot.armPort.setPower(getArmPower());
 
-            robot.motorTurret.setPower(getTurretPower());
+            turretController.setSetPoint(getTurretTarget());
+            double turretPos = robot.motorTurret.getCurrentPosition();
+            robot.motorTurret.setPower(turretController.calculate(turretPos, turretController.getSetPoint()));
 
             robot.servoHand1.setPosition(getHandPos1().getPosition());
             robot.servoHand2.setPosition(getHandPos2().getPosition());
-            //robot.servoExtend.setPosition(getExtendPosition());
-            robot.servoExtend.setPosition(RETRACTED.getPosition());
-            telemetry.addData("dist Star T", robot.distSensorStarT.getDistance(DistanceUnit.CM));
-            telemetry.addData("dist Star B", robot.distSensorStarB.getDistance(DistanceUnit.CM));
-            telemetry.addData("position", getExtendPosition());
-            telemetry.update();
+            robot.servoExtend.setPosition(getExtendPosition());
 
-            //telemetry.addData("turret", robot.motorTurret.getCurrentPosition());
-            //telemetry.update();
+            telemetry.addData("turret pos", robot.motorTurret.getCurrentPosition());
+            telemetry.update();
         }
     }
-
     public void distDriveStar(int direction, double timeout){
         resetRuntime();
         while(robot.distSensorStarB.getDistance(DistanceUnit.CM)>50 && getRuntime()<timeout){
@@ -96,7 +96,6 @@ public class Threemaru2Tele extends LinearOpMode {
         robot.fsd.setPower(0);
         robot.bsd.setPower(0);
     }
-
     public double getDrivePowerDenom() {
         if (gamepad1.left_trigger > 0) {
             drivePowerDenom = 2;
@@ -107,7 +106,6 @@ public class Threemaru2Tele extends LinearOpMode {
         }
         return drivePowerDenom;
     }
-
     public double getDrivePower() {
         if ((gamepad2.dpad_up && (robot.distSensorPort.getDistance(DistanceUnit.CM) > 10))) {
             drivePower = .175;
@@ -122,7 +120,6 @@ public class Threemaru2Tele extends LinearOpMode {
         }
         return drivePower;
     }
-
     public HandSubsystem.HandPos getHandPos1() {
         if (gamepad1.left_bumper) {
             handPos1 = CLOSED1;
@@ -136,7 +133,6 @@ public class Threemaru2Tele extends LinearOpMode {
 
         return handPos1;
     }
-
     public HandSubsystem.HandPos getHandPos2() {
         if (gamepad1.left_bumper) {
             handPos2 = CLOSED2;
@@ -150,20 +146,35 @@ public class Threemaru2Tele extends LinearOpMode {
 
         return handPos2;
     }
-
-    public double getTurretPower(){
-        double turretPower;
+    public double getTurretTarget(){
         if(gamepad2.dpad_right){
-            turretPower = 0.3;
+            turretTarget = 2500;
         } else if(gamepad2.dpad_left){
-            turretPower = -0.3;
-        } else {
-            turretPower = 0;
+            turretTarget = -2500;
+        } else if(gamepad2.dpad_up){
+            turretTarget = 0;
         }
 
-        return turretPower;
+        return turretTarget;
     }
+    public void PIDTurret(double target) {
+        turretController.setPID(pTurret, iTurret, dTurret);
 
+        turretController.setSetPoint(target);
+
+        turretController.setTolerance(1);
+
+        double turretPos = robot.motorTurret.getCurrentPosition();
+
+        resetRuntime();
+        while (!turretController.atSetPoint()) {
+            turretPos = robot.motorTurret.getCurrentPosition();
+
+            double pid = turretController.calculate(turretPos, turretController.getSetPoint());
+            robot.motorTurret.setPower(pid);
+        }
+        robot.motorTurret.setPower(0);
+    }
     public TurretSubsystem.TurretPos getTurretPosition() {
         if (gamepad2.dpad_up) {
             turretPosition = FORWARD;
@@ -176,7 +187,6 @@ public class Threemaru2Tele extends LinearOpMode {
         }
         return turretPosition;
     }
-
     public double getExtendPosition() {
 
         double distPort = (robot.distSensorPort.getDistance(DistanceUnit.CM));
@@ -185,13 +195,13 @@ public class Threemaru2Tele extends LinearOpMode {
         //extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)-.05, .29);
         //extendPosition = Math.max((0.668 + -0.0195 * distStar + 2.54E-04 * distStar * distStar), .29);
 
-        /*if(getTurretPosition() == PORT){
+        if(getTurretPosition() == PORT){
             extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
         } else if(getTurretPosition() == STAR){
-            extendPosition = Math.max((0.67 + -0.0152 * distStar + 9.16E-05 * distStar * distStar)+.025, .29);
+            extendPosition = Math.max((0.668 + -0.0195 * distStar + 2.54E-04 * distStar * distStar)+.0125, .29);
         } else {
             extendPosition = RETRACTED.getPosition();
-        }*/
+        }
 
         /*if (gamepad1.y) {
             extendPosition = 0.2;
@@ -212,12 +222,11 @@ public class Threemaru2Tele extends LinearOpMode {
         }*/
         return extendPosition;
     }
-
     public double getArmPower(){
-        if(gamepad2.dpad_up){
+        if(gamepad2.left_stick_y<0){
             armPower = 1;
             reference = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
-        } else if(gamepad2.dpad_down){
+        } else if(gamepad2.left_stick_y>0){
             armPower = -1;
             reference = (robot.armPort.getCurrentPosition()+robot.armStar.getCurrentPosition())/2.0;
         } else {

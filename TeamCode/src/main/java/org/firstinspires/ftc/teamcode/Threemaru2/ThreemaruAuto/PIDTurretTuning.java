@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.Threemaru.Subsystems.HandSubsystem.
 import org.firstinspires.ftc.teamcode.Threemaru.ThreemaruHardware;
 
 //@Disabled
+@Disabled
 @Config
 @TeleOp
 public class PIDTurretTuning extends OpMode {

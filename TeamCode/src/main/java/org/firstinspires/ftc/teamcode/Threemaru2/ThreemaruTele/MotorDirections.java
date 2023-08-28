@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Threemaru2.ThreemaruTele;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Threemaru2.Threemaru2Hardware;
-
+@Disabled
 @TeleOp
 public class MotorDirections extends LinearOpMode {
     Threemaru2Hardware robot = new Threemaru2Hardware();

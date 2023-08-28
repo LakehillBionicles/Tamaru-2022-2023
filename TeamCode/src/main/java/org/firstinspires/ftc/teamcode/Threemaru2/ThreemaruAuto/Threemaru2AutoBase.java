@@ -526,7 +526,7 @@ public class Threemaru2AutoBase extends LinearOpMode {
         robot.servoExtend.setPosition(extensionPosition);
     }
     public void extensionToDistPort(double distPort){
-        double extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort), .29);
+        double extendPosition = Math.max((0.735 + -0.0247 * distPort + 3.31E-04 *distPort *distPort) + .025, .29);
         robot.servoExtend.setPosition(extendPosition);
     }
     public void extensionToDistStar(double distStar){
