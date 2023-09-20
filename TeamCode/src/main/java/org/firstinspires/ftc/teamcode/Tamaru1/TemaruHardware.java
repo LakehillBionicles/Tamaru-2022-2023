@@ -96,7 +96,6 @@ public class TemaruHardware extends LinearOpMode {
     }
 
     @Override
-
     public void runOpMode() {
     }
 
